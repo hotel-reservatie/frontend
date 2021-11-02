@@ -40,7 +40,9 @@ export default () => {
             resolve(false)
           }
         })
-      } catch (error) {}
+      } catch (error) {
+        reject
+      }
     })
   }
 
