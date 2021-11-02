@@ -12,24 +12,18 @@ import {
 import { useState } from 'react'
 import graphQL from './useGraphQL'
 
-declare global {
-  interface Window {
-    _env_: any
-  }
-}
 const firebaseConfig: FirebaseOptions = {
-  apiKey: window._env_.apiKey,
-  authDomain: window._env_.authDomain,
-  projectId: window._env_.projectId,
-  storageBucket: window._env_.storageBucket,
-  messagingSenderId: window._env_.messagingSenderId,
-  appId: window._env_.appId,
+  apiKey: process.env.NEXT_PUBLIC_FB_APIKEY,
+  authDomain: process.env.NEXT_PUBLIC_FB_APIKEY,
+  projectId: process.env.NEXT_PUBLIC_FB_APIKEY,
+  storageBucket: process.env.NEXT_PUBLIC_FB_APIKEY,
+  messagingSenderId: process.env.NEXT_PUBLIC_FB_APIKEY,
+  appId: process.env.NEXT_PUBLIC_FB_APIKEY,
 }
 
+const app: FirebaseApp = initializeApp(firebaseConfig)
 export default () => {
-  const app: FirebaseApp = initializeApp(firebaseConfig)
   const auth: Auth = getAuth()
-
   setPersistence(auth, browserLocalPersistence)
   const [user, setUser] = useState<User | null>(null)
   const { query } = graphQL()
