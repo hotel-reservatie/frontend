@@ -1,19 +1,48 @@
-# First, we build our app to be compiled as Javascript
-FROM node:16.9.1-alpine as build-container
-WORKDIR /usr/app
-COPY ["package.json", "package-lock.json", "tsconfig.json", "./"]
-RUN npm ci
+
+
+# Install dependencies only when needed
+FROM node:alpine AS deps
+ENV NODE_OPTIONS=--openssl-legacy-provider
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --only-production
+
+# Rebuild the source code only when needed
+FROM node:alpine AS builder
+ENV NODE_OPTIONS=--openssl-legacy-provider
+WORKDIR /app
 COPY . .
-RUN npm run build
+COPY --from=deps /app/node_modules ./node_modules
+RUN npm run build && npm ci --only-production
 
-## Now, we create a secondary container, to be used in production
-FROM node:16.9.1-alpine as production-container
-WORKDIR /usr/app
+# Production image, copy all the files and run next
+FROM node:alpine AS runner
+WORKDIR /app
 
-COPY ["package.json", "package-lock.json", "./"]
-RUN npm ci --only=production
-RUN npm install http-server -g
-COPY --from=build-container /usr/app/dist .
-EXPOSE 80
+ENV NODE_ENV production
+ENV NODE_OPTIONS=--openssl-legacy-provider
 
-CMD ["http-server"]
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
+# You only need to copy next.config.js if you are NOT using the default configuration
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line in case you want to disable telemetry.
+ENV NEXT_TELEMETRY_DISABLED 1
+
+CMD ["node_modules/.bin/next", "start"]
