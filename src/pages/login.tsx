@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useFirebase from 'src/hooks/useFirebase'
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: '', password: '' })
-  const { login } = useFirebase()
+  const { login, user } = useFirebase()
 
   function loginUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    // testjonas@test.be --> testfirebase
+    login(credentials.email, credentials.password)
   }
 
   function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -14,6 +16,10 @@ const Login = () => {
       setCredentials({ ...credentials, [event.target.id]: event.target.value })
     }
   }
+
+  useEffect(() => {
+    console.log(user)
+  }, [user])
 
   return (
     <div className="bg-black min-h-screen py-12">

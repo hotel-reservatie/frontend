@@ -22,9 +22,10 @@ const firebaseConfig: FirebaseOptions = {
 }
 
 const app: FirebaseApp = initializeApp(firebaseConfig)
+const auth: Auth = getAuth()
+setPersistence(auth, browserLocalPersistence)
+
 export default () => {
-  const auth: Auth = getAuth()
-  setPersistence(auth, browserLocalPersistence)
   const [user, setUser] = useState<User | null>(null)
   const { query } = graphQL()
 
