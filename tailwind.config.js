@@ -1,4 +1,6 @@
 // tailwind.config.js
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   // mode: 'jit',
 
@@ -10,7 +12,11 @@ module.exports = {
   darkMode: 'media', // or 'class'
 
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sora: ['Sora', ...defaultTheme.fontFamily.sans],
+      },
+    },
   },
 
   variants: {
