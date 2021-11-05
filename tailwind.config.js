@@ -2,7 +2,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
-  // mode: 'jit',
+  mode: 'jit',
 
   purge: [
     './src/pages/**/*.{js,ts,jsx,tsx}',
@@ -29,6 +29,9 @@ module.exports = {
           800: '#062782',
           900: '#03123D',
         },
+      },
+      borderRadius: {
+        xl: '32px',
       },
     },
   },
