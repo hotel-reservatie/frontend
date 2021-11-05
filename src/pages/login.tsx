@@ -22,7 +22,7 @@ const Login = () => {
   }, [user])
 
   return (
-    <div className="bg-black min-h-screen py-12">
+    <div className="min-h-screen py-12">
       <div className="mx-auto max-w-lg p-12 bg-white dark:bg-gray-900 shadow rounded-lg">
         <h1 className="font-semibold text-4xl leading-normal mb-6">Login</h1>
         <form onSubmit={loginUser}>
