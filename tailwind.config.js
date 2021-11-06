@@ -30,6 +30,9 @@ module.exports = {
           900: '#03123D',
         },
       },
+      borderRadius: {
+        xl: '32px',
+      },
     },
   },
 
