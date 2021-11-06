@@ -14,7 +14,7 @@ const Header = () => {
         <div className="flex justify-between">
           <div className="flex space-x-7">
             <div>
-              <Link href="#">
+              <Link href="/">
                 <a className="flex items-center py-6 px-2 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
                   <img src="./logo.svg" alt="Logo" className="h-8 w-8 mr-2" />
                   <span className="font-semibold text-lg text-blue-700">
@@ -24,7 +24,7 @@ const Header = () => {
               </Link>
             </div>
             <div className="hidden md:flex items-center space-x-1">
-              <Link href="#">
+              <Link href="/about">
                 <a className="py-6 px-2 text-blue-800 hover:text-blue-700 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
                   About
                 </a>
@@ -34,7 +34,7 @@ const Header = () => {
                   Rooms
                 </a>
               </Link>
-              <Link href="#">
+              <Link href="/contact">
                 <a className="py-6 px-2 text-blue-800 hover:text-blue-700 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
                   Contact
                 </a>
