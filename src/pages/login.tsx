@@ -18,10 +18,6 @@ const Login = () => {
     }
   }
 
-  useEffect(() => {
-    console.log(user)
-  }, [user])
-
   return (
     <div className="min-h-full pt-12">
       <div className="p-4 mx-auto max-w-xs sm:max-w-lg  sm:p-12  bg-white  shadow  rounded-xl">
