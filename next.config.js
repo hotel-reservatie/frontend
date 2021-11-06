@@ -2,5 +2,8 @@
 module.exports = {
   reactStrictMode: true,
   distDir: 'dist',
-  // docker build fails if this command is set to through
+  i18n: {
+    locales: ['en', 'nl'],
+    defaultLocale: 'en',
+  },
 }
