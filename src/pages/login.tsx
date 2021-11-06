@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import useFirebase from 'src/hooks/useFirebase'
+import { useRouter } from 'next/router'
 
 const Login = () => {
+  const router = useRouter()
   const [credentials, setCredentials] = useState({ email: '', password: '' })
   const { login, user } = useFirebase()
 
@@ -10,6 +12,7 @@ const Login = () => {
     event.preventDefault()
     // testjonas@test.be --> testfirebase
     login(credentials.email, credentials.password)
+    router.push('/')
   }
 
   function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -20,7 +23,7 @@ const Login = () => {
 
   return (
     <div className="min-h-full pt-12">
-      <div className="p-4 mx-auto max-w-xs sm:max-w-lg  sm:p-12  bg-white  shadow  rounded-xl">
+      <div className="p-4 mx-auto max-w-xs sm:max-w-2xl sm:p-12  bg-white  shadow  rounded-xl">
         <h1 className="font-semibold text-2xl leading-normal mb-6">Login</h1>
         <form onSubmit={loginUser}>
           <label className="block mb-1 text-blue-600" htmlFor="email">
