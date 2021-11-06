@@ -6,8 +6,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const Input: FunctionComponent<InputProps> = ({
   label,
-  type,
-  autoComplete,
+  type = 'text',
+  autoComplete = 'off',
   onChange,
   placeholder,
   ...props
@@ -16,7 +16,7 @@ const Input: FunctionComponent<InputProps> = ({
     <>
       <label
         className="block mb-1 text-blue-600"
-        htmlFor={label.replace(/ +/g, '')}
+        htmlFor={label.replace(/ +/g, '').toLowerCase()}
       >
         {label}
       </label>
@@ -37,7 +37,7 @@ const Input: FunctionComponent<InputProps> = ({
             placeholder-blue-400
           "
         type={type}
-        id={label.replace(/ +/g, '')}
+        id={label.replace(/ +/g, '').toLowerCase()}
         placeholder={placeholder}
         {...props}
       />

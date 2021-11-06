@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import Input from 'src/components/input'
 import Button from 'src/components/button'
 import Card from 'src/components/card'
+import Subtext from 'src/components/text'
 
 const Login = () => {
   const router = useRouter()
@@ -45,7 +46,7 @@ const Login = () => {
           <Button>Login</Button>
         </form>
 
-        <p className="text-sm text-center text-blue-400 mt-12">
+        <Subtext>
           I don't have a login, let me{' '}
           <Link href="/register">
             <a className="underline focus:outline-none focus-visible:ring">
@@ -53,7 +54,7 @@ const Login = () => {
             </a>
           </Link>
           .
-        </p>
+        </Subtext>
       </Card>
     </div>
   )

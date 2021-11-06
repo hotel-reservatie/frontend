@@ -3,15 +3,19 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
+import Card from 'src/components/card'
 import useFirebase from 'src/hooks/useFirebase'
+import Input from 'src/components/input'
+import Button from 'src/components/button'
+import Subtext from 'src/components/text'
 
 const Register = () => {
   const router = useRouter()
   const [credentials, setCredentials] = useState({
     username: '',
-    email: '',
+    emailaddress: '',
     password: '',
-    password2: '',
+    repeatpassword: '',
   })
 
   const { createUser, user } = useFirebase()
@@ -21,15 +25,15 @@ const Register = () => {
     // testjonas@test.be --> testfirebase
     // login(credentials.email, credentials.password)
     console.log(credentials)
-    router.push('/')
+    // router.push('/')
   }
 
   function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (
       event.target.id === 'username' ||
-      'email' ||
+      'emailaddress' ||
       'password' ||
-      'password2'
+      'repeatpassword'
     ) {
       setCredentials({ ...credentials, [event.target.id]: event.target.value })
     }
@@ -37,117 +41,40 @@ const Register = () => {
 
   return (
     <div className="min-h-full pt-12 pb-12">
-      <div className="p-4 mx-auto max-w-xs sm:max-w-2xl  sm:p-12  bg-white  shadow  rounded-xl">
+      <Card>
         <h1 className="font-semibold text-2xl leading-normal mb-6">Register</h1>
         <form onSubmit={signInUser}>
-          <label className="block mb-1 text-blue-600" htmlFor="username">
-            Username
-          </label>
-          <input
+          <Input
+            label="Username"
             autoComplete="username"
             onChange={onInputChange}
-            className="
-            px-4
-            py-4
-            mb-4
-            rounded-full
-            border border-blue-400
-            bg-blue-100
-            w-full
-            focus:outline-none
-            focus-visible:ring
-            focus-visible:ring-blue-50
-            placeholder-blue-400
-          "
-            type="text"
-            id="username"
           />
-          <label className="block mb-1 text-blue-600" htmlFor="email">
-            Email address
-          </label>
-          <input
+
+          <Input
+            label="Email address"
             autoComplete="email"
             onChange={onInputChange}
-            className="
-            px-4
-            py-4
-            mb-4
-            rounded-full
-            border border-blue-400
-            bg-blue-100
-            w-full
-            focus:outline-none
-            focus-visible:ring
-            focus-visible:ring-blue-50
-            placeholder-blue-400
-          "
-            type="text"
-            id="email"
             placeholder="eg. johndoe@gmail.com"
           />
 
-          <label className="block mb-1 text-blue-600" htmlFor="password">
-            Password
-          </label>
-          <input
+          <Input
+            label="Password"
             autoComplete="password"
             onChange={onInputChange}
-            className="
-            px-4
-            py-4
-            mb-4
-            rounded-full
-            border border-blue-400
-            bg-blue-100
-            w-full
-            focus:outline-none
-            focus-visible:ring
-            focus-visible:ring-blue-50
-          "
             type="password"
-            id="password"
-          />
-          <label className="block mb-1 text-blue-600" htmlFor="password2">
-            Repeat Password
-          </label>
-          <input
-            autoComplete="password"
-            onChange={onInputChange}
-            className="
-            px-4
-            py-4
-            mb-10
-            rounded-full
-            border border-blue-400
-            bg-blue-100
-            w-full
-            focus:outline-none
-            focus-visible:ring
-            focus-visible:ring-blue-50
-          "
-            type="password"
-            id="password2"
           />
 
-          <button
-            className="
-            text-white
-            py-4
-            bg-blue-700
-            hover:bg-blue-600
-            rounded-full
-            w-full
-            font-semibold
-            focus:outline-none
-            focus-visible:ring
-            focus-visible:ring-blue-200
-          "
-          >
-            Register
-          </button>
+          <Input
+            label="Repeat password"
+            autoComplete="password"
+            onChange={onInputChange}
+            type="password"
+          />
+
+          <Button>Register</Button>
         </form>
 
-        <p className="text-sm text-center text-blue-400 mt-12">
+        <Subtext>
           Already have an account?{' '}
           <Link href="/login">
             <a className="underline focus:outline-none focus-visible:ring">
@@ -155,8 +82,8 @@ const Register = () => {
             </a>
           </Link>
           .
-        </p>
-      </div>
+        </Subtext>
+      </Card>
     </div>
   )
 }
