@@ -32,5 +32,6 @@
     "username": "Gebruikersnaam",
     "password": {
         "repeat": "Herhaal wachtwoord"
-    }
+    },
+    "register": "Registreer"
 }
