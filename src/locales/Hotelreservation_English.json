@@ -21,12 +21,13 @@
         "address": "Email address",
         "placeholder": "eg. johndoe@gmail.com"
     },
-    "login": {
-        "register": "register"
-    },
+    "login": "Log in",
     "subtext": {
         "register": "I don't have a login, let me",
         "login": "Already have an account?"
+    },
+    "loginpage": {
+        "register": "register"
     },
     "username": "Username",
     "password": {
