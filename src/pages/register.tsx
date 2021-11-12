@@ -8,6 +8,7 @@ import useFirebase from 'src/hooks/useFirebase'
 import Input from 'src/components/input'
 import Button from 'src/components/button'
 import Subtext from 'src/components/text'
+import t from 'src/utils/i18n'
 
 const Register = () => {
   const router = useRouter()
@@ -42,30 +43,32 @@ const Register = () => {
   return (
     <div className="min-h-full pt-12 pb-12">
       <Card>
-        <h1 className="font-semibold text-2xl leading-normal mb-6">Register</h1>
+        <h1 className="font-semibold text-2xl leading-normal mb-6">
+          {t('register')}
+        </h1>
         <form onSubmit={signInUser}>
           <Input
-            label="Username"
+            label={t('username')}
             autoComplete="username"
             onChange={onInputChange}
           />
 
           <Input
-            label="Email address"
+            label={t('email.address')}
             autoComplete="email"
             onChange={onInputChange}
-            placeholder="eg. johndoe@gmail.com"
+            placeholder={t('email.placeholder')}
           />
 
           <Input
-            label="Password"
+            label={t('password')}
             autoComplete="password"
             onChange={onInputChange}
             type="password"
           />
 
           <Input
-            label="Repeat password"
+            label={t('password.repeat')}
             autoComplete="password"
             onChange={onInputChange}
             type="password"
@@ -75,10 +78,10 @@ const Register = () => {
         </form>
 
         <Subtext>
-          Already have an account?{' '}
+          {t('subtext.login')}{' '}
           <Link href="/login">
             <a className="underline focus:outline-none focus-visible:ring">
-              Login
+              {t('login')}
             </a>
           </Link>
           .

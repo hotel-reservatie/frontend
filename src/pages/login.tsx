@@ -51,7 +51,7 @@ const Login = () => {
         </form>
 
         <Subtext>
-          {t('login.subtext')}{' '}
+          {t('subtext.register')}{' '}
           <Link href="/register">
             <a className="underline focus:outline-none focus-visible:ring">
               {t('login.register')}
