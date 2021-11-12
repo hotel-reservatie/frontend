@@ -30,11 +30,11 @@ const Home: NextPage = () => {
 
       <Card className="w-full md:py-8 md:px-4">
         <h1 className="text-center mb-4 font-semibold md:text-lg">
-          When would you like to stay with us?
+          {t('datepicker.title')}
         </h1>
         <form action="">
           <DateInput
-            placeholder={'Arrival Date'}
+            placeholder={t('datepicker.arrivaldate')}
             className="text-center placeholder-blue-500"
             onChange={(d: Date) => {
               setDates({ ...dates, arrival: d })
@@ -43,7 +43,7 @@ const Home: NextPage = () => {
             value={dates.arrival?.toLocaleDateString()}
           />
           <DateInput
-            placeholder={'Departure Date'}
+            placeholder={t('datepicker.departuredate')}
             className="text-center placeholder-blue-500"
             onChange={(d: Date) => {
               setDates({ ...dates, departure: d })
@@ -51,7 +51,7 @@ const Home: NextPage = () => {
             selected={dates.departure}
             value={dates.departure?.toLocaleDateString()}
           />
-          <Button>Show availability</Button>
+          <Button>{t('datepicker.availability')}</Button>
         </form>
       </Card>
     </div>
