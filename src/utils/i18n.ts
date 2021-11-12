@@ -41,10 +41,21 @@ i18n
       lookupFromPathIndex: 0,
       lookupFromSubdomainIndex: 0,
     },
+    returnObjects: true,
   })
 
 const t = (s: string) => {
-  return i18n.t(s)
+  const translatedString = i18n.t(s)
+
+  // catch if translatedstring returns an object (happens when using contexts)
+  if (typeof translatedString === 'object') {
+    console.log(s, translatedString)
+
+    const translatedValue = translatedString[Object.keys(translatedString)[0]]
+    return translatedValue
+  }
+
+  return translatedString
 }
 
 export default t
