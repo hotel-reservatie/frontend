@@ -4,15 +4,13 @@ import Header from 'src/components/header'
 import Card from 'src/components/card'
 import DateInput from 'src/components/input/DateInput'
 import Button from 'src/components/button'
-import useI18n from 'src/hooks/useI18n'
+import t from 'src/utils/i18n'
 
 const Home: NextPage = () => {
   const [dates, setDates] = useState<{
     arrival: null | Date
     departure: null | Date
   }>({ arrival: null, departure: null })
-
-  const { t } = useI18n()
 
   return (
     <div className="max-w-7xl mx-auto px-6 my-4 md:grid  md:grid-cols-2 md:mt-16">
