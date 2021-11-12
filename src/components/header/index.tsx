@@ -29,17 +29,17 @@ const Header = () => {
             <div className="hidden md:flex items-center space-x-1">
               <Link href="/about">
                 <a className="py-6 px-2 text-blue-800 hover:text-blue-700 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                  {t('about')}
+                  {t('header.about')}
                 </a>
               </Link>
               <Link href="#">
                 <a className="py-6 px-2 text-blue-800 hover:text-blue-700 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                  {t('rooms')}
+                  {t('header.rooms')}
                 </a>
               </Link>
               <Link href="/contact">
                 <a className="py-6 px-2 text-blue-800 hover:text-blue-700 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                  {t('contact')}
+                  {t('header.contact')}
                 </a>
               </Link>
             </div>
@@ -47,12 +47,12 @@ const Header = () => {
           <div className="hidden md:flex items-center space-x-3 ">
             <Link href="/login">
               <a className="py-2 px-2 text-blue-800 font-medium rounded hover:text-blue-700 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                {t('signin')}
+                {t('header.signin')}
               </a>
             </Link>
             <Link href="/register">
               <a className="py-1 px-4 text-blue-100 font-medium  rounded-full bg-blue-800 hover:bg-blue-700 transition duration-75  focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                {t('register')}
+                {t('header.register')}
               </a>
             </Link>
           </div>
@@ -82,21 +82,21 @@ const Header = () => {
           <li className="active px-6">
             <Link href="/about">
               <a className="block text-sm px-2 py-6 text-blue-800 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                {t('about')}
+                {t('header.about')}
               </a>
             </Link>
           </li>
           <li className="px-6">
             <Link href="#">
               <a className="block text-sm px-2 py-6 text-blue-800 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                {t('rooms')}
+                {t('header.rooms')}
               </a>
             </Link>
           </li>
           <li className="px-6">
             <Link href="/contact">
               <a className="block text-sm px-2 py-6 text-blue-800 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                {t('contact')}
+                {t('header.contact')}
               </a>
             </Link>
           </li>
