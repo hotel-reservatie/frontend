@@ -1,0 +1,20 @@
+{
+    "home": {
+        "welcome": "Welkom bij Hotel MCT!",
+        "p1": "We hebben kamers voor iedere vakantieganger.",
+        "p2": "Neem eens een kijkje!"
+    },
+    "header": {
+        "about": "Over Ons",
+        "rooms": "Kamers",
+        "contact": "Contact",
+        "signin": "Inloggen",
+        "register": "Registreren"
+    },
+    "datepicker": {
+        "title": "In welke periode wilt u bij ons verblijven?",
+        "arrivaldate": "Aankomst datum",
+        "departuredate": "Vertrek datum",
+        "availability": "Toon beschikbaarheid"
+    }
+}
