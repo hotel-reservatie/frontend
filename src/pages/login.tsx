@@ -7,6 +7,8 @@ import Button from 'src/components/button'
 import Card from 'src/components/card'
 import Subtext from 'src/components/text'
 
+import t from 'src/utils/i18n'
+
 const Login = () => {
   const router = useRouter()
   const [credentials, setCredentials] = useState({ email: '', password: '' })
@@ -28,29 +30,31 @@ const Login = () => {
   return (
     <div className="min-h-full pt-12">
       <Card>
-        <h1 className="font-semibold text-2xl leading-normal mb-6">Login</h1>
+        <h1 className="font-semibold text-2xl leading-normal mb-6">
+          {t('login')}
+        </h1>
         <form onSubmit={loginUser}>
           <Input
-            label={'Email address'}
+            label={t('email.address')}
             autoComplete="email"
             onChange={onInputChange}
-            placeholder="eg. johndoe@gmail.com"
+            placeholder={t('email.placeholder')}
           />
 
           <Input
-            label={'Password'}
+            label={t('password')}
             autoComplete="password"
             onChange={onInputChange}
           />
 
-          <Button>Login</Button>
+          <Button>{t('login')}</Button>
         </form>
 
         <Subtext>
-          I don't have a login, let me{' '}
+          {t('login.subtext')}{' '}
           <Link href="/register">
             <a className="underline focus:outline-none focus-visible:ring">
-              register
+              {t('login.register')}
             </a>
           </Link>
           .
