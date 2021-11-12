@@ -16,5 +16,20 @@
         "arrivaldate": "Arrival date",
         "departuredate": "Departure date",
         "availability": "Show availability"
+    },
+    "email": {
+        "address": "Email address",
+        "placeholder": "eg. johndoe@gmail.com"
+    },
+    "login": {
+        "register": "register"
+    },
+    "subtext": {
+        "register": "I don't have a login, let me",
+        "login": "Already have an account?"
+    },
+    "username": "Username",
+    "password": {
+        "repeat": "Repeat password"
     }
 }
