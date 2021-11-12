@@ -32,5 +32,6 @@
     "username": "Username",
     "password": {
         "repeat": "Repeat password"
-    }
+    },
+    "register": "Register"
 }
