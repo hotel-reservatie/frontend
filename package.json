@@ -11,6 +11,7 @@
     "@lingui/react": "^3.12.1",
     "firebase": "^9.2.0",
     "i18next": "^21.4.0",
+    "i18next-browser-languagedetector": "^6.1.2",
     "make-plural": "^7.0.0",
     "next": "12.0.2",
     "react": "17.0.2",
