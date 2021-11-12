@@ -21,12 +21,13 @@
         "address": "E-mail adres",
         "placeholder": "bv. mark@gmail.com"
     },
-    "login": {
-        "register": "registreren"
-    },
+    "login": "Log in",
     "subtext": {
         "register": "Ik heb nog geen login, laat me",
         "login": "Heb je al een account?"
+    },
+    "loginpage": {
+        "register": "registreren"
     },
     "username": "Gebruikersnaam",
     "password": {
