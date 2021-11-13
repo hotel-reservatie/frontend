@@ -50,3 +50,6 @@ env-config.js
 **/public/workbox-*.js.map
 **/public/worker-*.js.map
 **/public/fallback-*.js
+
+# codegen
+__generated-schema-types.tsx

@@ -1,16 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import type { NextPage } from 'next'
-import Header from 'src/components/header'
 import Card from 'src/components/card'
 import DateInput from 'src/components/input/DateInput'
 import Button from 'src/components/button'
 import t from 'src/utils/i18n'
+import { useGetAllRoomsQuery } from 'src/schema'
 
 const Home: NextPage = () => {
   const [dates, setDates] = useState<{
     arrival: null | Date
     departure: null | Date
   }>({ arrival: null, departure: null })
+
+  const { loading, error, data } = useGetAllRoomsQuery()
+
+  useEffect(() => {
+    if (!loading) {
+      data?.getAllRooms?.map(room => {
+        console.log(room.roomName)
+      })
+    }
+  }, [loading, data])
 
   return (
     <div className="max-w-7xl mx-auto px-6 my-4 md:grid  md:grid-cols-2 md:mt-16">
