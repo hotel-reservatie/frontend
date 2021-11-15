@@ -12,6 +12,7 @@ const GetAllRooms = gql`
       }
       currentPrice
       weekendMultiplier
+      images
     }
   }
 `
