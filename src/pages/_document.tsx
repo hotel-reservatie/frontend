@@ -45,7 +45,7 @@ class MyDocument extends Document {
           <meta name="msapplication-TileColor" content="#ffffff" />
           <meta name="theme-color" content="#ffffff" />
         </Head>
-        <body className="bg-blue-50 text-blue-800">
+        <body className="bg-blue-50 text-blue-800 selection:bg-blue-800 selection:text-white">
           <Main />
           <NextScript />
         </body>

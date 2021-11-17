@@ -86,7 +86,7 @@ const Header = () => {
             </Link>
           </li>
           <li className="px-6">
-            <Link href="#">
+            <Link href="/rooms">
               <a className="block text-sm px-2 py-6 text-blue-800 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
                 {t('header.rooms')}
               </a>
