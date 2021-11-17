@@ -65,6 +65,7 @@ const Home: NextPage = () => {
           price={90}
           size={type.capacity}
           loading={loading}
+          type={'roomType'}
         />
       ))}
     </>
