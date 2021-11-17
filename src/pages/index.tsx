@@ -57,8 +57,9 @@ const Home: NextPage = () => {
           </form>
         </Card>
       </div>
-      {data?.getRoomTypes.map(type => (
+      {data?.getRoomTypes.map((type, index) => (
         <RoomCard
+          key={`roomcard-${index}`}
           img={type.sampleImage}
           title={type.typeName}
           desc={type.description}
