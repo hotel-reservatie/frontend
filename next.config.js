@@ -6,6 +6,9 @@ const isDev = process.env.NODE_ENV === 'development'
 module.exports = withPWA({
   reactStrictMode: true,
   distDir: 'dist',
+  images: {
+    domains: ['firebasestorage.googleapis.com'],
+  },
   i18n: {
     locales: ['en', 'nl'],
     defaultLocale: 'en',

@@ -11,7 +11,7 @@ const Header = () => {
   }
 
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="bg-white shadow">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between">
           <div className="flex space-x-7">
