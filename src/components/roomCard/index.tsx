@@ -1,6 +1,6 @@
-import { FunctionComponent, useEffect } from 'react'
+import { FunctionComponent, useEffect, useRef } from 'react'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 import localizedPrice from 'src/utils/localePrice'
 import Button from 'src/components/button'
 interface RoomCardProps {
@@ -83,8 +83,10 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
 }) => {
   const { locale } = useRouter()
 
-  function RoomTypeOnPress() {}
-  function RoomOnPress() {}
+  function RoomTypeOnClick(title: string | undefined | null) {
+    router.push({ pathname: '/rooms', query: { roomtype: title ? title : '' } })
+  }
+  function RoomOnClick(title: string | undefined | null) {}
 
   if (loading) {
     return (
@@ -114,7 +116,10 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
               {size ? size : ''}
             </p>
           </span>
-          <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
+          <Button
+            className="w-max py-2 px-8 text-base font-normal leading-tight"
+            onClick={() => RoomTypeOnClick(title)}
+          >
             Show Availability
           </Button>
         </div>
