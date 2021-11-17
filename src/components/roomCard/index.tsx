@@ -2,6 +2,7 @@ import { FunctionComponent, useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import localizedPrice from 'src/utils/localePrice'
+import Button from 'src/components/button'
 
 interface RoomCardProps {
   img: string | undefined | null
@@ -60,7 +61,9 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
         </div>
         <div className="flex flex-row justify-between my-8">
           <p className="font-bold text-2xl">{size ? size : ''}</p>
-          <button>Show Availability</button>
+          <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
+            Show Availability
+          </Button>
         </div>
       </div>
     </div>

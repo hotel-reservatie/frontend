@@ -4,11 +4,14 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode
 }
 
-const Button: FunctionComponent<ButtonProps> = ({ children, ...props }) => {
+const Button: FunctionComponent<ButtonProps> = ({
+  children,
+  className = '',
+  ...props
+}) => {
   return (
     <button
-      className="
-            text-white
+      className={`text-white
             py-4
             bg-blue-700
             hover:bg-blue-600
@@ -18,7 +21,7 @@ const Button: FunctionComponent<ButtonProps> = ({ children, ...props }) => {
             focus:outline-none
             focus-visible:ring
             focus-visible:ring-blue-200
-          "
+            ${className}`}
       {...props}
     >
       {children}
