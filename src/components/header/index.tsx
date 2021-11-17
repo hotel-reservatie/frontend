@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
-
-import t from 'src/utils/i18n'
+import { useTranslation } from 'next-i18next'
 
 const Header = () => {
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true)
-
+  const { t } = useTranslation()
   function toggleNav() {
     setMobileMenuHidden(!mobileMenuHidden)
   }

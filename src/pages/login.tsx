@@ -6,11 +6,12 @@ import Input from 'src/components/input'
 import Button from 'src/components/button'
 import Card from 'src/components/card'
 import Subtext from 'src/components/text'
-
-import t from 'src/utils/i18n'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 
 const Login = () => {
   const router = useRouter()
+  const { t } = useTranslation()
   const [credentials, setCredentials] = useState({ email: '', password: '' })
   const { login, user } = useFirebase()
 
@@ -63,5 +64,11 @@ const Login = () => {
     </div>
   )
 }
+
+export const getStaticProps = async ({ locale }: any) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+})
 
 export default Login

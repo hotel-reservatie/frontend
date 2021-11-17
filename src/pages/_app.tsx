@@ -1,5 +1,7 @@
 import type { AppProps } from 'next/app'
 import { ApolloProvider } from '@apollo/client'
+import { appWithTranslation } from 'next-i18next'
+
 import Header from 'src/components/header'
 import '../styles/globals.css'
 import client from 'src/utils/apollo'
@@ -13,4 +15,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   )
 }
 
-export default MyApp
+export default appWithTranslation(MyApp)

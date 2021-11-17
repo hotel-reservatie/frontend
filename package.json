@@ -17,6 +17,7 @@
     "i18next-browser-languagedetector": "^6.1.2",
     "make-plural": "^7.0.0",
     "next": "12.0.2",
+    "next-i18next": "^9.1.0",
     "next-pwa": "^5.4.0",
     "react": "17.0.2",
     "react-datepicker": "^4.3.0",
