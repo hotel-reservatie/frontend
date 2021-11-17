@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const withPWA = require('next-pwa')
+const { i18n } = require('./next-i18next.config')
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -9,11 +10,12 @@ module.exports = withPWA({
   images: {
     domains: ['firebasestorage.googleapis.com'],
   },
-  i18n: {
-    locales: ['en', 'nl'],
-    defaultLocale: 'en',
-    localeDetection: true,
-  },
+  i18n,
+  // i18n: {
+  //   locales: ['en', 'nl'],
+  //   defaultLocale: 'en',
+  //   localeDetection: true,
+  // },
   pwa: {
     dest: 'public',
     register: true,

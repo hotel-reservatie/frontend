@@ -8,10 +8,12 @@ import useFirebase from 'src/hooks/useFirebase'
 import Input from 'src/components/input'
 import Button from 'src/components/button'
 import Subtext from 'src/components/text'
-import t from 'src/utils/i18n'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const Register = () => {
   const router = useRouter()
+  const { t } = useTranslation()
   const [credentials, setCredentials] = useState({
     username: '',
     emailaddress: '',
@@ -90,5 +92,11 @@ const Register = () => {
     </div>
   )
 }
+
+export const getStaticProps = async ({ locale }: any) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+})
 
 export default Register

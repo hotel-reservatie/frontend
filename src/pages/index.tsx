@@ -3,15 +3,19 @@ import type { NextPage } from 'next'
 import Card from 'src/components/card'
 import DateInput from 'src/components/input/DateInput'
 import Button from 'src/components/button'
-import t from 'src/utils/i18n'
 import { useGetAllRoomTypesQuery } from 'src/schema'
 import RoomCard from 'src/components/roomCard'
+
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const Home: NextPage = () => {
   const [dates, setDates] = useState<{
     arrival: null | Date
     departure: null | Date
   }>({ arrival: null, departure: null })
+
+  const { t } = useTranslation('common')
 
   const { loading, error, data } = useGetAllRoomTypesQuery()
 
@@ -72,5 +76,11 @@ const Home: NextPage = () => {
     </>
   )
 }
+
+export const getStaticProps = async ({ locale }: any) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+})
 
 export default Home
