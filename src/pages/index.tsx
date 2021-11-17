@@ -4,7 +4,7 @@ import Card from 'src/components/card'
 import DateInput from 'src/components/input/DateInput'
 import Button from 'src/components/button'
 import t from 'src/utils/i18n'
-import { useGetAllRoomsQuery } from 'src/schema'
+import { useGetAllRoomTypesQuery } from 'src/schema'
 import RoomCard from 'src/components/roomCard'
 
 const Home: NextPage = () => {
@@ -13,7 +13,7 @@ const Home: NextPage = () => {
     departure: null | Date
   }>({ arrival: null, departure: null })
 
-  const { loading: roomsLoading, error, data: rooms } = useGetAllRoomsQuery()
+  const { loading, error, data } = useGetAllRoomTypesQuery()
 
   return (
     <>
@@ -57,20 +57,16 @@ const Home: NextPage = () => {
           </form>
         </Card>
       </div>
-      {rooms?.getAllRooms?.map(room => {
-        if (room?.images?.[0] !== 'familiekamer-1.jpg') {
-          return (
-            <RoomCard
-              img={room?.images?.[0]}
-              title={room.roomName}
-              desc={room.description}
-              price={room.currentPrice}
-              size={room.surface}
-              loading={roomsLoading}
-            />
-          )
-        }
-      })}
+      {data?.getRoomTypes.map(type => (
+        <RoomCard
+          img={type.sampleImage}
+          title={type.typeName}
+          desc={type.description}
+          price={90}
+          size={type.capacity}
+          loading={loading}
+        />
+      ))}
     </>
   )
 }
