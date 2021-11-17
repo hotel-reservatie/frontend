@@ -19,6 +19,11 @@ interface RoomCardHolderProps {
   title: string | undefined | null
 }
 
+interface RoomCardTitleSectionProps {
+  title: string | undefined | null
+  desc: string | undefined | null
+}
+
 const RoomCardHolder: FunctionComponent<RoomCardHolderProps> = ({
   children,
   img,
@@ -26,7 +31,7 @@ const RoomCardHolder: FunctionComponent<RoomCardHolderProps> = ({
 }) => {
   return (
     <div className="max-w-7xl mx-auto grid grid-cols-4 my-8 items-center rounded-xl shadow bg-white">
-      <div className="h-72 relative">
+      <div className="h-80 relative">
         <Image
           src={img ? img : '/not_found.svg'}
           alt={title ? title : 'Not found'}
@@ -35,7 +40,21 @@ const RoomCardHolder: FunctionComponent<RoomCardHolderProps> = ({
           className="rounded-l-xl"
         />
       </div>
-      {children}
+      <div className="col-span-3 flex  flex-col px-8 h-full content-between justify-between">
+        {children}
+      </div>
+    </div>
+  )
+}
+
+const RoomCardTitleSection: FunctionComponent<RoomCardTitleSectionProps> = ({
+  title,
+  desc,
+}) => {
+  return (
+    <div className="">
+      <h2 className="font-bold text-2xl mt-8 mb-4">{title ? title : ''}</h2>
+      <p className="max-w-md text-blue-700">{desc ? desc : ''}</p>
     </div>
   )
 }
@@ -51,6 +70,9 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
 }) => {
   const { locale } = useRouter()
 
+  function RoomTypeOnPress() {}
+  function RoomOnPress() {}
+
   if (loading) {
     return (
       <>
@@ -63,27 +85,22 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
   if (type === 'roomType') {
     return (
       <RoomCardHolder img={img} title={title}>
-        <div className="col-span-3 flex  flex-col px-8 h-full content-between justify-between">
-          <div className="flex flex-row justify-between items-start">
-            <div className="">
-              <h2 className="font-bold text-2xl mt-8 mb-4">
-                {title ? title : ''}
-              </h2>
-              <p className="max-w-md text-blue-700">{desc ? desc : ''}</p>
-            </div>
-            <div>
-              <p className="mt-8 text-gray-400">Starting from</p>
-              <p className="font-bold text-2xl">
-                {price ? localizedPrice(price, locale) : ''}
-              </p>
-            </div>
+        <div className="flex flex-row justify-between items-start">
+          <RoomCardTitleSection title={title} desc={desc} />
+          <div>
+            <p className="mt-8 text-gray-400">Starting from</p>
+            <p className="font-bold text-2xl">
+              {price ? localizedPrice(price, locale) : ''}
+            </p>
           </div>
-          <div className="flex flex-row justify-between my-8">
+        </div>
+        <div className="flex flex-row justify-between my-8">
+          <span>
             <p className="font-bold text-2xl">{size ? size : ''}</p>
-            <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
-              Show Availability
-            </Button>
-          </div>
+          </span>
+          <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
+            Show Availability
+          </Button>
         </div>
       </RoomCardHolder>
     )

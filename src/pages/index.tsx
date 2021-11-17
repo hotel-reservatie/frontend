@@ -17,8 +17,8 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto px-6 my-4 md:grid  md:grid-cols-2 md:mt-16">
-        <div className="mb-8 mx-auto md:my-auto md:px-4">
+      <div className="max-w-7xl mx-auto my-4 md:grid  md:grid-cols-2 md:mt-16">
+        <div className="mb-8 mx-auto md:my-auto md:pr-4">
           <h1 className="font-bold text-blue-700 mb-2 md:text-4xl">
             {t('home.welcome')}
           </h1>
