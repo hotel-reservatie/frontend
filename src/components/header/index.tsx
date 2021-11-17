@@ -12,12 +12,12 @@ const Header = () => {
 
   return (
     <nav className="bg-white shadow">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto ">
         <div className="flex justify-between">
           <div className="flex space-x-7">
             <div>
               <Link href="/">
-                <a className="flex items-center py-6 px-2 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
+                <a className="flex items-center py-6 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
                   <img src="./logo.svg" alt="Logo" className="h-8 w-8 mr-2" />
                   <span className="font-semibold text-lg text-blue-700">
                     Hotel MCT
@@ -31,7 +31,7 @@ const Header = () => {
                   {t('header.about')}
                 </a>
               </Link>
-              <Link href="#">
+              <Link href="/rooms">
                 <a className="py-6 px-2 text-blue-800 hover:text-blue-700 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
                   {t('header.rooms')}
                 </a>
