@@ -25,39 +25,41 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
   if (loading) {
     return (
       <>
+        {/* replace this with skeleton loader */}
         <p>loading..</p>
       </>
     )
   }
 
   return (
-    <div className="max-w-5xl mx-auto  flex flex-row justify-between  my-8 items-center rounded-xl shadow">
-      <div>
+    <div className="max-w-7xl mx-auto grid grid-cols-4 my-8 items-center rounded-xl shadow bg-white">
+      <div className="h-72 relative">
         <Image
-          placeholder="blur"
-          blurDataURL="https://firebasestorage.googleapis.com/v0/b/advfs-hotelreservations.appspot.com/o/comfort-kamer-1.jpg?alt=media&token=1dc6fe7c-98ec-4ad0-8545-21e8e8c979c6"
-          width={16}
-          height={9}
           src={img ? img : '/not_found.svg'}
           alt={title ? title : 'Not found'}
+          layout="fill" // required
+          objectFit="cover" // change to suit your needs
+          className="rounded-l-xl"
         />
       </div>
 
-      <div className="flex flex-col bg-white">
+      <div className="col-span-3 flex  flex-col px-8 h-full content-between justify-between">
         <div className="flex flex-row justify-between items-start">
-          <div className=" pr-16">
-            <h2 className="font-bold text-xl my-2">{title ? title : ''}</h2>
-            <p className="max-w-md">{desc ? desc : ''}</p>
+          <div className="">
+            <h2 className="font-bold text-2xl mt-8 mb-4">
+              {title ? title : ''}
+            </h2>
+            <p className="max-w-md text-blue-700">{desc ? desc : ''}</p>
           </div>
           <div>
-            <p className="mt-2 text-gray-400">Starting from</p>
-            <p className="font-bold">
+            <p className="mt-8 text-gray-400">Starting from</p>
+            <p className="font-bold text-2xl">
               {price ? localizedPrice(price, locale) : ''}
             </p>
           </div>
         </div>
-        <div className="flex flex-row justify-between pt-16">
-          <p>{size ? size : ''}</p>
+        <div className="flex flex-row justify-between my-8">
+          <p className="font-bold text-2xl">{size ? size : ''}</p>
           <button>Show Availability</button>
         </div>
       </div>

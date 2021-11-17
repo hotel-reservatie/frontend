@@ -15,12 +15,6 @@ const Home: NextPage = () => {
 
   const { loading: roomsLoading, error, data: rooms } = useGetAllRoomsQuery()
 
-  useEffect(() => {
-    rooms?.getAllRooms?.map(({ images }) => {
-      console.log(images)
-    })
-    return () => {}
-  }, [rooms])
   return (
     <>
       <div className="max-w-7xl mx-auto px-6 my-4 md:grid  md:grid-cols-2 md:mt-16">
