@@ -25,7 +25,7 @@ interface IAuthContext {
   logout: () => Promise<void>
 }
 
-const AuthContext = createContext<IAuthContext | null>(null)
+const AuthContext = createContext<IAuthContext>({} as IAuthContext)
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FB_APIKEY,
@@ -42,12 +42,9 @@ export function useAuth() {
 
 export const AuthProvider: FunctionComponent = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
+  const app: FirebaseApp = initializeApp(firebaseConfig)
   const auth: Auth = getAuth()
-
-  useEffect(() => {
-    const app: FirebaseApp = initializeApp(firebaseConfig)
-    setPersistence(auth, browserLocalPersistence)
-  }, [])
+  setPersistence(auth, browserLocalPersistence)
 
   const restoreAuth = (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
@@ -87,6 +84,8 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
         .catch(error => {
           const errorCode = error.code
           const errorMessage = error.message
+          console.log(error)
+
           reject(false)
         })
     })
