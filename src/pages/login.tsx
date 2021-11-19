@@ -8,19 +8,23 @@ import Card from 'src/components/card'
 import Subtext from 'src/components/text'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import { useAuth } from 'src/providers/authProvider'
 
 const Login = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const [credentials, setCredentials] = useState({ email: '', password: '' })
-  const { login, user } = useFirebase()
+  const { login, user } = useAuth()
 
   function loginUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    // testjonas@test.be --> testfirebase
     login(credentials.email, credentials.password)
-    router.push('/')
+    // router.push('/')
   }
+
+  useEffect(() => {
+    console.log(user)
+  }, [user])
 
   function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.id === 'email' || 'password') {
@@ -37,6 +41,7 @@ const Login = () => {
         <form onSubmit={loginUser}>
           <Input
             label={t('email.address')}
+            id="email"
             autoComplete="email"
             onChange={onInputChange}
             placeholder={t('email.placeholder')}
@@ -44,8 +49,10 @@ const Login = () => {
 
           <Input
             label={t('password')}
+            id="password"
             autoComplete="password"
             onChange={onInputChange}
+            type="password"
           />
 
           <Button>{t('login')}</Button>

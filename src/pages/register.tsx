@@ -10,23 +10,25 @@ import Button from 'src/components/button'
 import Subtext from 'src/components/text'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useAuth } from 'src/providers/authProvider'
 
 const Register = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const [credentials, setCredentials] = useState({
     username: '',
-    emailaddress: '',
+    email: '',
     password: '',
-    repeatpassword: '',
+    'repeat-pw': '',
   })
 
-  const { createUser, user } = useFirebase()
+  const { createUser } = useAuth()
 
   function signInUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     // testjonas@test.be --> testfirebase
     // login(credentials.email, credentials.password)
+    createUser(credentials.email, credentials.password, credentials.username)
     console.log(credentials)
     // router.push('/')
   }
@@ -34,9 +36,9 @@ const Register = () => {
   function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (
       event.target.id === 'username' ||
-      'emailaddress' ||
+      'email' ||
       'password' ||
-      'repeatpassword'
+      'repeat-pw'
     ) {
       setCredentials({ ...credentials, [event.target.id]: event.target.value })
     }
@@ -53,6 +55,7 @@ const Register = () => {
             label={t('username')}
             autoComplete="username"
             onChange={onInputChange}
+            id="username"
           />
 
           <Input
@@ -60,6 +63,7 @@ const Register = () => {
             autoComplete="email"
             onChange={onInputChange}
             placeholder={t('email.placeholder')}
+            id="email"
           />
 
           <Input
@@ -67,6 +71,7 @@ const Register = () => {
             autoComplete="password"
             onChange={onInputChange}
             type="password"
+            id="password"
           />
 
           <Input
@@ -74,6 +79,7 @@ const Register = () => {
             autoComplete="password"
             onChange={onInputChange}
             type="password"
+            id="repeat-pw"
           />
 
           <Button>Register</Button>
