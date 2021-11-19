@@ -33,6 +33,12 @@ module.exports = {
       borderRadius: {
         xl: '32px',
       },
+      gridTemplateColumns: {
+        'auto': 'repeat(auto-fill, minmax(9rem, 1fr))'
+      },
+      gridTemplateRows: {
+        'fixheight': " repeat(400px)"
+      }
     },
   },
 
