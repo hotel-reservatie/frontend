@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
+import Image from 'next/image'
 
 const Header = () => {
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true)
@@ -17,7 +18,7 @@ const Header = () => {
             <div>
               <Link href="/">
                 <a className="flex items-center py-6 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                  <img src="./logo.svg" alt="Logo" className="h-8 w-8 mr-2" />
+                  <Image src="/logo.svg" alt="Logo" width={32} height={32} className="mr-2" />
                   <span className="font-semibold text-lg text-blue-700">
                     Hotel MCT
                   </span>
