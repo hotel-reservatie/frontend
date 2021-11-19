@@ -1,5 +1,5 @@
 overwrite: true
-schema: 'http://192.168.0.146:3000/v1'
+schema: ${SCHEMA_PATH}
 generates:
   src/schema/__generated-schema-types.tsx:
     documents:
