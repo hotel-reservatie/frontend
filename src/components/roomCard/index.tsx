@@ -9,6 +9,7 @@ interface RoomCardProps {
   desc: string | undefined | null
   price: number | undefined | null
   size: number | undefined | null
+  id: string | undefined | null
   type: 'roomType' | 'room'
   loading: boolean
 }
@@ -79,6 +80,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
   price,
   size,
   loading,
+  id,
   type = 'room',
 }) => {
   const { locale } = useRouter()
@@ -118,7 +120,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
           </span>
           <Button
             className="w-max py-2 px-8 text-base font-normal leading-tight"
-            onClick={() => RoomTypeOnClick(title)}
+            onClick={() => RoomTypeOnClick(id)}
           >
             Show Availability
           </Button>
