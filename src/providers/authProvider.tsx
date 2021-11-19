@@ -15,12 +15,13 @@ import {
   signInWithEmailAndPassword,
   signOut,
   User,
+  updateProfile,
 } from 'firebase/auth'
 
 interface IAuthContext {
   user: User | null
   restoreAuth: () => Promise<boolean>
-  createUser: (email: string, password: string) => void
+  createUser: (email: string, password: string, username: string) => void
   login: (email: string, password: string) => Promise<boolean>
   logout: () => Promise<void>
 }
@@ -64,14 +65,35 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     })
   }
 
-  const createUser = (email: string, password: string) => {
+  const createUser = (email: string, password: string, username: string) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async userCredential => {
         setUser(userCredential.user)
+        changeUserDisplayName(username, userCredential.user)
       })
       .catch(error => {
         console.log({ error })
       })
+  }
+
+  const changeUserDisplayName = (
+    username: string,
+    user: User,
+  ): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+      updateProfile(user, {
+        displayName: username,
+      })
+        .then(value => {
+          console.log(value)
+
+          resolve(true)
+        })
+        .catch(e => {
+          console.log('Unable to update username: ', e)
+          reject(false)
+        })
+    })
   }
 
   const login = (email: string, password: string): Promise<boolean> => {

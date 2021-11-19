@@ -28,7 +28,7 @@ const Register = () => {
     event.preventDefault()
     // testjonas@test.be --> testfirebase
     // login(credentials.email, credentials.password)
-    createUser(credentials.email, credentials.password)
+    createUser(credentials.email, credentials.password, credentials.username)
     console.log(credentials)
     // router.push('/')
   }

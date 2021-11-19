@@ -14,13 +14,17 @@ const Login = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const [credentials, setCredentials] = useState({ email: '', password: '' })
-  const { login } = useAuth()
+  const { login, user } = useAuth()
 
   function loginUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     login(credentials.email, credentials.password)
-    router.push('/')
+    // router.push('/')
   }
+
+  useEffect(() => {
+    console.log(user)
+  }, [user])
 
   function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.id === 'email' || 'password') {
