@@ -38,6 +38,17 @@ module.exports = {
       },
       gridTemplateRows: {
         'fixheight': " repeat(400px)"
+      },
+      width: {
+        "100": "100px",
+        "128": "128px"
+      },
+      height: {
+        "100": "100px",
+        "128": "128px"
+      },
+      minHeight: {
+        "128": "128px"
       }
     },
   },
