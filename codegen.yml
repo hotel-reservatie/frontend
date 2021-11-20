@@ -1,5 +1,5 @@
 overwrite: true
-schema: ${SCHEMA_PATH}
+schema: ${NEXT_PUBLIC_BACKEND}
 generates:
   src/schema/__generated-schema-types.tsx:
     documents:

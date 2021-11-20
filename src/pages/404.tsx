@@ -1,3 +1,4 @@
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import React from 'react'
 
 export default function Custom404() {
@@ -9,3 +10,8 @@ export default function Custom404() {
     </div>
   )
 }
+export const getStaticProps = async ({ locale }: any) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+})
