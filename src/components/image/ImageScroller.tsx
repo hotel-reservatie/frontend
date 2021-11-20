@@ -37,7 +37,7 @@ const ImageScroller = ({ images }: { images?: string[] | undefined }) => {
                     className={`${
                       index == selectedImage
                         ? 'w-100 h-100'
-                        : 'w-80 h-80 opacity-50 hover:opacity-75'
+                        : 'w-20 h-20 opacity-50 hover:opacity-75'
                     } object-cover object-center rounded-2xl transition-all `}
                   />
                 </button>

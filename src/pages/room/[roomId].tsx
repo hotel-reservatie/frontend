@@ -10,6 +10,7 @@ import SubTitle from 'src/components/text/SubTitle'
 import { MdDone, MdOutlinePerson, MdStar } from 'react-icons/md'
 import Card from 'src/components/card'
 import ImageScroller from 'src/components/image/ImageScroller'
+import { BsTag } from 'react-icons/bs'
 
 const Room: NextPage = () => {
   const router = useRouter()
@@ -35,13 +36,13 @@ const Room: NextPage = () => {
     for (let i = 0; i < 5; i++) {
       if (i < score) {
         stars.push(
-          <div>
+          <div key={i}>
             <MdStar size={24} className=" text-yellow-400" />
           </div>,
         )
       } else {
         stars.push(
-          <div>
+          <div key={i}>
             <MdStar size={24} className=" text-blue-300" />
           </div>,
         )
@@ -59,7 +60,21 @@ const Room: NextPage = () => {
             data?.getRoomById?.images ? data.getRoomById.images : undefined
           }
         />
-        <div className="grid grid-rows-3 items-center gap-9">
+        <div className="grid  row items-start gap-9">
+          <div className="flex gap-2">
+            {data?.getRoomById?.tags
+              ? data.getRoomById.tags.map(t => {
+                  return (
+                    <Card className=" px-2 py-2 mx-0 flex gap-2" key={t.name}>
+                      <div>
+                        <BsTag />
+                      </div>
+                      <span className=" text-xs">{t.name}</span>
+                    </Card>
+                  )
+                })
+              : null}
+          </div>
           <h2 className=" text-blue-400 mb">
             <span className=" text-2xl font-bold text-blue-700">{`€${
               data?.getRoomById?.currentPrice
