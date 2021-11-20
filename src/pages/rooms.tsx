@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 
-import Slider, { Range } from 'rc-slider'
-import 'rc-slider/assets/index.css'
+import Slider from '@mui/material/Slider'
+
 import RoomCard from 'src/components/roomCard'
 import { Maybe, RoomFilters, useGetFilteredRoomsQuery } from 'src/schema'
 
 const Rooms = () => {
   const [filters, setFilters] = useState<RoomFilters>()
   const [boundries, setBoundries] = useState({ min: 0, max: 100 })
+  const [marks, setMarks] = useState([])
   const { query } = useRouter()
   const { loading, error, data } = useGetFilteredRoomsQuery({
     variables: { roomFilter: { ...filters } },
@@ -26,9 +27,9 @@ const Rooms = () => {
   }, [boundries])
 
   return (
-    <>
+    <div className="max-w-7xl mx-auto">
       <div>
-        <Range min={0} max={boundries.max} step={10} />
+        <Slider min={0} max={boundries.max} step={10} />
       </div>
       {data?.getRooms?.map((room, index) => {
         if (room.currentPrice && boundries.max < room.currentPrice) {
@@ -52,7 +53,7 @@ const Rooms = () => {
           />
         )
       })}
-    </>
+    </div>
   )
 }
 
