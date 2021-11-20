@@ -1,14 +1,16 @@
-import { FunctionComponent, useEffect, useRef } from 'react'
+import React, { FunctionComponent, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import router, { useRouter } from 'next/router'
 import localizedPrice from 'src/utils/localePrice'
 import Button from 'src/components/button'
+import Link from 'next/link'
 interface RoomCardProps {
   img: string | undefined | null
   title: string | undefined | null
   desc: string | undefined | null
   price: number | undefined | null
-  size: number | undefined | null
+  size?: number | undefined | null
+  surface?: number | undefined | null
   id: string | undefined | null
   type: 'roomType' | 'room'
   loading: boolean
@@ -38,6 +40,37 @@ const People = () => {
   )
 }
 
+const Surface = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      enableBackground="new 0 0 24 24"
+      height="24px"
+      viewBox="0 0 24 24"
+      width="24px"
+      fill="#0839BC"
+    >
+      <rect fill="none" height="24" width="24" />
+      <polygon points="21,11 21,3 13,3 16.29,6.29 6.29,16.29 3,13 3,21 11,21 7.71,17.71 17.71,7.71" />
+    </svg>
+  )
+}
+
+const Arrow = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24px"
+      viewBox="0 0 24 24"
+      width="24px"
+      fill="#527FF7"
+    >
+      <path d="M0 0h24v24H0V0z" fill="none" />
+      <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z" />
+    </svg>
+  )
+}
+
 const RoomCardHolder: FunctionComponent<RoomCardHolderProps> = ({
   children,
   img,
@@ -52,6 +85,7 @@ const RoomCardHolder: FunctionComponent<RoomCardHolderProps> = ({
           layout="fill" // required
           objectFit="cover" // change to suit your needs
           className="rounded-l-xl"
+          priority
         />
       </div>
       <div className="col-span-3 flex  flex-col px-8 h-full content-between justify-between">
@@ -81,6 +115,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
   size,
   loading,
   id,
+  surface,
   type = 'room',
 }) => {
   const { locale } = useRouter()
@@ -88,7 +123,6 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
   function RoomTypeOnClick(title: string | undefined | null) {
     router.push({ pathname: '/rooms', query: { roomtype: title ? title : '' } })
   }
-  function RoomOnClick(title: string | undefined | null) {}
 
   if (loading) {
     return (
@@ -97,9 +131,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
         <p>loading..</p>
       </>
     )
-  }
-
-  if (type === 'roomType') {
+  } else if (type === 'roomType' && img?.includes('http')) {
     return (
       <RoomCardHolder img={img} title={title}>
         <div className="flex flex-row justify-between items-start">
@@ -127,8 +159,49 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
         </div>
       </RoomCardHolder>
     )
+  } else if (type === 'room' && img?.includes('http')) {
+    return (
+      <RoomCardHolder img={img} title={title}>
+        <div className="flex flex-row justify-between items-start">
+          <RoomCardTitleSection title={title} desc={desc} />
+          <div>
+            <p className="mt-8 "></p>
+            <p className="font-bold text-2xl">
+              {price ? localizedPrice(price, locale) : ''}
+            </p>
+          </div>
+        </div>
+        <div>
+          <Link href="#">
+            <span className="flex flex-row items-center cursor-pointer">
+              <a className="text-blue-500 mr-4">More info</a>
+              <Arrow />
+            </span>
+          </Link>
+        </div>
+        <div className="flex flex-row justify-between my-8">
+          <div className="flex flex-row">
+            <span className="flex flex-row items-center mr-4">
+              <People />
+              <p className="font-bold text-2xl text-blue-700 ml-2">
+                {size ? size : ''}
+              </p>
+            </span>
+            <span className="flex flex-row items-center ml-4">
+              <Surface />
+              <p className="font-bold text-2xl text-blue-700 ml-1">
+                {surface ? surface : ''}m²
+              </p>
+            </span>
+          </div>
+          <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
+            <Link href="#">Book now</Link>
+          </Button>
+        </div>
+      </RoomCardHolder>
+    )
   } else {
-    return <div></div>
+    return <></>
   }
 }
 

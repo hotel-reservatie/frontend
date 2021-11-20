@@ -5,6 +5,7 @@ const GetFilteredRooms = gql`
     getRooms(Filters: $roomFilter) {
       roomId
       roomName
+      images
       description
       surface
       currentPrice
