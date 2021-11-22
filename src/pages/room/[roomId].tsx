@@ -21,11 +21,9 @@ const Room: NextPage = () => {
   const { roomId } = router.query
   const { user } = useAuth()
 
-  const { loading, error, data } = useGetRoomByIdQuery({
+  const { loading, error, data, refetch } = useGetRoomByIdQuery({
     variables: { roomId: roomId as string },
   })
-
-  const [roomData, setRoomData] = useState(data)
 
   const [createReview, createReviewResult] = useMutation(AddReview)
 
@@ -36,15 +34,19 @@ const Room: NextPage = () => {
     room: { roomId: roomId as string },
   })
 
+  const [hoveredStar, setHoveredStar] = useState(0)
+
   const writeReview = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     if (user) {
-      console.log(
-        await createReview({
-          variables: {
-            reviewInput: { ...newReview, room: { roomId: roomId as string } },
-          },
-        }),
-      )
+      await createReview({
+        variables: {
+          reviewInput: { ...newReview, room: { roomId: roomId as string } },
+        },
+      }),
+        refetch()
+
+      setNewReview({ ...newReview, reviewScore: 0, title: '', description: '' })
     }
   }
 
@@ -52,6 +54,37 @@ const Room: NextPage = () => {
     const d = new Date(date)
 
     return `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`
+  }
+
+  const generateNewReviewStars = () => {
+    const stars = []
+
+    for (let i = 0; i < 5; i++) {
+      stars.push(
+        <div
+          key={i}
+          onMouseLeave={() => {
+            setHoveredStar(newReview.reviewScore - 1)
+          }}
+        >
+          <MdStar
+            id={i.toString()}
+            size={48}
+            className={`${
+              i <= hoveredStar ? 'text-yellow-400' : 'text-blue-300'
+            } hover:cursor-pointer`}
+            onMouseEnter={e => {
+              setHoveredStar(i)
+            }}
+            onClick={() => {
+              setNewReview({ ...newReview, reviewScore: i + 1 })
+            }}
+          />
+        </div>,
+      )
+    }
+
+    return stars
   }
 
   const generateStars = (score: number) => {
@@ -177,30 +210,32 @@ const Room: NextPage = () => {
               )
             })
           : null}
-        <Card className="w-full sm:p-8 p-8 flex flex-col justify-center">
-          <SubTitle className=" text-center"> Write a review</SubTitle>
-          <button onClick={handleWriteReview}>
-            <MdAddCircle className="mx-auto mt-4" size={64} />
-          </button>
-        </Card>
       </div>
       <SubTitle>Describe your experience</SubTitle>
-      <form onSubmit={writeReview}>
-        <h3 className="block mb-1 text-blue-600">In amount of stars</h3>
-        <div className="flex mb1">{generateStars(0)}</div>
-        <Input
-          label={'In one sentence'}
-          id="title"
-          onChange={onInputChange}
-          placeholder={'This will be the title'}
-        />
-        <Input
-          label={'In own words'}
-          id="description"
-          onChange={onInputChange}
-        />
-        <Button>{'schrijf'}</Button>
-      </form>
+      {user ? (
+        <div className="md:grid md:grid-cols-2">
+          <form onSubmit={writeReview}>
+            <h3 className="block mb-1 text-blue-600">In amount of stars</h3>
+            <div className="flex mb-4">{generateNewReviewStars()}</div>
+            <Input
+              label={'In one sentence'}
+              id="title"
+              onChange={onInputChange}
+              placeholder={'This will be the title'}
+              value={newReview.title}
+            />
+            <Input
+              label={'In own words'}
+              id="description"
+              onChange={onInputChange}
+              value={newReview.description!}
+            />
+            <Button>{'schrijf'}</Button>
+          </form>
+        </div>
+      ) : (
+        <p>Please sign in to write a review</p>
+      )}
     </PageLayout>
   )
 }
