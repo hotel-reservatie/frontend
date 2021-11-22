@@ -172,7 +172,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
           </div>
         </div>
         <div>
-          <Link href="#">
+          <Link href={`/room/${id}`}>
             <span className="flex flex-row items-center cursor-pointer">
               <a className="text-blue-500 mr-4">More info</a>
               <Arrow />
