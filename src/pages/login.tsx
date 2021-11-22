@@ -19,7 +19,7 @@ const Login = () => {
   function loginUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     login(credentials.email, credentials.password)
-    // router.push('/')
+    router.push('/')
   }
 
   useEffect(() => {
