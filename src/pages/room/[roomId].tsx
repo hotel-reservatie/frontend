@@ -25,6 +25,7 @@ import AddReview from 'src/schema/reviews/addReview.schema'
 import formatDate from 'src/utils/formatDate'
 import FavButton from 'src/components/button/FavButton'
 import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
+import { NewReviewStars, ReviewStars } from 'src/components/reviewStar'
 
 const Room: NextPage = () => {
   const router = useRouter()
@@ -43,9 +44,9 @@ const Room: NextPage = () => {
     description: '',
     room: { roomId: roomId as string },
   })
-  const [hoveredStar, setHoveredStar] = useState(0)
   const writeReview = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
     if (user) {
       await createReview({
         variables: {
@@ -63,55 +64,7 @@ const Room: NextPage = () => {
     }
   }
 
-  const generateNewReviewStars = () => {
-    const stars = []
-
-    for (let i = 0; i < 5; i++) {
-      stars.push(
-        <div
-          key={i}
-          onMouseLeave={() => {
-            setHoveredStar(newReview.reviewScore - 1)
-          }}
-        >
-          <MdStar
-            id={i.toString()}
-            size={48}
-            className={`${
-              i <= hoveredStar ? 'text-yellow-400' : 'text-blue-300'
-            } hover:cursor-pointer`}
-            onMouseEnter={e => {
-              setHoveredStar(i)
-            }}
-            onClick={() => {
-              setNewReview({ ...newReview, reviewScore: i + 1 })
-            }}
-          />
-        </div>,
-      )
-    }
-
-    return stars
-  }
-
-  const generateStars = (score: number) => {
-    const stars = []
-
-    for (let i = 0; i < 5; i++) {
-      stars.push(
-        <div key={i}>
-          <MdStar
-            size={24}
-            className={`${i < score ? 'text-yellow-400' : 'text-blue-300'}`}
-          />
-        </div>,
-      )
-    }
-
-    return stars
-  }
-
-  function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.id === 'title' || 'description') {
       setNewReview({ ...newReview, [event.target.id]: event.target.value })
     }
@@ -231,7 +184,7 @@ const Room: NextPage = () => {
                   <div>
                     <div className="flex justify-between">
                       <SubTitle className=" text-xl">{r.title}</SubTitle>
-                      <div className="flex">{generateStars(r.reviewScore)}</div>
+                      <ReviewStars score={r.reviewScore} />
                     </div>
                     <p>{r.description}</p>
                   </div>
@@ -258,7 +211,12 @@ const Room: NextPage = () => {
         <div className="md:grid md:grid-cols-2">
           <form onSubmit={writeReview}>
             <h3 className="block mb-1 text-blue-600">In amount of stars</h3>
-            <div className="flex mb-4">{generateNewReviewStars()}</div>
+            <NewReviewStars
+              onSetReviewScore={(score: number) => {
+                setNewReview({ ...newReview, reviewScore: score })
+              }}
+              newReviewScore={newReview.reviewScore}
+            />
             <Input
               label={'In one sentence'}
               id="title"
