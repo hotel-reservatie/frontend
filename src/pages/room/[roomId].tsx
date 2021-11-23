@@ -3,11 +3,16 @@ import { useRouter } from 'next/router'
 import React, { FormEvent, useEffect, useState } from 'react'
 import PageLayout from 'src/components/layout/PageLayout'
 import PageTitle from 'src/components/text/PageTitle'
-import { NewReviewInput, Room, useGetRoomByIdQuery } from 'src/schema'
+import {
+  NewReviewInput,
+  Room,
+  useGetRoomByIdQuery,
+  useGetUserFavoritesQuery,
+} from 'src/schema'
 import Image from 'next/image'
 import Button from 'src/components/button'
 import SubTitle from 'src/components/text/SubTitle'
-import { MdDone, MdOutlinePerson, MdStar, MdAddCircle } from 'react-icons/md'
+import { MdDone, MdOutlinePerson, MdStar, MdFavorite } from 'react-icons/md'
 import Card from 'src/components/card'
 import ImageScroller from 'src/components/image/ImageScroller'
 import { BsTag } from 'react-icons/bs'
@@ -15,6 +20,8 @@ import { useAuth } from 'src/providers/authProvider'
 import Input from 'src/components/input'
 import { useMutation } from '@apollo/client'
 import AddReview from 'src/schema/reviews/addReview.schema'
+import AddFavorite from 'src/schema/favorites/addFavorite.schema'
+import DeleteFavorite from 'src/schema/favorites/removeFavorite.schema'
 
 const Room: NextPage = () => {
   const router = useRouter()
@@ -26,6 +33,8 @@ const Room: NextPage = () => {
   })
 
   const [createReview, createReviewResult] = useMutation(AddReview)
+  const [addFavorite, addFavoriteResult] = useMutation(AddFavorite)
+  const [deleteFavorite, deleteFavoriteResult] = useMutation(DeleteFavorite)
 
   const [newReview, setNewReview] = useState<NewReviewInput>({
     reviewScore: 0,
@@ -33,6 +42,10 @@ const Room: NextPage = () => {
     description: '',
     room: { roomId: roomId as string },
   })
+
+  const userFavs = useGetUserFavoritesQuery()
+
+  const [isFavorite, setIsFavorite] = useState<Boolean>(false)
 
   const [hoveredStar, setHoveredStar] = useState(0)
 
@@ -116,9 +129,60 @@ const Room: NextPage = () => {
     }
   }
 
+  const handleFavButton = async () => {
+    if (isFavorite) {
+      await deleteFavorite({ variables: { roomId: roomId } })
+        .then(() => {
+          setIsFavorite(false)
+        })
+        .catch(e => {})
+    } else {
+      await addFavorite({ variables: { roomId: roomId } }).then(() => {
+        setIsFavorite(true)
+      })
+    }
+
+    setIsFavorite(!isFavorite)
+  }
+
+  const checkIfFavorite = () => {
+    let found = false
+    if (userFavs.data) {
+      userFavs.data.getUserFavorites.map(r => {
+        if (r.roomId == roomId) {
+          found = true
+          return
+        }
+      })
+    }
+
+    if (found) {
+      setIsFavorite(true)
+    } else {
+      setIsFavorite(false)
+    }
+  }
+
+  useEffect(() => {
+    if (router.query && userFavs) {
+      checkIfFavorite()
+    }
+  }, [router.query, userFavs])
+
   return (
     <PageLayout>
-      <PageTitle>{data?.getRoomById?.roomName}</PageTitle>
+      <div className="flex justify-between align-middle">
+        <PageTitle>{data?.getRoomById?.roomName}</PageTitle>
+        {user ? (
+          <MdFavorite
+            onClick={handleFavButton}
+            size={32}
+            className={`${
+              isFavorite ? 'text-red-500' : 'text-blue-300'
+            } hover:scale-110 hover:cursor-pointer`}
+          />
+        ) : null}
+      </div>
       <div className="md:grid md:grid-cols-2 md:mt-16 md:gap-x-16 items-start">
         <ImageScroller
           images={
