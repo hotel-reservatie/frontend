@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
+import { useAuth } from 'src/providers/authProvider'
+import { MdPerson } from 'react-icons/md'
 
 const Header = () => {
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true)
@@ -9,6 +11,8 @@ const Header = () => {
   function toggleNav() {
     setMobileMenuHidden(!mobileMenuHidden)
   }
+
+  const { user } = useAuth()
 
   return (
     <nav className="bg-white shadow">
@@ -18,7 +22,13 @@ const Header = () => {
             <div>
               <Link href="/">
                 <a className="flex items-center py-6 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                  <Image src="/logo.svg" alt="Logo" width={32} height={32} className="mr-2" />
+                  <Image
+                    src="/logo.svg"
+                    alt="Logo"
+                    width={32}
+                    height={32}
+                    className="mr-2"
+                  />
                   <span className="font-semibold text-lg text-blue-700">
                     Hotel MCT
                   </span>
@@ -43,18 +53,26 @@ const Header = () => {
               </Link>
             </div>
           </div>
-          <div className="hidden md:flex items-center space-x-3 ">
-            <Link href="/login">
-              <a className="py-2 px-2 text-blue-800 font-medium rounded hover:text-blue-700 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                {t('header.signin')}
-              </a>
-            </Link>
-            <Link href="/register">
-              <a className="py-1 px-4 text-blue-100 font-medium  rounded-full bg-blue-800 hover:bg-blue-700 transition duration-75  focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                {t('header.register')}
-              </a>
-            </Link>
-          </div>
+          {user ? (
+            <div className="flex items-center gap-4">
+              <p className="">{user.displayName}</p>
+              <MdPerson size={32}/>
+            </div>
+          ) : (
+            <div className="hidden md:flex items-center space-x-3 ">
+              <Link href="/login">
+                <a className="py-2 px-2 text-blue-800 font-medium rounded hover:text-blue-700 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
+                  {t('header.signin')}
+                </a>
+              </Link>
+              <Link href="/register">
+                <a className="py-1 px-4 text-blue-100 font-medium  rounded-full bg-blue-800 hover:bg-blue-700 transition duration-75  focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
+                  {t('header.register')}
+                </a>
+              </Link>
+            </div>
+          )}
+
           <div className="md:hidden flex items-center">
             <button
               onClick={toggleNav}
