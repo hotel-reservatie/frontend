@@ -43,11 +43,7 @@ const Room: NextPage = () => {
     description: '',
     room: { roomId: roomId as string },
   })
-
-  const [isFavorite, setIsFavorite] = useState<Boolean>(false)
-
   const [hoveredStar, setHoveredStar] = useState(0)
-
   const writeReview = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (user) {
