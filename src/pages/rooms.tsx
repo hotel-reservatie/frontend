@@ -9,13 +9,16 @@ import {
   Maybe,
   RoomFilters,
   useGetFilteredRoomsQuery,
+  useGetUserFavoritesLazyQuery,
   useGetUserFavoritesQuery,
 } from 'src/schema'
 import { useMutation } from '@apollo/client'
 import AddFavorite from 'src/schema/favorites/addFavorite.schema'
 import DeleteFavorite from 'src/schema/favorites/removeFavorite.schema'
+import { useAuth } from 'src/providers/authProvider'
 
 const Rooms = () => {
+  const { user } = useAuth()
   const [filters, setFilters] = useState<RoomFilters>()
   const [boundries, setBoundries] = useState({ min: 0, max: 100 })
   const [marks, setMarks] = useState([])
@@ -23,7 +26,7 @@ const Rooms = () => {
   const { loading, error, data } = useGetFilteredRoomsQuery({
     variables: { roomFilter: { ...filters } },
   })
-  const userFavs = useGetUserFavoritesQuery()
+  const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
   const [addFavorite, addFavoriteResult] = useMutation(AddFavorite)
   const [deleteFavorite, deleteFavoriteResult] = useMutation(DeleteFavorite)
 
@@ -45,7 +48,7 @@ const Rooms = () => {
       await addFavorite({ variables: { roomId: roomId } })
     }
 
-    await userFavs.refetch()
+    if (userFavs.refetch) userFavs.refetch()
   }
 
   useEffect(() => {
@@ -53,6 +56,12 @@ const Rooms = () => {
       roomTypeIds: query['roomtype'] as Maybe<string[]> | undefined,
     })
   }, [query])
+
+  useEffect(() => {
+    if (user) {
+      getUserFavs()
+    }
+  }, [user])
 
   useEffect(() => {
     console.log(boundries)

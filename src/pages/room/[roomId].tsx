@@ -6,7 +6,9 @@ import PageTitle from 'src/components/text/PageTitle'
 import {
   NewReviewInput,
   Room,
+  useGetRoomByIdLazyQuery,
   useGetRoomByIdQuery,
+  useGetUserFavoritesLazyQuery,
   useGetUserFavoritesQuery,
 } from 'src/schema'
 import Image from 'next/image'
@@ -30,9 +32,8 @@ const Room: NextPage = () => {
   const { roomId } = router.query
   const { user } = useAuth()
 
-  const { loading, error, data, refetch } = useGetRoomByIdQuery({
-    variables: { roomId: roomId as string },
-  })
+  const [getRoomById, { data, refetch }] = useGetRoomByIdLazyQuery()
+  const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
 
   const [createReview, createReviewResult] = useMutation(AddReview)
   const [addFavorite, addFavoriteResult] = useMutation(AddFavorite)
@@ -45,7 +46,7 @@ const Room: NextPage = () => {
     room: { roomId: roomId as string },
   })
 
-  const userFavs = useGetUserFavoritesQuery()
+  // const userFavs = useGetUserFavoritesQuery()
 
   const [isFavorite, setIsFavorite] = useState<Boolean>(false)
 
@@ -59,9 +60,14 @@ const Room: NextPage = () => {
           reviewInput: { ...newReview, room: { roomId: roomId as string } },
         },
       }),
-        refetch()
+        setNewReview({
+          ...newReview,
+          reviewScore: 0,
+          title: '',
+          description: '',
+        })
 
-      setNewReview({ ...newReview, reviewScore: 0, title: '', description: '' })
+      if (refetch) refetch()
     }
   }
 
@@ -148,16 +154,28 @@ const Room: NextPage = () => {
 
     if (found) {
       setIsFavorite(true)
-    } else {
-      setIsFavorite(false)
+      return
     }
+    setIsFavorite(false)
   }
 
   useEffect(() => {
-    if (router.query && userFavs) {
+    if (router.query && userFavs.data) {
       checkIfFavorite()
     }
   }, [router.query, userFavs])
+
+  useEffect(() => {
+    if (roomId) {
+      getRoomById({ variables: { roomId: roomId as string } })
+    }
+  }, [router.query])
+
+  useEffect(() => {
+    if (user) {
+      getUserFavs()
+    }
+  }, [user])
 
   return (
     <PageLayout>
