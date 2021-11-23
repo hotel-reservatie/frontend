@@ -23,6 +23,7 @@ import AddReview from 'src/schema/reviews/addReview.schema'
 import AddFavorite from 'src/schema/favorites/addFavorite.schema'
 import DeleteFavorite from 'src/schema/favorites/removeFavorite.schema'
 import formatDate from 'src/utils/formatDate'
+import FavButton from 'src/components/button/FavButton'
 
 const Room: NextPage = () => {
   const router = useRouter()
@@ -163,12 +164,10 @@ const Room: NextPage = () => {
       <div className="flex justify-between align-middle">
         <PageTitle>{data?.getRoomById?.roomName}</PageTitle>
         {user ? (
-          <MdFavorite
-            onClick={handleFavButton}
+          <FavButton
             size={32}
-            className={`${
-              isFavorite ? 'text-red-500' : 'text-blue-300'
-            } hover:scale-110 hover:cursor-pointer`}
+            isFavorite={isFavorite as boolean}
+            onPress={handleFavButton}
           />
         ) : null}
       </div>

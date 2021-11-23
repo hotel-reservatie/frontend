@@ -5,6 +5,8 @@ import localizedPrice from 'src/utils/localePrice'
 import Button from 'src/components/button'
 import Link from 'next/link'
 import { MdFavorite } from 'react-icons/md'
+import FavButton from '../button/FavButton'
+import { useAuth } from 'src/providers/authProvider'
 interface RoomCardProps {
   img: string | undefined | null
   title: string | undefined | null
@@ -124,6 +126,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
   onFavToggle,
 }) => {
   const { locale } = useRouter()
+  const { user } = useAuth()
 
   function RoomTypeOnClick(title: string | undefined | null) {
     router.push({ pathname: '/rooms', query: { roomtype: title ? title : '' } })
@@ -204,14 +207,14 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
                 {surface ? surface : ''}m²
               </p>
             </span>
-            <button className="ml-4" onClick={handleFavClick}>
-              <MdFavorite
-                className={`${
-                  isFavorite ? 'text-red-500' : 'text-blue-300'
-                } hover:scale-110 hover:cursor-pointer`}
+            {user ? (
+              <FavButton
+                className="ml-4"
                 size={32}
+                isFavorite={isFavorite}
+                onPress={handleFavClick}
               />
-            </button>
+            ) : null}
           </div>
           <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
             <Link href="#">Book now</Link>
