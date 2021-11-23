@@ -3,57 +3,117 @@ import { useRouter } from 'next/router'
 import React, { FormEvent, useEffect, useState } from 'react'
 import PageLayout from 'src/components/layout/PageLayout'
 import PageTitle from 'src/components/text/PageTitle'
-import { Room, useGetRoomByIdQuery } from 'src/schema'
+import {
+  NewReviewInput,
+  Room,
+  useGetRoomByIdLazyQuery,
+  useGetRoomByIdQuery,
+  useGetUserFavoritesLazyQuery,
+  useGetUserFavoritesQuery,
+} from 'src/schema'
 import Image from 'next/image'
 import Button from 'src/components/button'
 import SubTitle from 'src/components/text/SubTitle'
-import { MdDone, MdOutlinePerson, MdStar } from 'react-icons/md'
+import { MdDone, MdOutlinePerson, MdStar, MdFavorite } from 'react-icons/md'
 import Card from 'src/components/card'
 import ImageScroller from 'src/components/image/ImageScroller'
 import { BsTag } from 'react-icons/bs'
+import { useAuth } from 'src/providers/authProvider'
+import Input from 'src/components/input'
+import { useMutation } from '@apollo/client'
+import AddReview from 'src/schema/reviews/addReview.schema'
+import formatDate from 'src/utils/formatDate'
+import FavButton from 'src/components/button/FavButton'
+import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
+import { NewReviewStars, ReviewStars } from 'src/components/reviewStar'
 
 const Room: NextPage = () => {
   const router = useRouter()
   const { roomId } = router.query
+  const { user } = useAuth()
 
-  const { loading, error, data } = useGetRoomByIdQuery({
-    variables: { roomId: roomId as string },
+  const [getRoomById, { data, refetch }] = useGetRoomByIdLazyQuery()
+  const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
+  const [toggleFavorite, toggleFavoriteResult] = useMutation(ToggleFavorite)
+
+  const [createReview, createReviewResult] = useMutation(AddReview)
+
+  const [newReview, setNewReview] = useState<NewReviewInput>({
+    reviewScore: 0,
+    title: '',
+    description: '',
+    room: { roomId: roomId as string },
   })
+  const writeReview = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
 
-  useEffect(() => {
-    console.log(data)
-  }, [data])
+    if (user) {
+      await createReview({
+        variables: {
+          reviewInput: { ...newReview, room: { roomId: roomId as string } },
+        },
+      }),
+        setNewReview({
+          ...newReview,
+          reviewScore: 0,
+          title: '',
+          description: '',
+        })
 
-  const formatDate = (date: any) => {
-    const d = new Date(date)
-
-    return `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`
+      if (refetch) refetch()
+    }
   }
 
-  const generateStars = (score: number) => {
-    const stars = []
+  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.id === 'title' || 'description') {
+      setNewReview({ ...newReview, [event.target.id]: event.target.value })
+    }
+  }
 
-    for (let i = 0; i < 5; i++) {
-      if (i < score) {
-        stars.push(
-          <div key={i}>
-            <MdStar size={24} className=" text-yellow-400" />
-          </div>,
-        )
-      } else {
-        stars.push(
-          <div key={i}>
-            <MdStar size={24} className=" text-blue-300" />
-          </div>,
-        )
+  const handleFavButton = async () => {
+    if (roomId) {
+      const res = await toggleFavorite({ variables: { roomId: roomId } })
+
+      if (res && userFavs.refetch) {
+        userFavs.refetch()
       }
     }
-    return stars
   }
+
+  const isFav = (roomId: string | null | undefined) => {
+    if (userFavs.data && roomId) {
+      for (const fav of userFavs.data.getUserFavorites) {
+        if (roomId == fav.roomId) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+  useEffect(() => {
+    if (roomId) {
+      getRoomById({ variables: { roomId: roomId as string } })
+    }
+  }, [router.query])
+
+  useEffect(() => {
+    if (user) {
+      getUserFavs()
+    }
+  }, [user])
 
   return (
     <PageLayout>
-      <PageTitle>{data?.getRoomById?.roomName}</PageTitle>
+      <div className="flex justify-between align-middle">
+        <PageTitle>{data?.getRoomById?.roomName}</PageTitle>
+        {user ? (
+          <FavButton
+            size={32}
+            isFavorite={isFav(roomId as string)}
+            onClick={handleFavButton}
+          />
+        ) : null}
+      </div>
       <div className="md:grid md:grid-cols-2 md:mt-16 md:gap-x-16 items-start">
         <ImageScroller
           images={
@@ -113,41 +173,69 @@ const Room: NextPage = () => {
         </div>
       </div>
       <SubTitle className="md:mt-8">Reviews</SubTitle>
-      <div className="grid md:grid-cols-2 auto-rows-fr gap-6 mt-8">
-        {data?.getRoomById?.reviews && data.getRoomById.reviews.length > 0 ? (
-          data?.getRoomById?.reviews?.map(r => {
-            return (
-              <Card
-                className=" w-full sm:p-8 p-8 flex flex-col justify-between"
-                key={r.createdAt}
-              >
-                <div>
-                  <div className="flex justify-between">
-                    <SubTitle className=" text-xl">{r.title}</SubTitle>
-                    <div className="flex">{generateStars(r.reviewScore)}</div>
+      <div className="grid md:grid-cols-2 md:mb-8 auto-rows-fr gap-6 mt-8">
+        {data?.getRoomById?.reviews && data.getRoomById.reviews.length > 0
+          ? data?.getRoomById?.reviews?.map(r => {
+              return (
+                <Card
+                  className=" w-full sm:p-8 p-8 flex flex-col justify-between"
+                  key={r.createdAt}
+                >
+                  <div>
+                    <div className="flex justify-between">
+                      <SubTitle className=" text-xl">{r.title}</SubTitle>
+                      <ReviewStars score={r.reviewScore} />
+                    </div>
+                    <p>{r.description}</p>
                   </div>
-                  <p className=" mt-4">{r.description}</p>
-                </div>
-                <div className="flex justify-between mt-4">
-                  <div className="flex gap-x-2">
-                    <div>
-                      <MdOutlinePerson size={24} className=" text-blue-300" />
+                  <div className="flex justify-between mt-4">
+                    <div className="flex gap-x-2">
+                      <div>
+                        <MdOutlinePerson size={24} className=" text-blue-300" />
+                      </div>
+                      <p className=" text-base text-blue-300">
+                        {r.user?.userName}
+                      </p>
                     </div>
                     <p className=" text-base text-blue-300">
-                      {r.user?.userName}
+                      {formatDate(r.createdAt)}
                     </p>
                   </div>
-                  <p className=" text-base text-blue-300">
-                    {formatDate(r.createdAt)}
-                  </p>
-                </div>
-              </Card>
-            )
-          })
-        ) : (
-          <p>nothing here...</p>
-        )}
+                </Card>
+              )
+            })
+          : null}
       </div>
+      <SubTitle>Describe your experience</SubTitle>
+      {user ? (
+        <div className="md:grid md:grid-cols-2">
+          <form onSubmit={writeReview}>
+            <h3 className="block mb-1 text-blue-600">In amount of stars</h3>
+            <NewReviewStars
+              onSetReviewScore={(score: number) => {
+                setNewReview({ ...newReview, reviewScore: score })
+              }}
+              newReviewScore={newReview.reviewScore}
+            />
+            <Input
+              label={'In one sentence'}
+              id="title"
+              onChange={onInputChange}
+              placeholder={'This will be the title'}
+              value={newReview.title}
+            />
+            <Input
+              label={'In own words'}
+              id="description"
+              onChange={onInputChange}
+              value={newReview.description!}
+            />
+            <Button>{'schrijf'}</Button>
+          </form>
+        </div>
+      ) : (
+        <p>Please sign in to write a review</p>
+      )}
     </PageLayout>
   )
 }

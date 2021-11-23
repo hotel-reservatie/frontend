@@ -4,6 +4,9 @@ import router, { useRouter } from 'next/router'
 import localizedPrice from 'src/utils/localePrice'
 import Button from 'src/components/button'
 import Link from 'next/link'
+import { MdFavorite } from 'react-icons/md'
+import FavButton from '../button/FavButton'
+import { useAuth } from 'src/providers/authProvider'
 interface RoomCardProps {
   img: string | undefined | null
   title: string | undefined | null
@@ -14,6 +17,8 @@ interface RoomCardProps {
   id: string | undefined | null
   type: 'roomType' | 'room'
   loading: boolean
+  isFavorite?: boolean
+  onFavToggle?: Function
 }
 
 interface RoomCardHolderProps {
@@ -117,11 +122,20 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
   id,
   surface,
   type = 'room',
+  isFavorite,
+  onFavToggle,
 }) => {
   const { locale } = useRouter()
+  const { user } = useAuth()
 
   function RoomTypeOnClick(title: string | undefined | null) {
     router.push({ pathname: '/rooms', query: { roomtype: title ? title : '' } })
+  }
+
+  const handleFavClick = (e: any) => {
+    if (onFavToggle) {
+      onFavToggle(id)
+    }
   }
 
   if (loading) {
@@ -172,7 +186,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
           </div>
         </div>
         <div>
-          <Link href="#">
+          <Link href={`/room/${id}`}>
             <span className="flex flex-row items-center cursor-pointer">
               <a className="text-blue-500 mr-4">More info</a>
               <Arrow />
@@ -180,19 +194,27 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
           </Link>
         </div>
         <div className="flex flex-row justify-between my-8">
-          <div className="flex flex-row">
-            <span className="flex flex-row items-center mr-4">
+          <div className="flex flex-row items-center">
+            <span className="flex flex-row items-end mr-4">
               <People />
               <p className="font-bold text-2xl text-blue-700 ml-2">
                 {size ? size : ''}
               </p>
             </span>
-            <span className="flex flex-row items-center ml-4">
+            <span className="flex flex-row items-center ml-4 mr-4">
               <Surface />
               <p className="font-bold text-2xl text-blue-700 ml-1">
                 {surface ? surface : ''}m²
               </p>
             </span>
+            {user ? (
+              <FavButton
+                className="ml-4"
+                size={32}
+                isFavorite={isFavorite}
+                onClick={handleFavClick}
+              />
+            ) : null}
           </div>
           <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
             <Link href="#">Book now</Link>

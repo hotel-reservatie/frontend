@@ -14,10 +14,6 @@ const ImageScroller = ({ images }: { images?: string[] | undefined }) => {
     
   }
 
-  useEffect(() => {
-      console.log(images);
-      
-  }, [images])
   return (
     <div className="flex flex-col gap-4">
       <img

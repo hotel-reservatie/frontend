@@ -9,7 +9,7 @@ const SubTitle = ({
 }) => {
   return (
     <h2
-      className={`text-2xl font-semibold text-blue-600 ${
+      className={` mb-8 text-2xl font-semibold text-blue-600 ${
         className ? className : ''
       }`}
     >

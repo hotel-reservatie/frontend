@@ -17,6 +17,14 @@ import {
   User,
   updateProfile,
 } from 'firebase/auth'
+import {
+  ApolloClient,
+  ApolloProvider,
+  createHttpLink,
+  InMemoryCache,
+} from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
+import client from 'src/utils/apollo'
 
 interface IAuthContext {
   user: User | null
@@ -27,6 +35,28 @@ interface IAuthContext {
 }
 
 const AuthContext = createContext<IAuthContext>({} as IAuthContext)
+
+const createGraphqlClient = (token: string): ApolloClient<any> => {
+  const httpLink = createHttpLink({
+    uri: process.env.NEXT_PUBLIC_BACKEND,
+  })
+
+  const authLink = setContext((_, { headers }) => {
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : '',
+      },
+    }
+  })
+
+  const client = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+  })
+
+  return client
+}
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FB_APIKEY,
@@ -42,17 +72,23 @@ export function useAuth() {
 }
 
 export const AuthProvider: FunctionComponent = ({ children }) => {
+  const [graphqlClient, SetgraphqlClient] = useState<ApolloClient<any>>(client)
   const [user, setUser] = useState<User | null>(null)
   const app: FirebaseApp = initializeApp(firebaseConfig)
   const auth: Auth = getAuth()
   setPersistence(auth, browserLocalPersistence)
 
+  useEffect(() => {
+    restoreAuth()
+  }, [])
+
   const restoreAuth = (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       try {
         auth.onAuthStateChanged(async state => {
-          console.log(state)
+          // console.log(state)
           if (state) {
+            SetgraphqlClient(createGraphqlClient(await state.getIdToken()))
             setUser(state)
             resolve(true)
           } else {
@@ -125,5 +161,9 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     logout,
   }
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={value}>
+      <ApolloProvider client={graphqlClient}>{children}</ApolloProvider>
+    </AuthContext.Provider>
+  )
 }
