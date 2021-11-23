@@ -5,7 +5,15 @@ import { useRouter } from 'next/router'
 import Slider from '@mui/material/Slider'
 
 import RoomCard from 'src/components/roomCard'
-import { Maybe, RoomFilters, useGetFilteredRoomsQuery } from 'src/schema'
+import {
+  Maybe,
+  RoomFilters,
+  useGetFilteredRoomsQuery,
+  useGetUserFavoritesQuery,
+} from 'src/schema'
+import { useMutation } from '@apollo/client'
+import AddFavorite from 'src/schema/favorites/addFavorite.schema'
+import DeleteFavorite from 'src/schema/favorites/removeFavorite.schema'
 
 const Rooms = () => {
   const [filters, setFilters] = useState<RoomFilters>()
@@ -15,6 +23,30 @@ const Rooms = () => {
   const { loading, error, data } = useGetFilteredRoomsQuery({
     variables: { roomFilter: { ...filters } },
   })
+  const userFavs = useGetUserFavoritesQuery()
+  const [addFavorite, addFavoriteResult] = useMutation(AddFavorite)
+  const [deleteFavorite, deleteFavoriteResult] = useMutation(DeleteFavorite)
+
+  const isFavorite = (roomId: string | null | undefined) => {
+    if (userFavs.data && roomId) {
+      for (const fav of userFavs.data.getUserFavorites) {
+        if (roomId == fav.roomId) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+
+  const handleToggleFav = async (roomId: string, isFav: boolean) => {
+    if (isFav && roomId) {
+      await deleteFavorite({ variables: { roomId: roomId } })
+    } else {
+      await addFavorite({ variables: { roomId: roomId } })
+    }
+
+    await userFavs.refetch()
+  }
 
   useEffect(() => {
     setFilters({
@@ -50,6 +82,8 @@ const Rooms = () => {
             desc={room.description}
             id={room.roomId}
             loading={loading}
+            isFavorite={isFavorite(room.roomId)}
+            onFavToggle={handleToggleFav}
           />
         )
       })}
