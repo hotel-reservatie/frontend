@@ -22,6 +22,7 @@ import { useMutation } from '@apollo/client'
 import AddReview from 'src/schema/reviews/addReview.schema'
 import AddFavorite from 'src/schema/favorites/addFavorite.schema'
 import DeleteFavorite from 'src/schema/favorites/removeFavorite.schema'
+import formatDate from 'src/utils/formatDate'
 
 const Room: NextPage = () => {
   const router = useRouter()
@@ -63,12 +64,6 @@ const Room: NextPage = () => {
     }
   }
 
-  const formatDate = (date: any) => {
-    const d = new Date(date)
-
-    return `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`
-  }
-
   const generateNewReviewStars = () => {
     const stars = []
 
@@ -104,24 +99,18 @@ const Room: NextPage = () => {
     const stars = []
 
     for (let i = 0; i < 5; i++) {
-      if (i < score) {
-        stars.push(
-          <div key={i}>
-            <MdStar size={24} className=" text-yellow-400" />
-          </div>,
-        )
-      } else {
-        stars.push(
-          <div key={i}>
-            <MdStar size={24} className=" text-blue-300" />
-          </div>,
-        )
-      }
+      stars.push(
+        <div key={i}>
+          <MdStar
+            size={24}
+            className={`${i < score ? 'text-yellow-400' : 'text-blue-300'}`}
+          />
+        </div>,
+      )
     }
+
     return stars
   }
-
-  const handleWriteReview = (e: FormEvent) => {}
 
   function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.id === 'title' || 'description') {
