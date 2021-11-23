@@ -134,7 +134,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
 
   const handleFavClick = (e: any) => {
     if (onFavToggle) {
-      onFavToggle(id, isFavorite)
+      onFavToggle(id)
     }
   }
 

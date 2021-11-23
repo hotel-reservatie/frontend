@@ -13,9 +13,8 @@ import {
   useGetUserFavoritesQuery,
 } from 'src/schema'
 import { useMutation } from '@apollo/client'
-import AddFavorite from 'src/schema/favorites/addFavorite.schema'
-import DeleteFavorite from 'src/schema/favorites/removeFavorite.schema'
 import { useAuth } from 'src/providers/authProvider'
+import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
 
 const Rooms = () => {
   const { user } = useAuth()
@@ -27,8 +26,8 @@ const Rooms = () => {
     variables: { roomFilter: { ...filters } },
   })
   const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
-  const [addFavorite, addFavoriteResult] = useMutation(AddFavorite)
-  const [deleteFavorite, deleteFavoriteResult] = useMutation(DeleteFavorite)
+
+  const [toggleFavorite, toggleFavoriteResult] = useMutation(ToggleFavorite)
 
   const isFavorite = (roomId: string | null | undefined) => {
     if (userFavs.data && roomId) {
@@ -41,14 +40,14 @@ const Rooms = () => {
     return false
   }
 
-  const handleToggleFav = async (roomId: string, isFav: boolean) => {
-    if (isFav && roomId) {
-      await deleteFavorite({ variables: { roomId: roomId } })
-    } else {
-      await addFavorite({ variables: { roomId: roomId } })
+  const handleToggleFav = async (roomId: string) => {
+    if (roomId) {
+      const res = await toggleFavorite({ variables: { roomId: roomId } })
+      
+      if (res && userFavs.refetch) {
+        userFavs.refetch()
+      }
     }
-
-    if (userFavs.refetch) userFavs.refetch()
   }
 
   useEffect(() => {

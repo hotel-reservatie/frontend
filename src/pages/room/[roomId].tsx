@@ -22,10 +22,9 @@ import { useAuth } from 'src/providers/authProvider'
 import Input from 'src/components/input'
 import { useMutation } from '@apollo/client'
 import AddReview from 'src/schema/reviews/addReview.schema'
-import AddFavorite from 'src/schema/favorites/addFavorite.schema'
-import DeleteFavorite from 'src/schema/favorites/removeFavorite.schema'
 import formatDate from 'src/utils/formatDate'
 import FavButton from 'src/components/button/FavButton'
+import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
 
 const Room: NextPage = () => {
   const router = useRouter()
@@ -34,10 +33,9 @@ const Room: NextPage = () => {
 
   const [getRoomById, { data, refetch }] = useGetRoomByIdLazyQuery()
   const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
+  const [toggleFavorite, toggleFavoriteResult] = useMutation(ToggleFavorite)
 
   const [createReview, createReviewResult] = useMutation(AddReview)
-  const [addFavorite, addFavoriteResult] = useMutation(AddFavorite)
-  const [deleteFavorite, deleteFavoriteResult] = useMutation(DeleteFavorite)
 
   const [newReview, setNewReview] = useState<NewReviewInput>({
     reviewScore: 0,
@@ -45,8 +43,6 @@ const Room: NextPage = () => {
     description: '',
     room: { roomId: roomId as string },
   })
-
-  // const userFavs = useGetUserFavoritesQuery()
 
   const [isFavorite, setIsFavorite] = useState<Boolean>(false)
 
@@ -126,45 +122,25 @@ const Room: NextPage = () => {
   }
 
   const handleFavButton = async () => {
-    if (isFavorite) {
-      await deleteFavorite({ variables: { roomId: roomId } })
-        .then(() => {
-          setIsFavorite(false)
-        })
-        .catch(e => {})
-    } else {
-      await addFavorite({ variables: { roomId: roomId } }).then(() => {
-        setIsFavorite(true)
-      })
-    }
+    if (roomId) {
+      const res = await toggleFavorite({ variables: { roomId: roomId } })
 
-    setIsFavorite(!isFavorite)
+      if (res && userFavs.refetch) {
+        userFavs.refetch()
+      }
+    }
   }
 
-  const checkIfFavorite = () => {
-    let found = false
-    if (userFavs.data) {
-      userFavs.data.getUserFavorites.map(r => {
-        if (r.roomId == roomId) {
-          found = true
-          return
+  const isFav = (roomId: string | null | undefined) => {
+    if (userFavs.data && roomId) {
+      for (const fav of userFavs.data.getUserFavorites) {
+        if (roomId == fav.roomId) {
+          return true
         }
-      })
+      }
     }
-
-    if (found) {
-      setIsFavorite(true)
-      return
-    }
-    setIsFavorite(false)
+    return false
   }
-
-  useEffect(() => {
-    if (router.query && userFavs.data) {
-      checkIfFavorite()
-    }
-  }, [router.query, userFavs])
-
   useEffect(() => {
     if (roomId) {
       getRoomById({ variables: { roomId: roomId as string } })
@@ -184,7 +160,7 @@ const Room: NextPage = () => {
         {user ? (
           <FavButton
             size={32}
-            isFavorite={isFavorite as boolean}
+            isFavorite={isFav(roomId as string)}
             onPress={handleFavButton}
           />
         ) : null}
