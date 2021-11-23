@@ -157,7 +157,7 @@ const Room: NextPage = () => {
           <FavButton
             size={32}
             isFavorite={isFav(roomId as string)}
-            onPress={handleFavButton}
+            onClick={handleFavButton}
           />
         ) : null}
       </div>

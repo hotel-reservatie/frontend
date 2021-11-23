@@ -212,7 +212,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
                 className="ml-4"
                 size={32}
                 isFavorite={isFavorite}
-                onPress={handleFavClick}
+                onClick={handleFavClick}
               />
             ) : null}
           </div>
