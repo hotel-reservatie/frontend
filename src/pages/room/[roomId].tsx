@@ -26,6 +26,7 @@ import formatDate from 'src/utils/formatDate'
 import FavButton from 'src/components/button/FavButton'
 import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
 import { NewReviewStars, ReviewStars } from 'src/components/reviewStar'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const Room: NextPage = () => {
   const router = useRouter()
@@ -239,5 +240,11 @@ const Room: NextPage = () => {
     </PageLayout>
   )
 }
+
+export const getServerSideProps = async ({ locale }: any) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+})
 
 export default Room

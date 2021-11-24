@@ -217,7 +217,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
             ) : null}
           </div>
           <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
-            <Link href="#">Book now</Link>
+            <Link href={`/room/${id}`}>Book now</Link>
           </Button>
         </div>
       </RoomCardHolder>
