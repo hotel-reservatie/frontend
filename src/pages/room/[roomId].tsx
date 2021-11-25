@@ -26,6 +26,7 @@ import formatDate from 'src/utils/formatDate'
 import FavButton from 'src/components/button/FavButton'
 import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
 import { NewReviewStars, ReviewStars } from 'src/components/reviewStar'
+import { useNewReservation } from 'src/providers/reservationProvider'
 
 const Room: NextPage = () => {
   const router = useRouter()
@@ -35,15 +36,16 @@ const Room: NextPage = () => {
   const [getRoomById, { data, refetch }] = useGetRoomByIdLazyQuery()
   const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
   const [toggleFavorite, toggleFavoriteResult] = useMutation(ToggleFavorite)
-
   const [createReview, createReviewResult] = useMutation(AddReview)
-
   const [newReview, setNewReview] = useState<NewReviewInput>({
     reviewScore: 0,
     title: '',
     description: '',
     room: { roomId: roomId as string },
   })
+
+  const { addRoom } = useNewReservation()
+
   const writeReview = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
@@ -80,6 +82,13 @@ const Room: NextPage = () => {
     }
   }
 
+  const handleBookRoom = () => {
+    if (roomId) {
+      addRoom(roomId as string)
+
+      router.push('/newreservation')
+    }
+  }
   const isFav = (roomId: string | null | undefined) => {
     if (userFavs.data && roomId) {
       for (const fav of userFavs.data.getUserFavorites) {
@@ -90,6 +99,7 @@ const Room: NextPage = () => {
     }
     return false
   }
+
   useEffect(() => {
     if (roomId) {
       getRoomById({ variables: { roomId: roomId as string } })
@@ -114,7 +124,7 @@ const Room: NextPage = () => {
           />
         ) : null}
       </div>
-      <div className="md:grid md:grid-cols-2 md:mt-16 md:gap-x-16 items-start">
+      <div className="md:grid md:grid-cols-2 md:gap-x-16 items-start">
         <ImageScroller
           images={
             data?.getRoomById?.images ? data.getRoomById.images : undefined
@@ -144,7 +154,7 @@ const Room: NextPage = () => {
             per night
           </h2>
           <p>{data?.getRoomById?.description}</p>
-          <Button>Book this room</Button>
+          <Button onClick={handleBookRoom}>Book this room</Button>
         </div>
       </div>
       <div className="md:grid md:grid-cols-2 md:mt-16 gap-x-16">
