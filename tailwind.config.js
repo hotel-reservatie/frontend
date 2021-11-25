@@ -34,7 +34,8 @@ module.exports = {
         xl: '32px',
       },
       gridTemplateColumns: {
-        'auto': 'repeat(auto-fill, minmax(9rem, 1fr))'
+        'auto': 'repeat(auto-fill, minmax(9rem, 1fr))',
+        'auto-lg': 'repeat(auto-fill, minmax(300px, 1fr))'
       },
       gridTemplateRows: {
         'fixheight': " repeat(400px)"
