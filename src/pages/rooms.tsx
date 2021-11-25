@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 
-import Slider from '@mui/material/Slider'
-
+import RangeSlider from 'src/components/rangeSlider'
 import RoomCard from 'src/components/roomCard'
 import {
   Maybe,
@@ -19,7 +18,7 @@ import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
 const Rooms = () => {
   const { user } = useAuth()
   const [filters, setFilters] = useState<RoomFilters>()
-  const [boundries, setBoundries] = useState({ min: 0, max: 100 })
+  const [boundries, setBoundries] = useState<{ min: number; max: number }>({})
   const [marks, setMarks] = useState([])
   const { query } = useRouter()
   const { loading, error, data } = useGetFilteredRoomsQuery({
@@ -43,9 +42,23 @@ const Rooms = () => {
   const handleToggleFav = async (roomId: string) => {
     if (roomId) {
       const res = await toggleFavorite({ variables: { roomId: roomId } })
-      
+
       if (res && userFavs.refetch) {
         userFavs.refetch()
+      }
+    }
+  }
+
+  const defineBoundries = (price: number | null | undefined) => {
+    if (price) {
+      if (!boundries.max) {
+        setBoundries({ ...boundries, max: price })
+      } else if (!boundries.min) {
+        setBoundries({ ...boundries, min: price })
+      } else if (boundries.max < price) {
+        setBoundries({ ...boundries, max: price })
+      } else if (boundries.min > price) {
+        setBoundries({ ...boundries, min: price })
       }
     }
   }
@@ -62,22 +75,13 @@ const Rooms = () => {
     }
   }, [user])
 
-  useEffect(() => {
-    console.log(boundries)
-  }, [boundries])
-
   return (
     <div className="max-w-7xl mx-auto">
       <div>
-        <Slider min={0} max={boundries.max} step={10} />
+        <RangeSlider boundries={boundries} />
       </div>
       {data?.getRooms?.map((room, index) => {
-        if (room.currentPrice && boundries.max < room.currentPrice) {
-          setBoundries({ ...boundries, max: room.currentPrice })
-        } else if (room.currentPrice && boundries.min > room.currentPrice) {
-          setBoundries({ ...boundries, min: room.currentPrice })
-        }
-
+        defineBoundries(room.currentPrice)
         return (
           <RoomCard
             key={`roomcard-${index}`}
