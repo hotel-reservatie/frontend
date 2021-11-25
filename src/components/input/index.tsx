@@ -1,7 +1,8 @@
 import React, { FunctionComponent } from 'react'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string
+  label?: string
+  id?: string
 }
 
 const Input: FunctionComponent<InputProps> = ({
@@ -10,16 +11,19 @@ const Input: FunctionComponent<InputProps> = ({
   autoComplete = 'off',
   onChange,
   placeholder,
+  id,
   ...props
 }) => {
   return (
     <>
-      <label
-        className="block mb-1 text-blue-600"
-        htmlFor={label.replace(/ +/g, '').toLowerCase()}
-      >
-        {label}
-      </label>
+      {label && (
+        <label
+          className="block mb-1 text-blue-600"
+          htmlFor={label.replace(/ +/g, '').toLowerCase()}
+        >
+          {label}
+        </label>
+      )}
       <input
         autoComplete={autoComplete}
         onChange={onChange}
@@ -37,7 +41,7 @@ const Input: FunctionComponent<InputProps> = ({
             placeholder-blue-400
           "
         type={type}
-        id={label.replace(/ +/g, '').toLowerCase()}
+        id={label ? label.replace(/ +/g, '').toLowerCase() : id}
         placeholder={placeholder}
         {...props}
       />

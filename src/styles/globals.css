@@ -5,3 +5,20 @@
 body {
   font-family: 'Sora', sans-serif;
 }
+
+.MuiSlider-track {
+  height: 12px;
+  color: #2a5ee8;
+  border-radius: 6px;
+}
+.MuiSlider-thumb {
+  height: 24px;
+  width: 24px;
+  color: #0839bc;
+}
+
+.MuiSlider-rail {
+  height: 12px;
+  color: #d9e3fc;
+  border-radius: 6px;
+}
