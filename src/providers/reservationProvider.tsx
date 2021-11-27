@@ -16,6 +16,7 @@ interface INewReservation {
 interface IReservationContext {
   newReservation: INewReservation | undefined
   addRoom: (roomId: string) => Promise<boolean>
+  setDates: (startDate: Date, endDate: Date) => Promise<boolean>
 }
 
 const ReservationContext = createContext<IReservationContext>(
@@ -41,7 +42,15 @@ const ReservationProvider: FunctionComponent = ({ children }) => {
 
       if (fromStorage) {
         const res = JSON.parse(fromStorage) as INewReservation
-        setNewReservation(res)
+        const parsedDates: INewReservation = {
+          ...res,
+          details: {
+            startDate: new Date(res.details?.startDate),
+            endDate: new Date(res.details?.endDate),
+          },
+        }
+        
+        setNewReservation(parsedDates)
         resolve(true)
       } else {
         resolve(false)
@@ -51,19 +60,37 @@ const ReservationProvider: FunctionComponent = ({ children }) => {
 
   const updateReservation = (state: INewReservation) => {
     if (state) {
+      setNewReservation(state)
       localStorage.setItem(localStorageKey, JSON.stringify(state))
     }
   }
 
   const addRoom = (roomId: string): Promise<boolean> => {
     return new Promise((resolve, reject) => {
-      const updatedReservation = {
-        ...newReservation,
-        roomIds: newReservation?.roomIds
-          ? [...newReservation.roomIds, roomId]
-          : [roomId],
+      if (newReservation?.roomIds?.includes(roomId)) {
+        resolve(false)
+      } else {
+        const updatedReservation = {
+          ...newReservation,
+          roomIds: newReservation?.roomIds
+            ? [...newReservation.roomIds, roomId]
+            : [roomId],
+        }
+        updateReservation(updatedReservation)
+        resolve(true)
       }
-      setNewReservation(updatedReservation)
+    })
+  }
+
+  const setDates = (startDate: Date, endDate: Date): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+      const updatedReservation: INewReservation = {
+        ...newReservation,
+        details: {
+          startDate: startDate,
+          endDate: endDate,
+        },
+      }
       updateReservation(updatedReservation)
       resolve(true)
     })
@@ -72,6 +99,7 @@ const ReservationProvider: FunctionComponent = ({ children }) => {
   const value = {
     newReservation,
     addRoom,
+    setDates,
   }
 
   return (

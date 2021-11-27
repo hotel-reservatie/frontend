@@ -85,7 +85,6 @@ const Room: NextPage = () => {
   const handleBookRoom = () => {
     if (roomId) {
       addRoom(roomId as string)
-
       router.push('/newreservation')
     }
   }

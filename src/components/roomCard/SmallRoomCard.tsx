@@ -16,11 +16,15 @@ const SmallRoomCard: FunctionComponent<SmallRoomCardProps> = ({
   capacity,
   surface,
   price,
-  roomId
+  roomId,
 }) => {
   return (
     <Card className="w-full px-8 py-8 hover:cursor-pointer">
-        <SubTitle>{title} <MdArrowForward className=" inline-block"/></SubTitle>
+      <div className="grid">
+        <SubTitle>
+          {title} <MdArrowForward className=" inline-block" />
+        </SubTitle>
+        <div>
           <div className="flex items-center gap-2 mb-3">
             <MdPeople size={32} />
             <span className=" font-semibold text-2xl">{capacity}</span>
@@ -29,10 +33,13 @@ const SmallRoomCard: FunctionComponent<SmallRoomCardProps> = ({
             <MdOpenInFull size={32} />
             <span className=" font-semibold text-2xl">{surface}</span>
           </div>
-        <div className=" font-bold text-blue-300">
-            <span className="text-3xl text-blue-800">{`€${price} `}</span>
-            per night
         </div>
+
+        <div className=" font-bold text-blue-300">
+          <span className="text-3xl text-blue-800">{`€${price} `}</span>
+          per night
+        </div>
+      </div>
     </Card>
   )
 }
