@@ -13,7 +13,7 @@ const Input: FunctionComponent<InputProps> = ({
   ...props
 }) => {
   return (
-    <>
+    <div>
       <label
         className="block mb-1 text-blue-600"
         htmlFor={label.replace(/ +/g, '').toLowerCase()}
@@ -41,7 +41,7 @@ const Input: FunctionComponent<InputProps> = ({
         placeholder={placeholder}
         {...props}
       />
-    </>
+    </div>
   )
 }
 
