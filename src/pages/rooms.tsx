@@ -19,6 +19,7 @@ import PageTitle from 'src/components/text/PageTitle'
 import DateInput from 'src/components/input/DateInput'
 import { useTranslation } from 'react-i18next'
 import Input from 'src/components/input'
+import Dropdown from 'src/components/dropdown'
 
 const Rooms = () => {
   const { user } = useAuth()
@@ -89,6 +90,21 @@ const Rooms = () => {
     }
   }, [user])
 
+  const options = [
+    {
+      id: 1,
+      name: 'test 1 label',
+    },
+    {
+      id: 2,
+      name: 'test 2 label',
+    },
+    {
+      id: 3,
+      name: 'test 3 label',
+    },
+  ]
+
   return (
     <div className="max-w-7xl mx-auto">
       <div>
@@ -105,6 +121,11 @@ const Rooms = () => {
             onChange={(d: Date) => {}}
           />
           <Input placeholder="Search room name" />
+          <div className="flex ">
+            <Dropdown placeholder="Room Type" options={options} />
+            <Dropdown placeholder="Room Capacity" options={options} />
+            <Dropdown placeholder="Tags" options={options} />
+          </div>
         </div>
         <RangeSlider boundries={boundries} onValueChange={sliderChange} />
       </div>
