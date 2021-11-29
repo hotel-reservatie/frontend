@@ -1,5 +1,7 @@
-interface FormItemOption {
-  [key: string]: string
+export interface FormItemOption {
+  [key: number]: string
+  id: number
+  name: string
 }
 
 function getValueFromObject(object: any, property: any, defaultValue: any) {
@@ -11,7 +13,7 @@ function getValueFromObject(object: any, property: any, defaultValue: any) {
 }
 
 class FormItem {
-  value: any
+  value?: any
   maxchars?: number
   minchars?: number
   placeholder?: string
@@ -47,6 +49,7 @@ class FormItem {
     | 'time'
     | 'url'
     | 'week'
+    | 'dropdown'
 
   constructor(formItem: FormItem) {
     this.type = getValueFromObject(formItem, 'type', 'text')

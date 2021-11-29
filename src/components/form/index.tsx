@@ -1,15 +1,21 @@
 import React, { FormEvent, FunctionComponent, useEffect, useState } from 'react'
-import FormItem from 'src/classes/FormItem'
+import FormItem, { FormItemOption } from 'src/classes/FormItem'
+import Dropdown from '../dropdown'
 import Input from '../input'
 import DateInput from '../input/DateInput'
 
 interface FormProps {
   formItems: Array<FormItem>
-  onSubmit: any
   rows?: number
   cols?: number
   submitting: boolean
   setSubmitting: React.Dispatch<React.SetStateAction<boolean>>
+  onItemChange?: any
+  onSubmit?: any
+}
+
+const findIndexByName = (arr: FormItem[], searchName: string) => {
+  return arr.findIndex(({ name }) => name === searchName)
 }
 
 const Form: FunctionComponent<FormProps> = ({
@@ -19,26 +25,46 @@ const Form: FunctionComponent<FormProps> = ({
   onSubmit,
   submitting,
   setSubmitting,
+  onItemChange,
 }) => {
   const [items, setItems] = useState<Array<FormItem>>(formItems)
 
-  useEffect(() => {
-    console.log(submitting)
-
-    if (submitting) {
-      handleSubmit()
-    }
-  }, [submitting])
-
   function onFormItemChange(e: FormEvent<HTMLInputElement>) {
-    const index = items.findIndex(({ name }) => name === e.currentTarget.name)
+    const index = findIndexByName(items, e.currentTarget.name)
+    console.log(e.currentTarget.name)
+
     if (index > -1) {
-      setItems([
+      const newItems = [
         ...items.slice(0, index),
         new FormItem({ ...items[index], value: e.currentTarget.value }),
         ...items.slice(index + 1),
-      ])
+      ]
+      onItemChange(newItems)
+      setItems(newItems)
     }
+  }
+
+  function handleDropdownChange(e: FormItemOption, name: string) {
+    const index = findIndexByName(items, name)
+    if (index > -1) {
+      const newItems = [
+        ...items.slice(0, index),
+        new FormItem({ ...items[index], value: e.name }),
+        ...items.slice(index + 1),
+      ]
+      onItemChange(newItems)
+      setItems(newItems)
+    }
+  }
+
+  function handleDateChange(d: Date, index: number) {
+    const newItems = [
+      ...items.slice(0, index),
+      new FormItem({ ...items[index], value: d }),
+      ...items.slice(index + 1),
+    ]
+    onItemChange(newItems)
+    setItems(newItems)
   }
 
   function isEmpty(formItem: FormItem, index: number) {
@@ -98,19 +124,33 @@ const Form: FunctionComponent<FormProps> = ({
 
   return (
     <form
-      className={`grid items-end gap-2 ${cols ? `grid-cols-${cols}` : ''} ${
+      className={`grid items-end ${cols ? `grid-cols-${cols}` : ''} gap-2  ${
         rows ? `grid-rows-${rows}` : ''
       }`}
       noValidate
     >
-      {items.map(({ value, ...item }, index) => {
+      {items.map(({ value, className, ...item }, index) => {
         if (item.type === 'date') {
           return (
             <DateInput
               key={`dateinput-${index}`}
-              onChange={() => onFormItemChange}
-              value={formItems[index].value}
+              onChange={(d: Date) => handleDateChange(d, index)}
+              value={items[index].value}
+              className={className}
+              selected={items[index].value}
               {...item}
+            />
+          )
+        } else if (item.type === 'dropdown') {
+          return (
+            <Dropdown
+              key={`dropdown-${index}`}
+              options={
+                item.options ?? [{ id: 1, name: 'option array required' }]
+              }
+              onChange={handleDropdownChange}
+              placeholder={item.placeholder ?? 'Placeholder is required'}
+              name={item.name ?? 'name is required'}
             />
           )
         } else {
@@ -121,6 +161,7 @@ const Form: FunctionComponent<FormProps> = ({
               value={items[index].value}
               errormessage={item.errormessage}
               faulty={items[index].faulty}
+              className={className}
               {...item}
             />
           )

@@ -20,6 +20,9 @@ import DateInput from 'src/components/input/DateInput'
 import { useTranslation } from 'react-i18next'
 import Input from 'src/components/input'
 import Dropdown from 'src/components/dropdown'
+import Form from 'src/components/form'
+import FormItem from 'src/classes/FormItem'
+import Button from 'src/components/button'
 
 const Rooms = () => {
   const { user } = useAuth()
@@ -38,6 +41,7 @@ const Rooms = () => {
   })
   const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
   const [toggleFavorite, toggleFavoriteResult] = useMutation(ToggleFavorite)
+  const [submitting, setSubmitting] = useState(false)
 
   const isFavorite = (roomId: string | null | undefined) => {
     if (userFavs.data && roomId) {
@@ -90,7 +94,35 @@ const Rooms = () => {
     }
   }, [user])
 
-  const options = [
+  const roomTypes = [
+    {
+      id: 1,
+      name: 'test 1 label',
+    },
+    {
+      id: 2,
+      name: 'test 2 label',
+    },
+    {
+      id: 3,
+      name: 'test 3 label',
+    },
+  ]
+  const roomCapacity = [
+    {
+      id: 1,
+      name: 'test 1 label',
+    },
+    {
+      id: 2,
+      name: 'test 2 label',
+    },
+    {
+      id: 3,
+      name: 'test 3 label',
+    },
+  ]
+  const tags = [
     {
       id: 1,
       name: 'test 1 label',
@@ -105,11 +137,57 @@ const Rooms = () => {
     },
   ]
 
+  const formItems = [
+    new FormItem({
+      placeholder: t('datepicker.arrivaldate'),
+      type: 'date',
+      name: 'arrivalDate',
+      id: 'arrivalDate',
+      className: 'col-span-3',
+    }),
+    new FormItem({
+      placeholder: t('datepicker.departuredate'),
+      type: 'date',
+      name: 'departureDate',
+      id: 'departureDate',
+      className: 'col-span-3',
+    }),
+    new FormItem({
+      placeholder: 'Search room name',
+      type: 'text',
+      id: 'roomName',
+      className: 'col-span-3',
+      name: 'roomName',
+    }),
+    new FormItem({
+      type: 'dropdown',
+      placeholder: 'Room Type',
+      options: roomTypes,
+      name: 'roomType',
+    }),
+    new FormItem({
+      type: 'dropdown',
+      placeholder: 'Room Capacity',
+      options: roomCapacity,
+      name: 'roomCapacity',
+    }),
+    new FormItem({
+      type: 'dropdown',
+      placeholder: 'Tags',
+      options: tags,
+      name: 'tags',
+    }),
+  ]
+
+  function onItemChange(e: FormItem[]) {
+    console.log('onItemChange: ', e)
+  }
+
   return (
     <div className="max-w-7xl mx-auto">
       <div>
         <PageTitle>Rooms</PageTitle>
-        <div className="grid grid-cols-2 grid-rows-2">
+        {/* <div className="grid grid-cols-2 grid-rows-2">
           <DateInput
             placeholder={t('datepicker.arrivaldate')}
             className="text-center placeholder-blue-500"
@@ -121,12 +199,17 @@ const Rooms = () => {
             onChange={(d: Date) => {}}
           />
           <Input placeholder="Search room name" />
-          <div className="flex ">
-            <Dropdown placeholder="Room Type" options={options} />
-            <Dropdown placeholder="Room Capacity" options={options} />
-            <Dropdown placeholder="Tags" options={options} />
-          </div>
-        </div>
+          <div className="flex "> */}
+        <Form
+          onItemChange={onItemChange}
+          submitting={submitting}
+          setSubmitting={setSubmitting}
+          formItems={formItems}
+          rows={2}
+          cols={6}
+        />
+        {/* </div> */}
+        {/* </div> */}
         <RangeSlider boundries={boundries} onValueChange={sliderChange} />
       </div>
       {data?.getRooms?.map((room, index) => {

@@ -23,7 +23,7 @@ const Input: FunctionComponent<InputProps> = ({
 }) => {
   if (label) {
     return (
-      <div>
+      <div className={className}>
         <label
           className={`block mb-1 text-blue-600 ${
             faulty === 'true' ? 'text-red-600' : undefined
@@ -35,12 +35,12 @@ const Input: FunctionComponent<InputProps> = ({
         <input
           autoComplete={autoComplete}
           onChange={onChange}
-          className={`px-4 py-4 mb-4 rounded-full border border-blue-400 bg-blue-100 w-full focus:outline-none focus-visible:ring focus-visible:ring-blue-50 placeholder-blue-400
+          className={`px-4 py-4  rounded-full border border-blue-400 bg-blue-100 w-full focus:outline-none focus-visible:ring focus-visible:ring-blue-50 placeholder-blue-400
           ${
             faulty === 'true'
               ? 'border-red-400 focus-visible:ring-red-50 placeholder-red-400 bg-red-100'
               : undefined
-          } ${className}`}
+          }`}
           type={type}
           id={label ? label.replace(/ +/g, '').toLowerCase() : id}
           placeholder={placeholder}
@@ -50,17 +50,17 @@ const Input: FunctionComponent<InputProps> = ({
     )
   } else {
     return (
-      <div>
+      <div className={className}>
         <label></label>
         <input
           autoComplete={autoComplete}
           onChange={onChange}
-          className={`px-4 py-4 mb-4 rounded-full border border-blue-400 bg-blue-100 w-full focus:outline-none focus-visible:ring focus-visible:ring-blue-50 placeholder-blue-400
+          className={`px-4 py-4 rounded-full border border-blue-400 bg-blue-100 w-full focus:outline-none focus-visible:ring focus-visible:ring-blue-50 placeholder-blue-400
           ${
             faulty === 'true'
               ? 'border-red-400 focus-visible:ring-red-50 placeholder-red-400 bg-red-100'
               : undefined
-          } ${className}`}
+          }`}
           type={type}
           id={label ? label.replace(/ +/g, '').toLowerCase() : id}
           placeholder={placeholder}

@@ -1,28 +1,32 @@
 import React, { Fragment, FunctionComponent, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { MdExpandMore, MdDone } from 'react-icons/md'
-
-interface Option {
-  [key: number]: string
-  id: number
-  name: string
-}
+import { FormItemOption } from 'src/classes/FormItem'
 
 interface DropdownProps {
-  options: Array<Option>
+  options: Array<FormItemOption>
   placeholder: string
+  className?: string
+  onChange: any
+  name: string
 }
 
 const Dropdown: FunctionComponent<DropdownProps> = ({
   options,
   placeholder,
+  className,
+  onChange,
+  name,
 }) => {
-  const [selected, setSelected] = useState<Option>()
-
+  const [selected, setSelected] = useState<FormItemOption>()
+  function handleChange(e: any) {
+    setSelected(e)
+    onChange(e, name)
+  }
   return (
-    <Listbox value={selected} onChange={setSelected}>
-      <div className="relative w-full       ">
-        <Listbox.Button className="relative border-blue-500 border w-full py-4 pl-7 pr-6 text-left bg-white rounded-full cursor-default">
+    <Listbox value={selected} onChange={handleChange}>
+      <div className={`relative w-full ${className}`}>
+        <Listbox.Button className="relative border-blue-500 border w-full py-4 pl-7 pr-10 text-left bg-white rounded-full cursor-default">
           <span className="block truncate">
             {selected ? selected.name : placeholder}
           </span>
