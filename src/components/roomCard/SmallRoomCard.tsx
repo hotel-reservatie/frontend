@@ -9,10 +9,11 @@ interface SmallRoomCardProps {
   title?: string
   capacity?: number
   surface?: number
-  price?: number
+  price: number
   roomId?: string
   isValid?: boolean
   onDelete?: Function
+  weekendMultiplier: number
 }
 
 const SmallRoomCard: FunctionComponent<SmallRoomCardProps> = ({
@@ -23,6 +24,7 @@ const SmallRoomCard: FunctionComponent<SmallRoomCardProps> = ({
   roomId,
   isValid = false,
   onDelete,
+  weekendMultiplier,
 }) => {
   const handleDelete = () => {
     if (onDelete) onDelete(roomId)
@@ -35,7 +37,7 @@ const SmallRoomCard: FunctionComponent<SmallRoomCardProps> = ({
       }`}
     >
       <div className="grid">
-        <div className=" mb-8">
+        <div className="mb-4">
           <Link href={`/room/${roomId}`}>
             <a className="flex justify-between items-center">
               <SubTitle className=" mb-0  overflow-hidden whitespace-nowrap overflow-clip">
@@ -48,9 +50,7 @@ const SmallRoomCard: FunctionComponent<SmallRoomCardProps> = ({
               <MdArrowForward size={24} className=" inline-block" />
             </a>
           </Link>
-          {!isValid ? (
-            <span className=" text-red-600">Not available for given time.</span>
-          ) : null}
+          <span className=" text-red-600">{!isValid ? 'Not available for given time' : <br></br>}</span>
         </div>
         <div>
           <div className="flex items-center gap-2 mb-3">
@@ -62,10 +62,18 @@ const SmallRoomCard: FunctionComponent<SmallRoomCardProps> = ({
             <span className=" font-semibold text-2xl">{surface}</span>
           </div>
         </div>
-        <div className="flex justify-between items-center">
-          <div className=" font-bold text-blue-300">
-            <span className="text-3xl text-blue-800">{`€${price} `}</span>
-            per night
+        <div className="flex justify-between items-end">
+          <div>
+            <div className="text-blue-300">
+              <span className="text-blue-400 font-semibold">{`€${
+                Math.round(price * weekendMultiplier * 100) / 100
+              } `}</span>
+              weekend
+            </div>
+            <div className=" font-bold text-blue-300">
+              <span className="text-3xl text-blue-800">{`€${price} `}</span>
+              per night
+            </div>
           </div>
           <HiMinusCircle
             onClick={handleDelete}

@@ -9,6 +9,7 @@ const GetFilteredRooms = gql`
       description
       surface
       currentPrice
+      weekendMultiplier
       roomType {
         capacity
       }

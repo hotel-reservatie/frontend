@@ -7,6 +7,8 @@ const ValidateReservation = gql`
             isValid
             invalidRooms
             totalPrice
+            totalDays
+            weekendDays
         }
     }
 `

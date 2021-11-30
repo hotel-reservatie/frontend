@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import { NewReservationInput, Room } from 'src/schema'
+import { NewReservationInput, Room, UserInput } from 'src/schema'
 
 interface INewReservation {
   details?: NewReservationInput
@@ -18,6 +18,7 @@ interface IReservationContext {
   addRoom: (roomId: string) => Promise<boolean>
   setDates: (startDate: Date, endDate: Date) => Promise<boolean>
   removeRoom: (roomId: string) => Promise<boolean>
+  setUserInfo: (user: UserInput) => Promise<boolean>
 }
 
 const ReservationContext = createContext<IReservationContext>(
@@ -52,6 +53,17 @@ const ReservationProvider: FunctionComponent = ({ children }) => {
             endDate: res.details?.endDate
               ? new Date(res.details.endDate)
               : undefined,
+            user: res.details?.user
+              ? res.details.user
+              : {
+                  firstName: '',
+                  lastName: '',
+                  reservationEmail: '',
+                  phone: '',
+                  address: '',
+                  city: '',
+                  postal: 0,
+                },
           },
         }
 
@@ -105,11 +117,27 @@ const ReservationProvider: FunctionComponent = ({ children }) => {
     })
   }
 
+  const setUserInfo = (user: UserInput): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+      const updatedReservation = {
+        ...newReservation,
+        details: {
+          ...newReservation?.details,
+          user: user,
+        } as NewReservationInput,
+      }
+
+      updateReservation(updatedReservation)
+      resolve(true)
+    })
+  }
+
   const setDates = (startDate: Date, endDate: Date): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       const updatedReservation: INewReservation = {
         ...newReservation,
         details: {
+          ...newReservation?.details,
           startDate: startDate,
           endDate: endDate,
         },
@@ -124,6 +152,7 @@ const ReservationProvider: FunctionComponent = ({ children }) => {
     addRoom,
     setDates,
     removeRoom,
+    setUserInfo,
   }
 
   return (
