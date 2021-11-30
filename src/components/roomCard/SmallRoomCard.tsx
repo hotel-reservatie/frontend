@@ -1,7 +1,9 @@
 import React, { FunctionComponent } from 'react'
 import { MdArrowForward, MdOpenInFull, MdPeople } from 'react-icons/md'
+import { HiMinusCircle } from 'react-icons/hi'
 import Card from '../card'
 import SubTitle from '../text/SubTitle'
+import Link from 'next/link'
 
 interface SmallRoomCardProps {
   title?: string
@@ -9,6 +11,8 @@ interface SmallRoomCardProps {
   surface?: number
   price?: number
   roomId?: string
+  isValid?: boolean
+  onDelete?: Function
 }
 
 const SmallRoomCard: FunctionComponent<SmallRoomCardProps> = ({
@@ -17,13 +21,37 @@ const SmallRoomCard: FunctionComponent<SmallRoomCardProps> = ({
   surface,
   price,
   roomId,
+  isValid = false,
+  onDelete,
 }) => {
+  const handleDelete = () => {
+    if (onDelete) onDelete(roomId)
+  }
+
   return (
-    <Card className="w-full px-8 py-8 hover:cursor-pointer">
+    <Card
+      className={`w-full px-8 py-8 ${
+        !isValid ? ' border-2 border-red-400' : ''
+      }`}
+    >
       <div className="grid">
-        <SubTitle>
-          {title} <MdArrowForward className=" inline-block" />
-        </SubTitle>
+        <div className=" mb-8">
+          <Link href={`/room/${roomId}`}>
+            <a className="flex justify-between items-center">
+              <SubTitle className=" mb-0  overflow-hidden whitespace-nowrap overflow-clip">
+                {title
+                  ? title?.length >= 14
+                    ? `${title?.substr(0, 14)}...`
+                    : title
+                  : null}
+              </SubTitle>
+              <MdArrowForward size={24} className=" inline-block" />
+            </a>
+          </Link>
+          {!isValid ? (
+            <span className=" text-red-600">Not available for given time.</span>
+          ) : null}
+        </div>
         <div>
           <div className="flex items-center gap-2 mb-3">
             <MdPeople size={32} />
@@ -34,10 +62,16 @@ const SmallRoomCard: FunctionComponent<SmallRoomCardProps> = ({
             <span className=" font-semibold text-2xl">{surface}</span>
           </div>
         </div>
-
-        <div className=" font-bold text-blue-300">
-          <span className="text-3xl text-blue-800">{`€${price} `}</span>
-          per night
+        <div className="flex justify-between items-center">
+          <div className=" font-bold text-blue-300">
+            <span className="text-3xl text-blue-800">{`€${price} `}</span>
+            per night
+          </div>
+          <HiMinusCircle
+            onClick={handleDelete}
+            size={32}
+            className=" text-blue-300 hover:text-red-500 hover:scale-105 hover:cursor-pointer transition-transform"
+          />
         </div>
       </div>
     </Card>

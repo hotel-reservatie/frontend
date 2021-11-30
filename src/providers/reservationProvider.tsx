@@ -17,6 +17,7 @@ interface IReservationContext {
   newReservation: INewReservation | undefined
   addRoom: (roomId: string) => Promise<boolean>
   setDates: (startDate: Date, endDate: Date) => Promise<boolean>
+  removeRoom: (roomId: string) => Promise<boolean>
 }
 
 const ReservationContext = createContext<IReservationContext>(
@@ -45,11 +46,15 @@ const ReservationProvider: FunctionComponent = ({ children }) => {
         const parsedDates: INewReservation = {
           ...res,
           details: {
-            startDate: new Date(res.details?.startDate),
-            endDate: new Date(res.details?.endDate),
+            startDate: res.details?.startDate
+              ? new Date(res.details.startDate)
+              : undefined,
+            endDate: res.details?.endDate
+              ? new Date(res.details.endDate)
+              : undefined,
           },
         }
-        
+
         setNewReservation(parsedDates)
         resolve(true)
       } else {
@@ -82,6 +87,24 @@ const ReservationProvider: FunctionComponent = ({ children }) => {
     })
   }
 
+  const removeRoom = (roomId: string): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+      if (newReservation?.roomIds?.includes(roomId)) {
+        const updatedReservation = {
+          ...newReservation,
+          roomIds: newReservation.roomIds
+            ? newReservation.roomIds.filter(r => r !== roomId)
+            : [],
+        }
+
+        updateReservation(updatedReservation)
+        resolve(true)
+      } else {
+        reject(false)
+      }
+    })
+  }
+
   const setDates = (startDate: Date, endDate: Date): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       const updatedReservation: INewReservation = {
@@ -100,6 +123,7 @@ const ReservationProvider: FunctionComponent = ({ children }) => {
     newReservation,
     addRoom,
     setDates,
+    removeRoom,
   }
 
   return (
