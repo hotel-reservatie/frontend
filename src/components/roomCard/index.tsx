@@ -6,7 +6,11 @@ import Button from 'src/components/button'
 import Link from 'next/link'
 import { MdFavorite } from 'react-icons/md'
 import FavButton from '../button/FavButton'
-import { useAuth } from 'src/providers/authProvider'
+import {
+  Authenticated,
+  NotAuthenticated,
+  useAuth,
+} from 'src/providers/authProvider'
 import { useNewReservation } from 'src/providers/reservationProvider'
 interface RoomCardProps {
   img: string | undefined | null
@@ -130,7 +134,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
   const { user } = useAuth()
   const { addRoom } = useNewReservation()
 
-  function RoomTypeOnClick(title: string | undefined | null) {
+  function RoomTypeOnClick() {
     router.push({ pathname: '/rooms', query: { roomtype: title ? title : '' } })
   }
 
@@ -138,6 +142,12 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
     if (id) {
       addRoom(id as string)
       router.push('/newreservation')
+    }
+  }
+
+  const handleMoreInfo = () => {
+    if (id) {
+      router.push(`/room/${id}`)
     }
   }
 
@@ -175,7 +185,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
           </span>
           <Button
             className="w-max py-2 px-8 text-base font-normal leading-tight"
-            onClick={() => RoomTypeOnClick(id)}
+            onClick={RoomTypeOnClick}
           >
             Show Availability
           </Button>
@@ -195,12 +205,14 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
           </div>
         </div>
         <div>
-          <Link href={`/room/${id}`}>
-            <span className="flex flex-row items-center cursor-pointer">
-              <a className="text-blue-500 mr-4">More info</a>
-              <Arrow />
-            </span>
-          </Link>
+          <Authenticated>
+            <Link href={`/room/${id}`}>
+              <span className="flex flex-row items-center cursor-pointer">
+                <a className="text-blue-500 mr-4">More info</a>
+                <Arrow />
+              </span>
+            </Link>
+          </Authenticated>
         </div>
         <div className="flex flex-row justify-between my-8">
           <div className="flex flex-row items-center">
@@ -216,21 +228,31 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
                 {surface ? surface : ''}m²
               </p>
             </span>
-            {user ? (
+            <Authenticated>
               <FavButton
                 className="ml-4"
                 size={32}
                 isFavorite={isFavorite}
                 onClick={handleFavClick}
               />
-            ) : null}
+            </Authenticated>
           </div>
-          <Button
-            onClick={handleBookRoom}
-            className="w-max py-2 px-8 text-base font-normal leading-tight"
-          >
-            Book this room
-          </Button>
+          <Authenticated>
+            <Button
+              onClick={handleBookRoom}
+              className="w-max py-2 px-8 text-base font-normal leading-tight"
+            >
+              Book this room
+            </Button>
+          </Authenticated>
+          <NotAuthenticated>
+            <Button
+              onClick={handleMoreInfo}
+              className="w-max py-2 px-8 text-base font-normal leading-tight"
+            >
+              More info
+            </Button>
+          </NotAuthenticated>
         </div>
       </RoomCardHolder>
     )

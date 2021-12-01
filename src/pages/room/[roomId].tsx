@@ -18,7 +18,11 @@ import { MdDone, MdOutlinePerson, MdStar, MdFavorite } from 'react-icons/md'
 import Card from 'src/components/card'
 import ImageScroller from 'src/components/image/ImageScroller'
 import { BsTag } from 'react-icons/bs'
-import { useAuth } from 'src/providers/authProvider'
+import {
+  Authenticated,
+  NotAuthenticated,
+  useAuth,
+} from 'src/providers/authProvider'
 import Input from 'src/components/input'
 import { useMutation } from '@apollo/client'
 import AddReview from 'src/schema/reviews/addReview.schema'
@@ -116,13 +120,13 @@ const Room: NextPage = () => {
     <PageLayout>
       <div className="flex justify-between align-middle">
         <PageTitle>{data?.getRoomById?.roomName}</PageTitle>
-        {user ? (
+        <Authenticated>
           <FavButton
             size={32}
             isFavorite={isFav(roomId as string)}
             onClick={handleFavButton}
           />
-        ) : null}
+        </Authenticated>
       </div>
       <div className="md:grid md:grid-cols-2 md:gap-x-16 items-start">
         <ImageScroller
@@ -154,7 +158,9 @@ const Room: NextPage = () => {
             per night
           </h2>
           <p>{data?.getRoomById?.description}</p>
-          <Button onClick={handleBookRoom}>Book this room</Button>
+          <Authenticated>
+            <Button onClick={handleBookRoom}>Book this room</Button>
+          </Authenticated>
         </div>
       </div>
       <div className="md:grid md:grid-cols-2 md:mt-16 gap-x-16">
@@ -217,7 +223,7 @@ const Room: NextPage = () => {
           : null}
       </div>
       <SubTitle>Describe your experience</SubTitle>
-      {user ? (
+      <Authenticated>
         <div className="md:grid md:grid-cols-2">
           <form onSubmit={writeReview}>
             <h3 className="block mb-1 text-blue-600">In amount of stars</h3>
@@ -243,9 +249,10 @@ const Room: NextPage = () => {
             <Button>{'schrijf'}</Button>
           </form>
         </div>
-      ) : (
+      </Authenticated>
+      <NotAuthenticated>
         <p>Please sign in to write a review</p>
-      )}
+      </NotAuthenticated>
     </PageLayout>
   )
 }
