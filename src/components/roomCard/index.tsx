@@ -86,7 +86,7 @@ const RoomCardHolder: FunctionComponent<RoomCardHolderProps> = ({
   img,
   title,
 }) => {
-  return (
+  return img ? (
     <div className="max-w-7xl mx-auto grid grid-cols-4 my-8 items-center rounded-xl shadow bg-white">
       <div className="h-80 relative">
         <Image
@@ -102,7 +102,7 @@ const RoomCardHolder: FunctionComponent<RoomCardHolderProps> = ({
         {children}
       </div>
     </div>
-  )
+  ) : null
 }
 
 const RoomCardTitleSection: FunctionComponent<RoomCardTitleSectionProps> = ({
