@@ -18,10 +18,7 @@ const Login = () => {
   const [credentials, setCredentials] = useState({ email: '', password: '' })
   const { login, user } = useAuth()
 
-  function loginUser(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    console.log(credentials)
-
+  function loginUser() {
     login(credentials.email, credentials.password)
     // router.push('/')
   }
@@ -40,8 +37,9 @@ const Login = () => {
     setSubmitting(true)
   }
 
-  function handleSubmit(e: any) {
-    console.log('from form: ', e)
+  function handleSubmit(items: Array<FormItem>) {
+    login(items[0].value, items[1].value)
+    router.push('/')
   }
 
   const formItems = [

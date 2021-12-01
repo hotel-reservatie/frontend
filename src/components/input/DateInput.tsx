@@ -41,6 +41,7 @@ const DateInput: FunctionComponent<DateInputProps> = ({
             relative
             px-4
             py-4
+            mb-4
             rounded-full
             border border-blue-400
             bg-blue-100
