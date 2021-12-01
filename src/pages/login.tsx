@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import useFirebase from 'src/hooks/useFirebase'
 import { useRouter } from 'next/router'
 import Input from 'src/components/input'
 import Button from 'src/components/button'
@@ -9,6 +8,7 @@ import Subtext from 'src/components/text'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { useAuth } from 'src/providers/authProvider'
+import FormItem from 'src/classes/FormItem'
 
 const Login = () => {
   const router = useRouter()
@@ -18,8 +18,10 @@ const Login = () => {
 
   function loginUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    console.log(credentials)
+
     login(credentials.email, credentials.password)
-    router.push('/')
+    // router.push('/')
   }
 
   useEffect(() => {

@@ -8,10 +8,13 @@ interface FormProps {
   formItems: Array<FormItem>
   rows?: number
   cols?: number
+  rowGap?: number
+  colGap?: number
   submitting: boolean
   setSubmitting: React.Dispatch<React.SetStateAction<boolean>>
   onItemChange?: any
   onSubmit?: any
+  className?: string
 }
 
 const findIndexByName = (arr: FormItem[], searchName: string) => {
@@ -22,10 +25,13 @@ const Form: FunctionComponent<FormProps> = ({
   formItems,
   cols,
   rows,
+  rowGap = 4,
+  colGap = 2,
   onSubmit,
   submitting,
   setSubmitting,
   onItemChange,
+  className = '',
 }) => {
   const [items, setItems] = useState<Array<FormItem>>(formItems)
 
@@ -124,9 +130,7 @@ const Form: FunctionComponent<FormProps> = ({
 
   return (
     <form
-      className={`grid items-end ${cols ? `grid-cols-${cols}` : ''} gap-2  ${
-        rows ? `grid-rows-${rows}` : ''
-      }`}
+      className={`grid items-end ${`grid-cols-${cols}`} ${`gap-x-${colGap}`} ${`grid-rows-${rows}`} ${`gap-y-${rowGap}`} ${className}`}
       noValidate
     >
       {items.map(({ value, className, ...item }, index) => {

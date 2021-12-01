@@ -207,6 +207,8 @@ const Rooms = () => {
           formItems={formItems}
           rows={2}
           cols={6}
+          rowGap={8}
+          className="mb-4"
         />
         {/* </div> */}
         {/* </div> */}

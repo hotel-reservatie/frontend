@@ -42,7 +42,6 @@ const Input: FunctionComponent<InputProps> = ({
               : undefined
           }`}
           type={type}
-          id={label ? label.replace(/ +/g, '').toLowerCase() : id}
           placeholder={placeholder}
           {...props}
         />
