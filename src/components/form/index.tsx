@@ -1,4 +1,5 @@
 import React, { FormEvent, FunctionComponent, useEffect, useState } from 'react'
+import classNames from 'classnames/bind'
 import FormItem, { FormItemOption } from 'src/classes/FormItem'
 import Dropdown from '../dropdown'
 import Input from '../input'
@@ -23,7 +24,7 @@ const findIndexByName = (arr: FormItem[], searchName: string) => {
 
 const Form: FunctionComponent<FormProps> = ({
   formItems,
-  cols,
+  cols = 1,
   rows,
   rowGap = 4,
   colGap = 2,
@@ -128,11 +129,17 @@ const Form: FunctionComponent<FormProps> = ({
     setSubmitting(false)
   }
 
+  const formStyling = classNames(
+    'grid items-end',
+    { [`grid-cols-${cols}`]: cols },
+    { [`gap-x-${colGap}`]: colGap },
+    { [`grid-rows-${rows}`]: rows },
+    { [`gap-y-${rowGap}`]: rowGap },
+    { [`${className}`]: className },
+  )
+
   return (
-    <form
-      className={`grid items-end ${`grid-cols-${cols}`} ${`gap-x-${colGap}`} ${`grid-rows-${rows}`} ${`gap-y-${rowGap}`} ${className}`}
-      noValidate
-    >
+    <form className={formStyling} noValidate>
       {items.map(({ value, className, ...item }, index) => {
         if (item.type === 'date') {
           return (

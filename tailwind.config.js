@@ -4,10 +4,20 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 module.exports = {
   mode: 'jit',
 
-  purge: [
-    './src/pages/**/*.{js,ts,jsx,tsx}',
-    './src/components/**/*.{js,ts,jsx,tsx}',
-  ],
+  purge: {
+    content: [
+      './src/pages/**/*.{js,ts,jsx,tsx}',
+      './src/components/**/*.{js,ts,jsx,tsx}',
+    ],
+    safeList: [
+      'grid-cols-1',
+      'grid-cols-2',
+      'grid-cols-3',
+      'grid-cols-4',
+      'grid-cols-5',
+      'grid-cols-6',
+    ],
+  },
 
   darkMode: 'media', // or 'class'
 
@@ -34,22 +44,22 @@ module.exports = {
         xl: '32px',
       },
       gridTemplateColumns: {
-        'auto': 'repeat(auto-fill, minmax(9rem, 1fr))'
+        auto: 'repeat(auto-fill, minmax(9rem, 1fr))',
       },
       gridTemplateRows: {
-        'fixheight': " repeat(400px)"
+        fixheight: ' repeat(400px)',
       },
       width: {
-        "100": "100px",
-        "80": "80px"
+        100: '100px',
+        80: '80px',
       },
       height: {
-        "100": "100px",
+        100: '100px',
         // "80": "80px"
       },
       minHeight: {
-        "100": "100px"
-      }
+        100: '100px',
+      },
     },
   },
 
