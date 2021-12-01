@@ -45,7 +45,10 @@ const Form: FunctionComponent<FormProps> = ({
         new FormItem({ ...items[index], value: e.currentTarget.value }),
         ...items.slice(index + 1),
       ]
-      onItemChange(newItems)
+      if (onItemChange) {
+        onItemChange(newItems)
+      }
+
       setItems(newItems)
     }
   }
@@ -69,7 +72,9 @@ const Form: FunctionComponent<FormProps> = ({
       new FormItem({ ...items[index], value: d }),
       ...items.slice(index + 1),
     ]
-    onItemChange(newItems)
+    if (onItemChange) {
+      onItemChange(newItems)
+    }
     setItems(newItems)
   }
 
@@ -85,25 +90,23 @@ const Form: FunctionComponent<FormProps> = ({
   }
 
   function isValidEmail(fi: FormItem) {
-    const re =
-      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
-    if (fi.type === 'email') return String(fi.value).toLowerCase().match(re)
-    else return false
+    const re = /\S+@\S+\.\S+/
+    return re.test(fi.value)
   }
 
   function formHasErrors(formItems: Array<FormItem>) {
     let counter = 0
+
     const newItems = formItems.map((item, index) => {
       if (isEmpty(item, index)) {
-        if (item.type === 'email' && !isValidEmail(item)) {
-          counter++
-          item.faulty = 'true'
-          item.errormessage = 'Geen geldig e-mail'
-          return item
-        }
         item.faulty = 'true'
         item.errormessage = 'Verplicht!'
         counter++
+        return item
+      } else if (item.type === 'email' && !isValidEmail(item)) {
+        counter++
+        item.faulty = 'true'
+        item.errormessage = 'Geen geldig e-mail'
         return item
       }
       item.faulty = 'false'
@@ -119,14 +122,19 @@ const Form: FunctionComponent<FormProps> = ({
     return false
   }
 
-  function handleSubmit() {
-    if (formHasErrors(items)) {
-      console.log('form has errors')
-    } else {
-      onSubmit(items)
+  useEffect(() => {
+    function handleSubmit() {
+      if (formHasErrors(items)) {
+        console.log('form has errors')
+      } else {
+        onSubmit(items)
+      }
+      setSubmitting(false)
     }
-    setSubmitting(false)
-  }
+    if (submitting) {
+      handleSubmit()
+    }
+  }, [submitting])
 
   return (
     <form
