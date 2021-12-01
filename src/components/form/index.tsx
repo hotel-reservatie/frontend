@@ -94,9 +94,18 @@ const Form: FunctionComponent<FormProps> = ({
     return re.test(fi.value)
   }
 
+  function checkForPasswords(formItems: Array<FormItem>) {
+    const passwordItems = formItems.filter(e => e.type === 'password')
+    return passwordItems
+  }
+
+  function passwordsMatch(passwordItems: Array<FormItem>) {
+    return passwordItems[0].value === passwordItems[1].value
+  }
+
   function formHasErrors(formItems: Array<FormItem>) {
     let counter = 0
-
+    let password = ''
     const newItems = formItems.map((item, index) => {
       if (isEmpty(item, index)) {
         item.faulty = 'true'
@@ -107,6 +116,14 @@ const Form: FunctionComponent<FormProps> = ({
         counter++
         item.faulty = 'true'
         item.errormessage = 'Geen geldig e-mail'
+        return item
+      } else if (item.id === 'password') {
+        password = item.value
+      } else if (item.id === 'repeatpassword' && password !== item.value) {
+        item.faulty = 'true'
+        item.errormessage = 'Wachtwoorden komen niet overeen'
+        item.value = ''
+        counter++
         return item
       }
       item.faulty = 'false'

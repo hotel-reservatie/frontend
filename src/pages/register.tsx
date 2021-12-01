@@ -23,9 +23,8 @@ const Register = () => {
   }
 
   function handleSubmit(items: Array<FormItem>) {
-    console.log(items)
     createUser(items[1].value, items[2].value, items[0].value)
-    // router.push('/')
+    router.push('/')
   }
 
   const formItems = [
