@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { MdFavorite } from 'react-icons/md'
 import FavButton from '../button/FavButton'
 import { useAuth } from 'src/providers/authProvider'
+import { useNewReservation } from 'src/providers/reservationProvider'
 interface RoomCardProps {
   img: string | undefined | null
   title: string | undefined | null
@@ -127,9 +128,17 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
 }) => {
   const { locale } = useRouter()
   const { user } = useAuth()
+  const { addRoom } = useNewReservation()
 
   function RoomTypeOnClick(title: string | undefined | null) {
     router.push({ pathname: '/rooms', query: { roomtype: title ? title : '' } })
+  }
+
+  const handleBookRoom = () => {
+    if (id) {
+      addRoom(id as string)
+      router.push('/newreservation')
+    }
   }
 
   const handleFavClick = (e: any) => {
@@ -216,8 +225,11 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
               />
             ) : null}
           </div>
-          <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
-            <Link href="#">Book now</Link>
+          <Button
+            onClick={handleBookRoom}
+            className="w-max py-2 px-8 text-base font-normal leading-tight"
+          >
+            Book this room
           </Button>
         </div>
       </RoomCardHolder>
