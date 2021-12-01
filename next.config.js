@@ -22,4 +22,11 @@ module.exports = withPWA({
     skipWaiting: true,
     disable: isDev,
   },
+  async rewrites() {
+    return [
+      { source: '/over-ons', destination: '/about' },
+      { source: '/kamers', destination: '/rooms' },
+    ]
+  },
 })
+// https://stackoverflow.com/questions/68723485/how-to-setup-i18n-translated-url-routes-in-next-js

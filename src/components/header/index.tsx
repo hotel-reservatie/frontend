@@ -7,7 +7,7 @@ import { MdPerson } from 'react-icons/md'
 
 const Header = () => {
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true)
-  const { t } = useTranslation()
+  const { t } = useTranslation('common')
   function toggleNav() {
     setMobileMenuHidden(!mobileMenuHidden)
   }
@@ -56,7 +56,7 @@ const Header = () => {
           {user ? (
             <div className="flex items-center gap-4">
               <p className="">{user.displayName}</p>
-              <MdPerson size={32}/>
+              <MdPerson size={32} />
             </div>
           ) : (
             <div className="hidden md:flex items-center space-x-3 ">
