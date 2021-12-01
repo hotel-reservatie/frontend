@@ -30,7 +30,7 @@ const DateInput: FunctionComponent<DateInputProps> = ({
   }
 
   return (
-    <div className="mb-4">
+    <div className={className}>
       <DatePicker
         ref={datePickerRef}
         minDate={minDate}
@@ -49,7 +49,6 @@ const DateInput: FunctionComponent<DateInputProps> = ({
             focus-visible:ring
             focus-visible:ring-blue-50
             placeholder-blue-400
-            ${className}
           `}
         {...props}
       />
