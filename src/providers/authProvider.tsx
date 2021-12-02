@@ -25,6 +25,7 @@ import {
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import client from 'src/utils/apollo'
+import { createLogicalWrapper } from 'src/utils/logicalWrapper'
 
 interface IAuthContext {
   user: User | null
@@ -32,6 +33,7 @@ interface IAuthContext {
   createUser: (email: string, password: string, username: string) => void
   login: (email: string, password: string) => Promise<boolean>
   logout: () => Promise<void>
+  signedIn: boolean
 }
 
 const AuthContext = createContext<IAuthContext>({} as IAuthContext)
@@ -71,12 +73,31 @@ export function useAuth() {
   return useContext(AuthContext)
 }
 
+export const Authenticated = createLogicalWrapper(
+  AuthContext,
+  (ctx: any) => ctx.signedIn,
+)
+
+export const NotAuthenticated = createLogicalWrapper(
+  AuthContext,
+  (ctx: any) => !ctx.signedIn,
+)
+
 export const AuthProvider: FunctionComponent = ({ children }) => {
   const [graphqlClient, SetgraphqlClient] = useState<ApolloClient<any>>(client)
   const [user, setUser] = useState<User | null>(null)
+  const [signedIn, setSignedIn] = useState(false)
   const app: FirebaseApp = initializeApp(firebaseConfig)
   const auth: Auth = getAuth()
   setPersistence(auth, browserLocalPersistence)
+
+  useEffect(() => {
+    if (user) {
+      setSignedIn(true)
+    } else {
+      setSignedIn(false)
+    }
+  }, [user])
 
   useEffect(() => {
     restoreAuth()
@@ -159,6 +180,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     createUser,
     login,
     logout,
+    signedIn,
   }
 
   return (

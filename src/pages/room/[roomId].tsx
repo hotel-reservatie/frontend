@@ -18,7 +18,11 @@ import { MdDone, MdOutlinePerson, MdStar, MdFavorite } from 'react-icons/md'
 import Card from 'src/components/card'
 import ImageScroller from 'src/components/image/ImageScroller'
 import { BsTag } from 'react-icons/bs'
-import { useAuth } from 'src/providers/authProvider'
+import {
+  Authenticated,
+  NotAuthenticated,
+  useAuth,
+} from 'src/providers/authProvider'
 import Input from 'src/components/input'
 import { useMutation } from '@apollo/client'
 import AddReview from 'src/schema/reviews/addReview.schema'
@@ -26,6 +30,7 @@ import formatDate from 'src/utils/formatDate'
 import FavButton from 'src/components/button/FavButton'
 import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
 import { NewReviewStars, ReviewStars } from 'src/components/reviewStar'
+import { useNewReservation } from 'src/providers/reservationProvider'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const Room: NextPage = () => {
@@ -36,15 +41,16 @@ const Room: NextPage = () => {
   const [getRoomById, { data, refetch }] = useGetRoomByIdLazyQuery()
   const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
   const [toggleFavorite, toggleFavoriteResult] = useMutation(ToggleFavorite)
-
   const [createReview, createReviewResult] = useMutation(AddReview)
-
   const [newReview, setNewReview] = useState<NewReviewInput>({
     reviewScore: 0,
     title: '',
     description: '',
     room: { roomId: roomId as string },
   })
+
+  const { addRoom } = useNewReservation()
+
   const writeReview = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
@@ -81,6 +87,12 @@ const Room: NextPage = () => {
     }
   }
 
+  const handleBookRoom = () => {
+    if (roomId) {
+      addRoom(roomId as string)
+      router.push('/newreservation')
+    }
+  }
   const isFav = (roomId: string | null | undefined) => {
     if (userFavs.data && roomId) {
       for (const fav of userFavs.data.getUserFavorites) {
@@ -91,6 +103,7 @@ const Room: NextPage = () => {
     }
     return false
   }
+
   useEffect(() => {
     if (roomId) {
       getRoomById({ variables: { roomId: roomId as string } })
@@ -107,15 +120,15 @@ const Room: NextPage = () => {
     <PageLayout>
       <div className="flex justify-between align-middle">
         <PageTitle>{data?.getRoomById?.roomName}</PageTitle>
-        {user ? (
+        <Authenticated>
           <FavButton
             size={32}
             isFavorite={isFav(roomId as string)}
             onClick={handleFavButton}
           />
-        ) : null}
+        </Authenticated>
       </div>
-      <div className="md:grid md:grid-cols-2 md:mt-16 md:gap-x-16 items-start">
+      <div className="md:grid md:grid-cols-2 md:gap-x-16 items-start">
         <ImageScroller
           images={
             data?.getRoomById?.images ? data.getRoomById.images : undefined
@@ -145,7 +158,9 @@ const Room: NextPage = () => {
             per night
           </h2>
           <p>{data?.getRoomById?.description}</p>
-          <Button>Book this room</Button>
+          <Authenticated>
+            <Button onClick={handleBookRoom}>Book this room</Button>
+          </Authenticated>
         </div>
       </div>
       <div className="md:grid md:grid-cols-2 md:mt-16 gap-x-16">
@@ -208,7 +223,7 @@ const Room: NextPage = () => {
           : null}
       </div>
       <SubTitle>Describe your experience</SubTitle>
-      {user ? (
+      <Authenticated>
         <div className="md:grid md:grid-cols-2">
           <form onSubmit={writeReview}>
             <h3 className="block mb-1 text-blue-600">In amount of stars</h3>
@@ -234,9 +249,10 @@ const Room: NextPage = () => {
             <Button>{'schrijf'}</Button>
           </form>
         </div>
-      ) : (
+      </Authenticated>
+      <NotAuthenticated>
         <p>Please sign in to write a review</p>
-      )}
+      </NotAuthenticated>
     </PageLayout>
   )
 }

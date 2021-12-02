@@ -21,7 +21,7 @@ const Button: FunctionComponent<ButtonProps> = ({
             focus:outline-none
             focus-visible:ring
             focus-visible:ring-blue-200
-            ${className}`}
+            ${className} disabled:bg-blue-400 disabled:cursor-not-allowed`}
       {...props}
     >
       {children}

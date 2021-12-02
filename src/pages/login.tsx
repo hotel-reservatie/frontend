@@ -9,17 +9,16 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { useAuth } from 'src/providers/authProvider'
 import FormItem from 'src/classes/FormItem'
+import Form from 'src/components/form'
 
 const Login = () => {
   const router = useRouter()
+  const [submitting, setSubmitting] = useState(false)
   const { t } = useTranslation()
   const [credentials, setCredentials] = useState({ email: '', password: '' })
   const { login, user } = useAuth()
 
-  function loginUser(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    console.log(credentials)
-
+  function loginUser() {
     login(credentials.email, credentials.password)
     // router.push('/')
   }
@@ -34,13 +33,44 @@ const Login = () => {
     }
   }
 
+  function handleLoginClick() {
+    setSubmitting(true)
+  }
+
+  function handleSubmit(items: Array<FormItem>) {
+    login(items[0].value, items[1].value)
+    router.push('/')
+  }
+
+  const formItems = [
+    new FormItem({
+      label: t('email.address'),
+      id: 'email',
+      name: 'email',
+      placeholder: t('email.placeholder'),
+      type: 'email',
+    }),
+    new FormItem({
+      label: t('password'),
+      id: 'password',
+      type: 'password',
+      name: 'password',
+    }),
+  ]
+
   return (
     <div className="min-h-full pt-12">
       <Card>
         <h1 className="font-semibold text-2xl leading-normal mb-6">
           {t('login')}
         </h1>
-        <form onSubmit={loginUser}>
+        <Form
+          submitting={submitting}
+          setSubmitting={setSubmitting}
+          formItems={formItems}
+          onSubmit={handleSubmit}
+        />
+        {/* <form onSubmit={loginUser}>
           <Input
             label={t('email.address')}
             id="email"
@@ -55,10 +85,10 @@ const Login = () => {
             autoComplete="password"
             onChange={onInputChange}
             type="password"
-          />
+          /> */}
 
-          <Button>{t('login')}</Button>
-        </form>
+        <Button onClick={handleLoginClick}>{t('login')}</Button>
+        {/* </form> */}
 
         <Subtext>
           {t('subtext.register')}{' '}

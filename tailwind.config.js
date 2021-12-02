@@ -45,6 +45,7 @@ module.exports = {
       },
       gridTemplateColumns: {
         auto: 'repeat(auto-fill, minmax(9rem, 1fr))',
+        'auto-lg': 'repeat(auto-fill, minmax(300px, 1fr))',
       },
       gridTemplateRows: {
         fixheight: ' repeat(400px)',
@@ -59,6 +60,7 @@ module.exports = {
       },
       minHeight: {
         100: '100px',
+        300: '300px',
       },
     },
   },

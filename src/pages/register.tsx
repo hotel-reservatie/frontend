@@ -4,45 +4,55 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import Card from 'src/components/card'
-import useFirebase from 'src/hooks/useFirebase'
-import Input from 'src/components/input'
 import Button from 'src/components/button'
 import Subtext from 'src/components/text'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useAuth } from 'src/providers/authProvider'
+import FormItem from 'src/classes/FormItem'
+import Form from 'src/components/form'
 
 const Register = () => {
   const router = useRouter()
   const { t } = useTranslation()
-  const [credentials, setCredentials] = useState({
-    username: '',
-    email: '',
-    password: '',
-    'repeat-pw': '',
-  })
-
+  const [submitting, setSubmitting] = useState(false)
   const { createUser } = useAuth()
 
-  function signInUser(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    // testjonas@test.be --> testfirebase
-    // login(credentials.email, credentials.password)
-    createUser(credentials.email, credentials.password, credentials.username)
-    console.log(credentials)
-    // router.push('/')
+  function onStartSubmit() {
+    setSubmitting(true)
   }
 
-  function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    if (
-      event.target.id === 'username' ||
-      'email' ||
-      'password' ||
-      'repeat-pw'
-    ) {
-      setCredentials({ ...credentials, [event.target.id]: event.target.value })
-    }
+  function handleSubmit(items: Array<FormItem>) {
+    createUser(items[1].value, items[2].value, items[0].value)
+    router.push('/')
   }
+
+  const formItems = [
+    new FormItem({
+      label: t('username'),
+      id: 'username',
+      name: 'username',
+    }),
+    new FormItem({
+      label: t('email.address'),
+      name: 'email',
+      id: 'email',
+      placeholder: t('email.placeholder'),
+      type: 'email',
+    }),
+    new FormItem({
+      label: t('password'),
+      name: 'password',
+      id: 'password',
+      type: 'password',
+    }),
+    new FormItem({
+      label: t('password.repeat'),
+      name: 'repeatpassword',
+      id: 'repeatpassword',
+      type: 'password',
+    }),
+  ]
 
   return (
     <div className="min-h-full pt-12 pb-12">
@@ -50,40 +60,14 @@ const Register = () => {
         <h1 className="font-semibold text-2xl leading-normal mb-6">
           {t('register')}
         </h1>
-        <form onSubmit={signInUser}>
-          <Input
-            label={t('username')}
-            autoComplete="username"
-            onChange={onInputChange}
-            id="username"
-          />
+        <Form
+          formItems={formItems}
+          submitting={submitting}
+          setSubmitting={setSubmitting}
+          onSubmit={handleSubmit}
+        />
 
-          <Input
-            label={t('email.address')}
-            autoComplete="email"
-            onChange={onInputChange}
-            placeholder={t('email.placeholder')}
-            id="email"
-          />
-
-          <Input
-            label={t('password')}
-            autoComplete="password"
-            onChange={onInputChange}
-            type="password"
-            id="password"
-          />
-
-          <Input
-            label={t('password.repeat')}
-            autoComplete="password"
-            onChange={onInputChange}
-            type="password"
-            id="repeat-pw"
-          />
-
-          <Button>Register</Button>
-        </form>
+        <Button onClick={onStartSubmit}>Register</Button>
 
         <Subtext>
           {t('subtext.login')}{' '}
