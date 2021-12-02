@@ -198,7 +198,7 @@ const Rooms = () => {
       hasValue(e[0].value) ? { startDate: e[0].value } : null,
       hasValue(e[1].value) ? { endDate: e[1].value } : null,
       e[4].value > 0 ? { maxCapacity: e[4].value } : null,
-      hasValue(e[3].value) ? { roomType: e[3].value } : null,
+      hasValue(e[3].value) ? { roomTypeIds: e[3].value } : null,
     )
     setFilters(newFilters)
   }
