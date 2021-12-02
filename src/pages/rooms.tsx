@@ -178,19 +178,7 @@ const Rooms = () => {
     <div className="max-w-7xl mx-auto">
       <div>
         <PageTitle>Rooms</PageTitle>
-        {/* <div className="grid grid-cols-2 grid-rows-2">
-          <DateInput
-            placeholder={t('datepicker.arrivaldate')}
-            className="text-center placeholder-blue-500"
-            onChange={(d: Date) => {}}
-          />
-          <DateInput
-            placeholder={t('datepicker.departuredate')}
-            className="text-center placeholder-blue-500 row-start-1"
-            onChange={(d: Date) => {}}
-          />
-          <Input placeholder="Search room name" />
-          <div className="flex "> */}
+
         {filterOptions && (
           <Form
             onItemChange={onItemChange}
@@ -203,8 +191,7 @@ const Rooms = () => {
             className="mb-4"
           />
         )}
-        {/* </div> */}
-        {/* </div> */}
+
         <RangeSlider boundries={boundries} onValueChange={sliderChange} />
       </div>
       {data?.getRooms?.map((room, index) => {
