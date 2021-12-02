@@ -25,7 +25,7 @@ const Dropdown: FunctionComponent<DropdownProps> = ({
   }
   return (
     <Listbox value={selected} onChange={handleChange}>
-      <div className={`relative w-full ${className}`}>
+      <div className={`relative w-full mb-4 ${className}`}>
         <Listbox.Button className="relative border-blue-500 border w-full py-4 pl-7 pr-10 text-left bg-white rounded-full cursor-default">
           <span className="block truncate">
             {selected ? selected.name : placeholder}
