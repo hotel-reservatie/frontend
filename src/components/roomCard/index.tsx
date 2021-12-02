@@ -86,7 +86,7 @@ const RoomCardHolder: FunctionComponent<RoomCardHolderProps> = ({
   img,
   title,
 }) => {
-  return img ? (
+  return (
     <div className="max-w-7xl mx-auto grid grid-cols-4 my-8 items-center rounded-xl shadow bg-white">
       <div className="h-80 relative">
         <Image
@@ -102,7 +102,7 @@ const RoomCardHolder: FunctionComponent<RoomCardHolderProps> = ({
         {children}
       </div>
     </div>
-  ) : null
+  )
 }
 
 const RoomCardTitleSection: FunctionComponent<RoomCardTitleSectionProps> = ({
@@ -194,67 +194,69 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
     )
   } else if (type === 'room' && img?.includes('http')) {
     return (
-      <RoomCardHolder img={img} title={title}>
-        <div className="flex flex-row justify-between items-start">
-          <RoomCardTitleSection title={title} desc={desc} />
-          <div>
-            <p className="mt-8 "></p>
-            <p className="font-bold text-2xl">
-              {price ? localizedPrice(price, locale) : ''}
-            </p>
+      <>
+        <RoomCardHolder img={img} title={title}>
+          <div className="flex flex-row justify-between items-start">
+            <RoomCardTitleSection title={title} desc={desc} />
+            <div>
+              <p className="mt-8 "></p>
+              <p className="font-bold text-2xl">
+                {price ? localizedPrice(price, locale) : ''}
+              </p>
+            </div>
           </div>
-        </div>
-        <div>
-          <Authenticated>
-            <Link href={`/room/${id}`}>
-              <span className="flex flex-row items-center cursor-pointer">
-                <a className="text-blue-500 mr-4">More info</a>
-                <Arrow />
-              </span>
-            </Link>
-          </Authenticated>
-        </div>
-        <div className="flex flex-row justify-between my-8">
-          <div className="flex flex-row items-center">
-            <span className="flex flex-row items-end mr-4">
-              <People />
-              <p className="font-bold text-2xl text-blue-700 ml-2">
-                {size ? size : ''}
-              </p>
-            </span>
-            <span className="flex flex-row items-center ml-4 mr-4">
-              <Surface />
-              <p className="font-bold text-2xl text-blue-700 ml-1">
-                {surface ? surface : ''}m²
-              </p>
-            </span>
+          <div>
             <Authenticated>
-              <FavButton
-                className="ml-4"
-                size={32}
-                isFavorite={isFavorite}
-                onClick={handleFavClick}
-              />
+              <Link href={`/room/${id}`}>
+                <span className="flex flex-row items-center cursor-pointer">
+                  <a className="text-blue-500 mr-4">More info</a>
+                  <Arrow />
+                </span>
+              </Link>
             </Authenticated>
           </div>
-          <Authenticated>
-            <Button
-              onClick={handleBookRoom}
-              className="w-max py-2 px-8 text-base font-normal leading-tight"
-            >
-              Book this room
-            </Button>
-          </Authenticated>
-          <NotAuthenticated>
-            <Button
-              onClick={handleMoreInfo}
-              className="w-max py-2 px-8 text-base font-normal leading-tight"
-            >
-              More info
-            </Button>
-          </NotAuthenticated>
-        </div>
-      </RoomCardHolder>
+          <div className="flex flex-row justify-between my-8">
+            <div className="flex flex-row items-center">
+              <span className="flex flex-row items-end mr-4">
+                <People />
+                <p className="font-bold text-2xl text-blue-700 ml-2">
+                  {size ? size : ''}
+                </p>
+              </span>
+              <span className="flex flex-row items-center ml-4 mr-4">
+                <Surface />
+                <p className="font-bold text-2xl text-blue-700 ml-1">
+                  {surface ? surface : ''}m²
+                </p>
+              </span>
+              <Authenticated>
+                <FavButton
+                  className="ml-4"
+                  size={32}
+                  isFavorite={isFavorite}
+                  onClick={handleFavClick}
+                />
+              </Authenticated>
+            </div>
+            <Authenticated>
+              <Button
+                onClick={handleBookRoom}
+                className="w-max py-2 px-8 text-base font-normal leading-tight"
+              >
+                Book this room
+              </Button>
+            </Authenticated>
+            <NotAuthenticated>
+              <Button
+                onClick={handleMoreInfo}
+                className="w-max py-2 px-8 text-base font-normal leading-tight"
+              >
+                More info
+              </Button>
+            </NotAuthenticated>
+          </div>
+        </RoomCardHolder>
+      </>
     )
   } else {
     return <></>
