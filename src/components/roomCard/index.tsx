@@ -135,7 +135,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
   const { addRoom } = useNewReservation()
 
   function RoomTypeOnClick() {
-    router.push({ pathname: '/rooms', query: { roomtype: title ? title : '' } })
+    router.push({ pathname: '/rooms', query: { roomtype: id ?? '' } })
   }
 
   const handleBookRoom = () => {
