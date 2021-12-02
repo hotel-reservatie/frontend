@@ -154,13 +154,21 @@ const Form: FunctionComponent<FormProps> = ({
     }
   }, [submitting])
 
+  function dynamicRowCols(amount: number | undefined, type: 'rows' | 'cols') {
+    return `grid-${type}-${amount}`
+  }
+
+  function dynamicGaps(amount: number | undefined, type: 'x' | 'y') {
+    return `gap-${type}-${amount}`
+  }
+
   const formStyling = classNames(
     'grid items-end',
-    { [`grid-cols-${cols}`]: cols },
-    { [`gap-x-${colGap}`]: colGap },
-    { [`grid-rows-${rows}`]: rows },
-    { [`gap-y-${rowGap}`]: rowGap },
-    { [`${className}`]: className },
+    { [dynamicGaps(colGap, 'x')]: colGap },
+    { [dynamicGaps(rowGap, 'y')]: rowGap },
+    { [dynamicRowCols(cols, 'cols')]: cols },
+    { [dynamicRowCols(rows, 'rows')]: rows },
+    className,
   )
 
   return (
