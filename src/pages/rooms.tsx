@@ -7,6 +7,7 @@ import RoomCard from 'src/components/roomCard'
 import {
   Maybe,
   RoomFilters,
+  useGetAllFilterValuesQuery,
   useGetFilteredRoomsQuery,
   useGetUserFavoritesLazyQuery,
 } from 'src/schema'
@@ -16,7 +17,7 @@ import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
 import PageTitle from 'src/components/text/PageTitle'
 import { useTranslation } from 'react-i18next'
 import Form from 'src/components/form'
-import FormItem from 'src/classes/FormItem'
+import FormItem, { FormItemOption } from 'src/classes/FormItem'
 
 const Rooms = () => {
   const { user } = useAuth()
@@ -24,6 +25,12 @@ const Rooms = () => {
   const { t } = useTranslation('common')
 
   const [filters, setFilters] = useState<RoomFilters>()
+  const [filterOptions, setFilterOptions] = useState<{
+    roomTypes: FormItemOption[]
+    roomCapacity: FormItemOption[]
+    tags: FormItemOption[]
+  }>()
+
   const [boundries, setBoundries] = useState<{
     min: number | null
     max: number | null
@@ -35,6 +42,9 @@ const Rooms = () => {
   const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
   const [toggleFavorite, toggleFavoriteResult] = useMutation(ToggleFavorite)
   const [submitting, setSubmitting] = useState(false)
+
+  const { loading: filterOptionsLoading, data: filterData } =
+    useGetAllFilterValuesQuery()
 
   const isFavorite = (roomId: string | null | undefined) => {
     if (userFavs.data && roomId) {
@@ -87,48 +97,36 @@ const Rooms = () => {
     }
   }, [user])
 
-  const roomTypes = [
-    {
-      id: 1,
-      name: 'test 1 label',
-    },
-    {
-      id: 2,
-      name: 'test 2 label',
-    },
-    {
-      id: 3,
-      name: 'test 3 label',
-    },
-  ]
-  const roomCapacity = [
-    {
-      id: 1,
-      name: 'test 1 label',
-    },
-    {
-      id: 2,
-      name: 'test 2 label',
-    },
-    {
-      id: 3,
-      name: 'test 3 label',
-    },
-  ]
-  const tags = [
-    {
-      id: 1,
-      name: 'test 1 label',
-    },
-    {
-      id: 2,
-      name: 'test 2 label',
-    },
-    {
-      id: 3,
-      name: 'test 3 label',
-    },
-  ]
+  useEffect(() => {
+    if (!filterOptionsLoading) {
+      console.log(filterData)
+      const roomCapacity: Array<FormItemOption> = []
+      const roomTypes: Array<FormItemOption> = []
+      const tags: Array<FormItemOption> = []
+      if (filterData?.getFilters.maxCapacity) {
+        for (
+          let index = 0;
+          index < filterData?.getFilters.maxCapacity;
+          index++
+        ) {
+          roomCapacity.push({ id: index + 1, name: String(index + 1) })
+        }
+      }
+      if (filterData?.getFilters.roomTypes) {
+        const types = filterData.getFilters.roomTypes
+        // TODO: sort alphabeticaly
+        types.forEach((rt, index) => {
+          roomTypes.push({ id: index, name: rt.typeName })
+        })
+      }
+      if (filterData?.getFilters.tags) {
+        filterData.getFilters.tags.forEach((t, i) => {
+          tags.push({ id: i, name: t.name })
+        })
+      }
+      setFilterOptions({ roomTypes, roomCapacity, tags })
+    }
+  }, [filterOptionsLoading])
 
   const formItems = [
     new FormItem({
@@ -155,19 +153,19 @@ const Rooms = () => {
     new FormItem({
       type: 'dropdown',
       placeholder: 'Room Type',
-      options: roomTypes,
+      options: filterOptions?.roomTypes,
       name: 'roomType',
     }),
     new FormItem({
       type: 'dropdown',
       placeholder: 'Room Capacity',
-      options: roomCapacity,
+      options: filterOptions?.roomCapacity,
       name: 'roomCapacity',
     }),
     new FormItem({
       type: 'dropdown',
       placeholder: 'Tags',
-      options: tags,
+      options: filterOptions?.tags,
       name: 'tags',
     }),
   ]
@@ -193,16 +191,18 @@ const Rooms = () => {
           />
           <Input placeholder="Search room name" />
           <div className="flex "> */}
-        <Form
-          onItemChange={onItemChange}
-          submitting={submitting}
-          setSubmitting={setSubmitting}
-          formItems={formItems}
-          rows={2}
-          cols={6}
-          rowGap={8}
-          className="mb-4"
-        />
+        {filterOptions && (
+          <Form
+            onItemChange={onItemChange}
+            submitting={submitting}
+            setSubmitting={setSubmitting}
+            formItems={formItems}
+            rows={2}
+            cols={6}
+            rowGap={8}
+            className="mb-4"
+          />
+        )}
         {/* </div> */}
         {/* </div> */}
         <RangeSlider boundries={boundries} onValueChange={sliderChange} />
