@@ -28,7 +28,6 @@ const Rooms = () => {
     min: number | null
     max: number | null
   }>({ min: null, max: null })
-  const [marks, setMarks] = useState([])
 
   const { loading, error, data } = useGetFilteredRoomsQuery({
     variables: { roomFilter: { ...filters } },
