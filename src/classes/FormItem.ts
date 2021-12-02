@@ -1,6 +1,6 @@
 export interface FormItemOption {
-  [key: number]: string
-  id: number
+  [key: string]: string
+  id: string
   name: string
 }
 

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
+import debounce from 'lodash.debounce'
 
 import RangeSlider from 'src/components/rangeSlider'
 import RoomCard from 'src/components/roomCard'
@@ -8,7 +9,7 @@ import {
   Maybe,
   RoomFilters,
   useGetAllFilterValuesQuery,
-  useGetFilteredRoomsQuery,
+  useGetFilteredRoomsLazyQuery,
   useGetUserFavoritesLazyQuery,
 } from 'src/schema'
 import { useMutation } from '@apollo/client'
@@ -36,9 +37,10 @@ const Rooms = () => {
     max: number | null
   }>({ min: null, max: null })
 
-  const { loading, error, data } = useGetFilteredRoomsQuery({
-    variables: { roomFilter: { ...filters } },
-  })
+  const [getFilteredRooms, { loading, error, data }] =
+    useGetFilteredRoomsLazyQuery({
+      variables: { roomFilter: { ...filters } },
+    })
   const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
   const [toggleFavorite, toggleFavoriteResult] = useMutation(ToggleFavorite)
   const [submitting, setSubmitting] = useState(false)
@@ -98,8 +100,18 @@ const Rooms = () => {
   }, [user])
 
   useEffect(() => {
+    if (filters) {
+      console.log('refetching')
+      console.log(filters)
+
+      getFilteredRooms({
+        variables: { roomFilter: { ...filters } },
+      })
+    }
+  }, [filters])
+
+  useEffect(() => {
     if (!filterOptionsLoading) {
-      console.log(filterData)
       const roomCapacity: Array<FormItemOption> = []
       const roomTypes: Array<FormItemOption> = []
       const tags: Array<FormItemOption> = []
@@ -109,19 +121,20 @@ const Rooms = () => {
           index < filterData?.getFilters.maxCapacity;
           index++
         ) {
-          roomCapacity.push({ id: index + 1, name: String(index + 1) })
+          roomCapacity.push({ id: String(index + 1), name: String(index + 1) })
         }
       }
       if (filterData?.getFilters.roomTypes) {
         const types = filterData.getFilters.roomTypes
         // TODO: sort alphabeticaly
-        types.forEach((rt, index) => {
-          roomTypes.push({ id: index, name: rt.typeName })
+        types.forEach(rt => {
+          roomTypes.push({ id: rt.roomTypeId ?? '', name: rt.typeName })
         })
+        console.log(roomTypes)
       }
       if (filterData?.getFilters.tags) {
         filterData.getFilters.tags.forEach((t, i) => {
-          tags.push({ id: i, name: t.name })
+          tags.push({ id: String(i), name: t.name })
         })
       }
       setFilterOptions({ roomTypes, roomCapacity, tags })
@@ -172,7 +185,25 @@ const Rooms = () => {
 
   function onItemChange(e: FormItem[]) {
     console.log('onItemChange: ', e)
+
+    const hasValue = (val: string) => {
+      console.log(val)
+
+      return val.trim().length > 0
+    }
+    let newFilters = {}
+    Object.assign(
+      newFilters,
+      hasValue(e[2].value) ? { roomName: e[2].value } : null,
+      hasValue(e[0].value) ? { startDate: e[0].value } : null,
+      hasValue(e[1].value) ? { endDate: e[1].value } : null,
+      e[4].value > 0 ? { maxCapacity: e[4].value } : null,
+      hasValue(e[3].value) ? { roomType: e[3].value } : null,
+    )
+    setFilters(newFilters)
   }
+
+  const debouncedItemChange = useMemo(() => debounce(onItemChange, 300), [])
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -181,7 +212,7 @@ const Rooms = () => {
 
         {filterOptions && (
           <Form
-            onItemChange={onItemChange}
+            onItemChange={debouncedItemChange}
             submitting={submitting}
             setSubmitting={setSubmitting}
             formItems={formItems}

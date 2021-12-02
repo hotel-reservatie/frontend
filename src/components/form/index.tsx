@@ -59,7 +59,7 @@ const Form: FunctionComponent<FormProps> = ({
     if (index > -1) {
       const newItems = [
         ...items.slice(0, index),
-        new FormItem({ ...items[index], value: e.name }),
+        new FormItem({ ...items[index], value: e.id }),
         ...items.slice(index + 1),
       ]
       onItemChange(newItems)
@@ -190,7 +190,7 @@ const Form: FunctionComponent<FormProps> = ({
             <Dropdown
               key={`dropdown-${index}`}
               options={
-                item.options ?? [{ id: 1, name: 'option array required' }]
+                item.options ?? [{ id: '', name: 'option array required' }]
               }
               onChange={handleDropdownChange}
               placeholder={item.placeholder ?? 'Placeholder is required'}

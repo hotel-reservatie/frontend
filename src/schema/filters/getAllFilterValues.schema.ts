@@ -5,6 +5,7 @@ const GetAllRooms = gql`
     getFilters {
       roomTypes {
         typeName
+        roomTypeId
       }
       tags {
         name
