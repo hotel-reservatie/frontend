@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 
@@ -9,20 +9,14 @@ import {
   RoomFilters,
   useGetFilteredRoomsQuery,
   useGetUserFavoritesLazyQuery,
-  useGetUserFavoritesQuery,
 } from 'src/schema'
 import { useMutation } from '@apollo/client'
 import { useAuth } from 'src/providers/authProvider'
 import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
-import SubTitle from 'src/components/text/SubTitle'
 import PageTitle from 'src/components/text/PageTitle'
-import DateInput from 'src/components/input/DateInput'
 import { useTranslation } from 'react-i18next'
-import Input from 'src/components/input'
-import Dropdown from 'src/components/dropdown'
 import Form from 'src/components/form'
 import FormItem from 'src/classes/FormItem'
-import Button from 'src/components/button'
 
 const Rooms = () => {
   const { user } = useAuth()
