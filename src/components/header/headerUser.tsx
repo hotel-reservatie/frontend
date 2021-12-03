@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react'
 import { IconType } from 'react-icons'
-import { MdListAlt, MdLogout, MdPerson } from 'react-icons/md'
+import { MdFavorite, MdListAlt, MdLogout, MdOutlineShoppingBasket, MdPerson } from 'react-icons/md'
 import { useAuth } from 'src/providers/authProvider'
 
 interface DropDownItemProps {
@@ -39,13 +39,19 @@ export const DropDownItem: FunctionComponent<DropDownItemProps> = ({
 export const UserDropDown = () => {
   const { logout } = useAuth()
   return (
-    <div className=" z-50 absolute top-16 right-0 bg-white border-1 rounded-lg border-blue-400 w-72 shadow">
+    <div className=" z-50 absolute top-16 right-0 bg-white border-1 rounded-lg border-blue-400 shadow">
       <ul>
-        <DropDownItem Icon={MdPerson} title={'Profile'} href="/profile" />
+        <DropDownItem Icon={MdPerson} title={'Profile'} href="#" />
+        <DropDownItem Icon={MdFavorite} title={'Favorites'} href="#" />
         <DropDownItem
           Icon={MdListAlt}
-          title={'Reservations'}
+          title={'My Reservations'}
           href="/reservations"
+        />
+        <DropDownItem
+          Icon={MdOutlineShoppingBasket}
+          title={'Cart'}
+          href="/newreservation"
         />
         <DropDownItem
           Icon={MdLogout}
