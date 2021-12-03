@@ -42,7 +42,7 @@ export const UserDropDown = () => {
     <div className=" z-50 absolute top-16 right-0 bg-white border-1 rounded-lg border-blue-400 shadow">
       <ul>
         <DropDownItem Icon={MdPerson} title={'Profile'} href="#" />
-        <DropDownItem Icon={MdFavorite} title={'Favorites'} href="#" />
+        <DropDownItem Icon={MdFavorite} title={'Favorites'} href="/favorites" />
         <DropDownItem
           Icon={MdListAlt}
           title={'My Reservations'}
