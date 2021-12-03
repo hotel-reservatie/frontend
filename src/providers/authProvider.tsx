@@ -26,13 +26,14 @@ import {
 import { setContext } from '@apollo/client/link/context'
 import client from 'src/utils/apollo'
 import { createLogicalWrapper } from 'src/utils/logicalWrapper'
+import { resolve } from 'path'
 
 interface IAuthContext {
   user: User | null
-  restoreAuth: () => Promise<{state: User, token: string}>
+  restoreAuth: () => Promise<{ state: User; token: string }>
   createUser: (email: string, password: string, username: string) => void
   login: (email: string, password: string) => Promise<boolean>
-  logout: () => Promise<void>
+  logout: () => Promise<Boolean>
   signedIn: boolean
 }
 
@@ -159,6 +160,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       signInWithEmailAndPassword(auth, email, password)
         .then(async userCredential => {
           setUser(userCredential.user)
+          setSignedIn(true)
           resolve(true)
         })
         .catch(error => {
@@ -171,8 +173,18 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     })
   }
 
-  const logout = () => {
-    return signOut(auth)
+  const logout = (): Promise<Boolean> => {
+    return new Promise((resolve, reject) => {
+      signOut(auth)
+        .then(() => {
+          setUser(null)
+          setSignedIn(false)
+          resolve(true)
+        })
+        .catch(e => {
+          reject(false)
+        })
+    })
   }
 
   const value = {

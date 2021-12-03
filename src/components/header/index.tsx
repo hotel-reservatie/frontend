@@ -8,6 +8,7 @@ import {
   useAuth,
 } from 'src/providers/authProvider'
 import { MdPerson } from 'react-icons/md'
+import HeaderUser from './headerUser'
 
 const Header = () => {
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true)
@@ -58,10 +59,7 @@ const Header = () => {
             </div>
           </div>
           <Authenticated>
-            <div className="flex items-center gap-4">
-              <p className="">{user?.displayName}</p>
-              <MdPerson size={32} />
-            </div>
+            <HeaderUser/>
           </Authenticated>
           <NotAuthenticated>
             <div className="hidden md:flex items-center space-x-3 ">
