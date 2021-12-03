@@ -43,6 +43,9 @@ module.exports = {
       borderRadius: {
         xl: '32px',
       },
+      borderWidth: {
+        '1': '1px',
+      },
       gridTemplateColumns: {
         auto: 'repeat(auto-fill, minmax(9rem, 1fr))',
         'auto-lg': 'repeat(auto-fill, minmax(300px, 1fr))',
