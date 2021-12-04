@@ -8,7 +8,13 @@ import React, {
   useState,
 } from 'react'
 import { IconType } from 'react-icons'
-import { MdFavorite, MdListAlt, MdLogout, MdOutlineShoppingBasket, MdPerson } from 'react-icons/md'
+import {
+  MdFavorite,
+  MdListAlt,
+  MdLogout,
+  MdOutlineShoppingBasket,
+  MdPerson,
+} from 'react-icons/md'
 import { useAuth } from 'src/providers/authProvider'
 
 interface DropDownItemProps {
@@ -25,14 +31,17 @@ export const DropDownItem: FunctionComponent<DropDownItemProps> = ({
   onClick,
 }) => {
   return (
-    <li className=" p-4 border-1 border-blue-200" onClick={onClick}>
-      <Link href={href}>
+    <Link href={href}>
+      <li
+        className=" p-4 border-1 border-blue-200 hover:cursor-pointer hover:bg-blue-100"
+        onClick={onClick}
+      >
         <div className=" flex items-center gap-2">
           {<Icon size={24} />}
           <a href="">{title}</a>
         </div>
-      </Link>
-    </li>
+      </li>
+    </Link>
   )
 }
 
@@ -78,8 +87,6 @@ const HeaderUser = () => {
     if (divRef.current?.contains(e.target as Node)) {
       return
     }
-    console.log('hi')
-
     setisOpen(false)
   }
 
