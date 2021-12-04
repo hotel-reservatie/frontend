@@ -19,6 +19,7 @@ interface IReservationContext {
   setDates: (startDate: Date, endDate: Date) => Promise<boolean>
   removeRoom: (roomId: string) => Promise<boolean>
   setUserInfo: (user: UserInput) => Promise<boolean>
+  resetReservation: () => void
 }
 
 const ReservationContext = createContext<IReservationContext>(
@@ -147,12 +148,17 @@ const ReservationProvider: FunctionComponent = ({ children }) => {
     })
   }
 
+  const resetReservation = async () => {
+    updateReservation({})
+  }
+
   const value = {
     newReservation,
     addRoom,
     setDates,
     removeRoom,
     setUserInfo,
+    resetReservation
   }
 
   return (

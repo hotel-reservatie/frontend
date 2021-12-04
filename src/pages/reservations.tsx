@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PageLayout from 'src/components/layout/PageLayout'
 import PageTitle from 'src/components/text/PageTitle'
 import {
@@ -9,40 +9,53 @@ import {
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import {
+  useDeleteReservationMutation,
   useGetUserReservationsLazyQuery,
-  useGetUserReservationsQuery,
 } from 'src/schema'
 import Card from 'src/components/card'
 import SubTitle from 'src/components/text/SubTitle'
 import formatDate from 'src/utils/formatDate'
 import { MdArrowForward, MdPeople } from 'react-icons/md'
 import { HiMinusCircle } from 'react-icons/hi'
+import Dialog from 'src/components/dialog'
+import { useRouter } from 'next/router'
 
 const Reservations = () => {
-  const { signedIn } = useAuth()
+  const router = useRouter()
+  const [show, setShow] = useState(false)
+  const [idToDelete, setIdToDelete] = useState<string>('')
+  const handleClose = () => setShow(false)
+  const { user } = useAuth()
+  const [deleteReservation] = useDeleteReservationMutation()
 
-  //   const { data } = useGetUserReservationsQuery()
-
-  const handleDelete = () => {
-    console.log('delete')
+  const handleClickDelete = (id: string) => {
+    deleteReservation({ variables: { reservationId: id } }).then(() => {
+      handleClose()
+      if (userReservationResult.refetch) userReservationResult.refetch()
+    })
   }
 
-  const [getUserReservations, { data }] = useGetUserReservationsLazyQuery()
+  const [getUserReservations, userReservationResult] =
+    useGetUserReservationsLazyQuery({fetchPolicy: "no-cache"})
+
 
   useEffect(() => {
-    if (signedIn) {
+    if (user) {
       getUserReservations()
     }
-  }, [signedIn])
+  }, [user])
 
   return (
     <PageLayout>
       <PageTitle>My Reservations</PageTitle>
       <Authenticated>
         <div className="md:grid md:grid-cols-2 gap-8">
-          {data?.getUserReservations.map((r, index) => {
+          {userReservationResult?.data?.getUserReservations.map((r, index) => {
             return (
-              <Card className="w-full px-8 py-8 max-w-full" key={r.reservationId}>
+              <Card
+                className="w-full px-8 py-8 max-w-full"
+                key={r.reservationId}
+              >
                 <div className="flex justify-between">
                   <div>
                     <div className="mb-8">
@@ -60,7 +73,10 @@ const Reservations = () => {
                         Rooms: {r.roomsReserved?.length}
                       </p>
                       <HiMinusCircle
-                        onClick={handleDelete}
+                        onClick={() => {
+                          setIdToDelete(r.reservationId as string)
+                          setShow(true)
+                        }}
                         size={32}
                         className=" text-blue-300 hover:text-red-500 hover:scale-105 hover:cursor-pointer transition-transform"
                       />
@@ -79,10 +95,17 @@ const Reservations = () => {
         </div>
       </Authenticated>
       <NotAuthenticated>
-          <SubTitle>
-              Please sign in to view your reservations...
-          </SubTitle>
+        <SubTitle>Please sign in to view your reservations...</SubTitle>
       </NotAuthenticated>
+      <Dialog
+        title="Warning!"
+        show={show}
+        onRequestConfirm={() => {
+          handleClickDelete(idToDelete)
+        }}
+        onRequestClose={handleClose}
+        description="This action will delete your reservation permanently. Continue?"
+      />
     </PageLayout>
   )
 }
