@@ -26,12 +26,21 @@ import { useMutation } from '@apollo/client'
 import { CreateReservation } from 'src/schema/reservation/createReservation.schema'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
+import Dialog from 'src/components/dialog'
 
 const NewReservation = () => {
-  const { setUserInfo, setDates, removeRoom, resetReservation, newReservation } =
-    useNewReservation()
+  const {
+    setUserInfo,
+    setDates,
+    removeRoom,
+    resetReservation,
+    newReservation,
+  } = useNewReservation()
   const router = useRouter()
   const { user } = useAuth()
+
+  const [showDialog, setShowDialog] = useState(false)
+  const [roomToRemove, setroomToRemove] = useState('')
 
   const [createReservation, createReservationResult] =
     useMutation(CreateReservation)
@@ -59,9 +68,17 @@ const NewReservation = () => {
   }
 
   const handleDeleteRoom = (roomId: string) => {
-    console.log(roomId)
-
     removeRoom(roomId)
+    setShowDialog(false)
+  }
+
+  const handleShowDialog = (roomId: string) => {
+    setShowDialog(true)
+    setroomToRemove(roomId)
+  }
+
+  const handleHideDialog = () => {
+    setShowDialog(false)
   }
 
   const handleConfirmButton = () => {
@@ -146,11 +163,20 @@ const NewReservation = () => {
                     price={r.currentPrice as number}
                     weekendMultiplier={r.weekendMultiplier as number}
                     roomId={r.roomId?.toString()}
-                    onDelete={handleDeleteRoom}
+                    onDelete={handleShowDialog}
                   />
                 )
               })
             : null}
+          <Dialog
+            title="Warning!"
+            show={showDialog}
+            onRequestConfirm={() => {
+              handleDeleteRoom(roomToRemove)
+            }}
+            onRequestClose={handleHideDialog}
+            description="This action will remove this room from the reservation. Proceed?"
+          />
           <Link href={'/rooms'}>
             <a>
               <Card
