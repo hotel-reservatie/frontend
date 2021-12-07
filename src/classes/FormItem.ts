@@ -26,7 +26,7 @@ class FormItem {
   options?: FormItemOption[]
   faulty?: 'true' | 'false'
   errormessage?: string
-  autocomplete?: string
+  autoComplete?: string
   type?:
     | 'button'
     | 'checkbox'
@@ -67,7 +67,7 @@ class FormItem {
     this.options = getValueFromObject(formItem, 'options', undefined)
     this.faulty = getValueFromObject(formItem, 'faulty', undefined)
     this.errormessage = getValueFromObject(formItem, 'errormessage', undefined)
-    this.autocomplete = getValueFromObject(formItem, 'autoComplete', 'on')
+    this.autoComplete = getValueFromObject(formItem, 'autoComplete', 'on')
   }
 }
 
