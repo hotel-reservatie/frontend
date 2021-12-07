@@ -95,15 +95,6 @@ const Form: FunctionComponent<FormProps> = ({
     return re.test(fi.value)
   }
 
-  function checkForPasswords(formItems: Array<FormItem>) {
-    const passwordItems = formItems.filter(e => e.type === 'password')
-    return passwordItems
-  }
-
-  function passwordsMatch(passwordItems: Array<FormItem>) {
-    return passwordItems[0].value === passwordItems[1].value
-  }
-
   function formHasErrors(formItems: Array<FormItem>) {
     let counter = 0
     let password = ''
@@ -140,6 +131,20 @@ const Form: FunctionComponent<FormProps> = ({
     return false
   }
 
+  function dynamicRowCols(amount: number | undefined, type: 'rows' | 'cols') {
+    return `grid-${type}-${amount}`
+  }
+
+  function dynamicGaps(amount: number | undefined, type: 'x' | 'y') {
+    return `gap-${type}-${amount}`
+  }
+
+  function handleEnterKeyPress(e: React.KeyboardEvent<HTMLFormElement>) {
+    if (e.key === 'Enter') {
+      setSubmitting(true)
+    }
+  }
+
   useEffect(() => {
     function handleSubmit() {
       if (formHasErrors(items)) {
@@ -154,14 +159,6 @@ const Form: FunctionComponent<FormProps> = ({
     }
   }, [submitting])
 
-  function dynamicRowCols(amount: number | undefined, type: 'rows' | 'cols') {
-    return `grid-${type}-${amount}`
-  }
-
-  function dynamicGaps(amount: number | undefined, type: 'x' | 'y') {
-    return `gap-${type}-${amount}`
-  }
-
   const formStyling = classNames(
     'grid items-end',
     { [dynamicGaps(colGap, 'x')]: colGap },
@@ -172,7 +169,7 @@ const Form: FunctionComponent<FormProps> = ({
   )
 
   return (
-    <form className={formStyling} noValidate>
+    <form className={formStyling} noValidate onKeyPress={handleEnterKeyPress}>
       {items.map(({ value, className, ...item }, index) => {
         if (item.type === 'date') {
           return (
