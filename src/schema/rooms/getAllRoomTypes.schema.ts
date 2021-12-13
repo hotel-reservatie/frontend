@@ -8,6 +8,7 @@ const GetAllRoomTypes = gql`
       description
       capacity
       sampleImage
+      startingPrice
     }
   }
 `
