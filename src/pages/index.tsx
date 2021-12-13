@@ -19,6 +19,11 @@ const Home: NextPage = () => {
 
   const { loading, error, data } = useGetAllRoomTypesQuery()
 
+  useEffect(() => {
+    console.log(data);
+    
+  }, [data])
+
   return (
     <>
       <div className="max-w-7xl mx-auto my-4 md:grid  md:grid-cols-2 md:mt-16">
@@ -67,7 +72,7 @@ const Home: NextPage = () => {
           img={type.sampleImage}
           title={type.typeName}
           desc={type.description}
-          price={90}
+          price={type.startingPrice}
           size={type.capacity}
           loading={loading}
           id={type.roomTypeId}

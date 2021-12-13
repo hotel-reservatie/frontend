@@ -3,7 +3,6 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
   mode: 'jit',
-
   purge: {
     content: [
       './src/pages/**/*.{js,ts,jsx,tsx}',
@@ -42,6 +41,9 @@ module.exports = {
       },
       borderRadius: {
         xl: '32px',
+      },
+      borderWidth: {
+        '1': '1px',
       },
       gridTemplateColumns: {
         auto: 'repeat(auto-fill, minmax(9rem, 1fr))',

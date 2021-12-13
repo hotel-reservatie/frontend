@@ -26,13 +26,14 @@ import {
 import { setContext } from '@apollo/client/link/context'
 import client from 'src/utils/apollo'
 import { createLogicalWrapper } from 'src/utils/logicalWrapper'
+import { resolve } from 'path'
 
 interface IAuthContext {
   user: User | null
-  restoreAuth: () => Promise<boolean>
+  restoreAuth: () => Promise<{ state: User; token: string }>
   createUser: (email: string, password: string, username: string) => void
   login: (email: string, password: string) => Promise<boolean>
-  logout: () => Promise<void>
+  logout: () => Promise<Boolean>
   signedIn: boolean
 }
 
@@ -92,28 +93,29 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
   setPersistence(auth, browserLocalPersistence)
 
   useEffect(() => {
-    if (user) {
-      setSignedIn(true)
-    } else {
-      setSignedIn(false)
+    let mounted = true
+    restoreAuth().then(data => {
+      if (mounted) {
+        SetgraphqlClient(createGraphqlClient(data.token))
+        setUser(data.state)
+        setSignedIn(true)
+      }
+    })
+    return () => {
+      mounted = false
     }
-  }, [user])
-
-  useEffect(() => {
-    restoreAuth()
   }, [])
 
-  const restoreAuth = (): Promise<boolean> => {
+  const restoreAuth = (): Promise<{ state: User; token: string }> => {
     return new Promise((resolve, reject) => {
       try {
         auth.onAuthStateChanged(async state => {
           // console.log(state)
           if (state) {
-            SetgraphqlClient(createGraphqlClient(await state.getIdToken()))
-            setUser(state)
-            resolve(true)
+            const token = await state.getIdToken()
+            resolve({ state, token })
           } else {
-            resolve(false)
+            reject
           }
         })
       } catch (error) {
@@ -158,6 +160,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       signInWithEmailAndPassword(auth, email, password)
         .then(async userCredential => {
           setUser(userCredential.user)
+          setSignedIn(true)
           resolve(true)
         })
         .catch(error => {
@@ -170,8 +173,18 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     })
   }
 
-  const logout = () => {
-    return signOut(auth)
+  const logout = (): Promise<Boolean> => {
+    return new Promise((resolve, reject) => {
+      signOut(auth)
+        .then(() => {
+          setUser(null)
+          setSignedIn(false)
+          resolve(true)
+        })
+        .catch(e => {
+          reject(false)
+        })
+    })
   }
 
   const value = {
