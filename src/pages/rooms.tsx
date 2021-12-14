@@ -25,7 +25,7 @@ const Rooms = () => {
   const { query } = useRouter()
   const { t } = useTranslation('common')
 
-  const [filters, setFilters] = useState<RoomFilters>()
+  const [filters, setFilters] = useState<RoomFilters>({})
   const [filterOptions, setFilterOptions] = useState<{
     roomTypes: FormItemOption[]
     roomCapacity: FormItemOption[]
@@ -88,9 +88,19 @@ const Rooms = () => {
   }
 
   useEffect(() => {
-    setFilters({
-      roomTypeIds: query['roomtype'] as Maybe<string[]> | undefined,
-    })
+    if (query['roomtype']) {
+      setFilters({
+        roomTypeIds: query['roomtype'] as Maybe<string[]> | undefined,
+      })
+    } else if (query['daterange']) {
+      const dateRange: { arrival: string; departure: string } = JSON.parse(
+        query['daterange'] as string,
+      )
+      setFilters({
+        startDate: new Date(dateRange.arrival),
+        endDate: new Date(dateRange.departure),
+      })
+    }
   }, [query])
 
   useEffect(() => {
@@ -101,9 +111,6 @@ const Rooms = () => {
 
   useEffect(() => {
     if (filters) {
-      console.log('refetching')
-      console.log(filters)
-
       getFilteredRooms({
         variables: { roomFilter: { ...filters } },
       })
@@ -130,7 +137,6 @@ const Rooms = () => {
         types.forEach(rt => {
           roomTypes.push({ id: rt.roomTypeId ?? '', name: rt.typeName })
         })
-        console.log(roomTypes)
       }
       if (filterData?.getFilters.tags) {
         filterData.getFilters.tags.forEach((t, i) => {
@@ -148,6 +154,7 @@ const Rooms = () => {
       name: 'arrivalDate',
       id: 'arrivalDate',
       className: 'col-span-3',
+      value: filters?.startDate,
     }),
     new FormItem({
       placeholder: t('datepicker.departuredate'),
@@ -155,6 +162,7 @@ const Rooms = () => {
       name: 'departureDate',
       id: 'departureDate',
       className: 'col-span-3',
+      value: filters?.endDate,
     }),
     new FormItem({
       placeholder: 'Search room name',
@@ -184,19 +192,15 @@ const Rooms = () => {
   ]
 
   function onItemChange(e: FormItem[]) {
-    console.log('onItemChange: ', e)
-
     const hasValue = (val: string) => {
-      console.log(val)
-
       return val.trim().length > 0
     }
     let newFilters = {}
     Object.assign(
       newFilters,
       hasValue(e[2].value) ? { roomName: e[2].value } : null,
-      hasValue(e[0].value) ? { startDate: e[0].value } : null,
-      hasValue(e[1].value) ? { endDate: e[1].value } : null,
+      e[0].value ? { startDate: e[0].value } : null,
+      e[1].value ? { endDate: e[1].value } : null,
       e[4].value > 0 ? { maxCapacity: e[4].value } : null,
       hasValue(e[3].value) ? { roomTypeIds: e[3].value } : null,
     )
@@ -204,6 +208,12 @@ const Rooms = () => {
   }
 
   const debouncedItemChange = useMemo(() => debounce(onItemChange, 300), [])
+
+  useEffect(() => {
+    console.log(filters)
+    console.log(data)
+    console.log(error)
+  }, [filters, data, error])
 
   return (
     <div className="max-w-7xl mx-auto">

@@ -5,9 +5,11 @@ import DateInput from 'src/components/input/DateInput'
 import Button from 'src/components/button'
 import { useGetAllRoomTypesQuery } from 'src/schema'
 import RoomCard from 'src/components/roomCard'
+import { i18n, withTranslation } from 'next-i18next'
 
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import router from 'next/router'
 
 const Home: NextPage = () => {
   const [dates, setDates] = useState<{
@@ -18,6 +20,13 @@ const Home: NextPage = () => {
   const { t } = useTranslation('common')
 
   const { loading, error, data } = useGetAllRoomTypesQuery()
+
+  function showAvailability() {
+    router.push({
+      pathname: '/rooms',
+      query: { daterange: JSON.stringify(dates) },
+    })
+  }
 
   return (
     <>
@@ -38,7 +47,7 @@ const Home: NextPage = () => {
           <h1 className="text-center mb-4 font-semibold md:text-lg">
             {t('datepicker.title')}
           </h1>
-          <form action="">
+          <form>
             <DateInput
               placeholder={t('datepicker.arrivaldate')}
               className="text-center placeholder-blue-500"
@@ -57,7 +66,9 @@ const Home: NextPage = () => {
               selected={dates.departure}
               value={dates.departure?.toLocaleDateString()}
             />
-            <Button>{t('datepicker.availability')}</Button>
+            <Button type="button" onClick={showAvailability}>
+              {t('datepicker.availability')}
+            </Button>
           </form>
         </Card>
       </div>
