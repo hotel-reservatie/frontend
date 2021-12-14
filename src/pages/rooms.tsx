@@ -69,9 +69,9 @@ const Rooms = () => {
     }
   }
 
-  const sliderChange = (event: Event, value: number | number[]) => {
-    console.log('non-memoized: ', value)
-  }
+  const sliderChange = (event: Event, value: number | number[]) => {}
+
+  const debouncedSliderChange = useMemo(() => debounce(sliderChange, 300), [])
 
   const defineBoundries = (price: number | null | undefined) => {
     if (price) {
