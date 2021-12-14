@@ -38,7 +38,6 @@ const Form: FunctionComponent<FormProps> = ({
 
   function onFormItemChange(e: FormEvent<HTMLInputElement>) {
     const index = findIndexByName(items, e.currentTarget.name)
-    console.log(e.currentTarget.name)
 
     if (index > -1) {
       const newItems = [
@@ -169,8 +168,6 @@ const Form: FunctionComponent<FormProps> = ({
   return (
     <form className={formStyling} noValidate onKeyPress={handleEnterKeyPress}>
       {items.map(({ value, className, ...item }, index) => {
-        console.log(item)
-
         if (item.type === 'date') {
           return (
             <DateInput

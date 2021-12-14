@@ -71,7 +71,12 @@ const Rooms = () => {
     }
   }
 
-  const sliderChange = (event: Event, value: number | number[]) => {}
+  const sliderChange = (event: Event, value: number | Array<number>) => {
+    if (Array.isArray(value)) {
+      updateFilterValue('maxPrice', value[1])
+      updateFilterValue('minPrice', value[0])
+    }
+  }
 
   const debouncedSliderChange = useMemo(() => debounce(sliderChange, 300), [])
 
@@ -226,7 +231,10 @@ const Rooms = () => {
           />
         )}
 
-        <RangeSlider boundries={boundries} onValueChange={sliderChange} />
+        <RangeSlider
+          boundries={boundries}
+          onValueChange={debouncedSliderChange}
+        />
       </div>
       {data?.getRooms?.map((room, index) => {
         defineBoundries(room.currentPrice)
