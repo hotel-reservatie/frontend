@@ -18,6 +18,7 @@ import Button from 'src/components/button'
 import { useAuth } from 'src/providers/authProvider'
 import { useMutation } from '@apollo/client'
 import { CreateReservation } from 'src/schema/reservation/createReservation.schema'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const NewReservation = () => {
   const { setUserInfo, setDates, removeRoom, newReservation } =
@@ -332,5 +333,11 @@ const NewReservation = () => {
     </PageLayout>
   )
 }
+
+export const getStaticProps = async ({ locale }: any) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+})
 
 export default NewReservation
