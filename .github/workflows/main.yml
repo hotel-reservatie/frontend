@@ -13,9 +13,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Get env
-      run: echo NEXT_PUBLIC_BACKEND=$BACKEND_URL >> ./.env
+      run: echo $FRONTEND_ENV >> ./.env
       env:
-        BACKEND_URL: ${{secrets.NEXT_PUBLIC_BACKEND}}
+        BACKEND_URL: ${{secrets.FRONTEND_ENV}}
     - name: Check env
       run: cat ./.env
     - name: Install codegen
