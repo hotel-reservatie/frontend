@@ -179,7 +179,10 @@ const Form: FunctionComponent<FormProps> = ({
               {...item}
             />
           )
-        } else if (item.type === 'dropdown') {
+        } else if (
+          item.type === 'dropdown' ||
+          item.type === 'dropdown-multi-select'
+        ) {
           return (
             <Dropdown
               key={`dropdown-${index}`}
@@ -189,6 +192,7 @@ const Form: FunctionComponent<FormProps> = ({
               onChange={handleDropdownChange}
               placeholder={item.placeholder ?? 'Placeholder is required'}
               name={item.name ?? 'name is required'}
+              multiSelect={item.type === 'dropdown-multi-select'}
             />
           )
         } else {

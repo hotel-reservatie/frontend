@@ -52,6 +52,7 @@ class FormItem {
     | 'url'
     | 'week'
     | 'dropdown'
+    | 'dropdown-multi-select'
 
   constructor(formItem: FormItem) {
     this.type = getValueFromObject(formItem, 'type', 'text')

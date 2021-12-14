@@ -193,7 +193,7 @@ const Rooms = () => {
       id: 'maxCapacity',
     }),
     new FormItem({
-      type: 'dropdown',
+      type: 'dropdown-multi-select',
       placeholder: 'Tags',
       options: filterOptions?.tags,
       name: 'tags',
