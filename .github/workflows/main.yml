@@ -12,12 +12,12 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v2
-    # - name: Get env
-    #   run: echo $FRONTEND_ENV >> ./.env
-    #   env:
-    #     BACKEND_URL: ${{secrets.FRONTEND_ENV}}
-    # - name: Check env
-    #   run: cat ./.env
+    - name: Get env
+      run: echo $FRONTEND_ENV >> ./.env
+      env:
+        FRONTEND_ENV: ${{secrets.FRONTEND_ENV}}
+    - name: Check env
+      run: cat ./.env
     - name: Install codegen
       run: |
         npm install --save graphql
