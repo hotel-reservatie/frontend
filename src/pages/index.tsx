@@ -10,22 +10,38 @@ import { i18n, withTranslation } from 'next-i18next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import router from 'next/router'
+import FormItem from 'src/classes/FormItem'
+import Form from 'src/components/form'
+import { useFilterValues } from 'src/providers/filterProvider'
 
 const Home: NextPage = () => {
-  const [dates, setDates] = useState<{
-    arrival: null | Date
-    departure: null | Date
-  }>({ arrival: null, departure: null })
-
   const { t } = useTranslation('common')
 
   const { loading, error, data } = useGetAllRoomTypesQuery()
 
+  const { updateFilterValue } = useFilterValues()
+
   function showAvailability() {
-    router.push({
-      pathname: '/rooms',
-      query: { daterange: JSON.stringify(dates) },
-    })
+    router.push('/rooms')
+  }
+
+  const formItems: Array<FormItem> = [
+    new FormItem({
+      placeholder: t('datepicker.arrivaldate'),
+      type: 'date',
+      name: 'arrivalDate',
+      id: 'startDate',
+    }),
+    new FormItem({
+      placeholder: t('datepicker.departuredate'),
+      type: 'date',
+      name: 'departureDate',
+      id: 'endDate',
+    }),
+  ]
+
+  function onDateChange(e: FormItem) {
+    updateFilterValue(e.id, e.value)
   }
 
   return (
@@ -47,29 +63,10 @@ const Home: NextPage = () => {
           <h1 className="text-center mb-4 font-semibold md:text-lg">
             {t('datepicker.title')}
           </h1>
-          <form>
-            <DateInput
-              placeholder={t('datepicker.arrivaldate')}
-              className="text-center placeholder-blue-500"
-              onChange={(d: Date) => {
-                setDates({ ...dates, arrival: d })
-              }}
-              selected={dates.arrival}
-              value={dates.arrival?.toLocaleDateString()}
-            />
-            <DateInput
-              placeholder={t('datepicker.departuredate')}
-              className="text-center placeholder-blue-500"
-              onChange={(d: Date) => {
-                setDates({ ...dates, departure: d })
-              }}
-              selected={dates.departure}
-              value={dates.departure?.toLocaleDateString()}
-            />
-            <Button type="button" onClick={showAvailability}>
-              {t('datepicker.availability')}
-            </Button>
-          </form>
+          <Form onItemChange={onDateChange} formItems={formItems} />
+          <Button onClick={showAvailability}>
+            {t('datepicker.availability')}
+          </Button>
         </Card>
       </div>
       {data?.getRoomTypes.map((type, index) => (

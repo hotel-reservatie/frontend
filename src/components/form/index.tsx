@@ -11,8 +11,8 @@ interface FormProps {
   cols?: number
   rowGap?: number
   colGap?: number
-  submitting: boolean
-  setSubmitting: React.Dispatch<React.SetStateAction<boolean>>
+  submitting?: boolean
+  setSubmitting?: React.Dispatch<React.SetStateAction<boolean>>
   onItemChange?: any
   onSubmit?: any
   className?: string
