@@ -156,7 +156,7 @@ const Rooms = () => {
       name: 'arrivalDate',
       id: 'startDate',
       className: 'col-span-3',
-      value: filters?.startDate,
+      value: filterValues.startDate,
     }),
     new FormItem({
       placeholder: t('datepicker.departuredate'),
@@ -164,7 +164,7 @@ const Rooms = () => {
       name: 'departureDate',
       id: 'endDate',
       className: 'col-span-3',
-      value: filters?.endDate,
+      value: filterValues.endDate,
     }),
     new FormItem({
       placeholder: 'Search room name',
