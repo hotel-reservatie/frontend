@@ -13,9 +13,22 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Get env
-      run: echo $FRONTEND_ENV >> ./.env
+      run: | 
+        echo NEXT_PUBLIC_BACKEND=$BACKEND >> ./.env
+        echo NEXT_PUBLIC_FB_APIKEY=$APIKEY >> ./.env
+        echo NEXT_PUBLIC_FB_APPID=$APPID >> ./.env
+        echo NEXT_PUBLIC_FB_AUTHDOMAIN=$AUTHDOMAIN >> ./.env
+        echo NEXT_PUBLIC_FB_MESSAGINGSENDERID=$MESSAGINGSENDERID >> ./.env
+        echo NEXT_PUBLIC_FB_PROJECTID=$PROJECTID >> ./.env
+        echo NEXT_PUBLIC_FB_STORAGEBUCKET=$STORAGEBUCKET >> ./.env
       env:
-        FRONTEND_ENV: ${{secrets.FRONTEND_ENV}}
+        BACKEND: ${{secrets.NEXT_PUBLIC_BACKEND}}
+        APIKEY: ${{secrets.NEXT_PUBLIC_FB_APIKEY}}
+        APPID: ${{secrets.NEXT_PUBLIC_FB_APPID}}
+        AUTHDOMAIN: ${{secrets.NEXT_PUBLIC_FB_AUTHDOMAIN}}
+        MESSAGINGSENDERID: ${{secrets.NEXT_PUBLIC_FB_MESSAGINGSENDERID}}
+        PROJECTID: ${{secrets.NEXT_PUBLIC_FB_PROJECTID}}
+        STORAGEBUCKET: ${{secrets.NEXT_PUBLIC_FB_STORAGEBUCKET}}
     - name: Check env
       run: cat ./.env
     - name: Install codegen
