@@ -6,7 +6,6 @@ metadata:
     field.cattle.io/publicEndpoints: '[{"addresses":["192.168.10.150"],"port":30502,"protocol":"TCP","serviceName":"hotelreservaties-app:hotel-frontend-nodeport","allNodes":true}]'
   name: hotel-frontend
   namespace: hotelreservaties-app
-  resourceVersion: "556585269"
   uid: 4d30f305-77bd-48ab-9ea9-d1d8ea65d135
 spec:
   progressDeadlineSeconds: 600

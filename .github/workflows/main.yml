@@ -11,15 +11,17 @@ jobs:
   Build:
     runs-on: self-hosted
     steps:
-    # - uses: actions/checkout@v2
-    # - name: Build docker image
-    #   run: docker build -t ghcr.io/everaertalexander/hotel-reservatie-frontend .
-    # - name: Push docker image
-    #   run: docker push ghcr.io/everaertalexander/hotel-reservatie-api:$RELEASE_VERSION
-    # - name: Check kubernetes
-    #   run: kubectl get pods --namespace hotelreservaties-app
-    # - name: Create or update K8 deployment
-    #   run: kubectl apply -f ./k8/api-manifest.yaml
-    # - name: Update kubernetes image
-    #   run: |
-    #     kubectl set image deployment/hotel-api hotel-api=ghcr.io/everaertalexander/hotel-reservatie-api:$RELEASE_VERSION
+    - uses: actions/checkout@v2
+    - name: Run codegen
+      run: npm run gen-types
+    - name: Build docker image
+      run: docker build -t ghcr.io/everaertalexander/hotel-reservatie-frontend .
+    - name: Push docker image
+      run: docker push ghcr.io/everaertalexander/hotel-reservatie-frontend
+    - name: Check kubernetes
+      run: kubectl get pods --namespace hotelreservaties-app
+    - name: Create or update K8 deployment
+      run: kubectl apply -f ./k8/frontend-manifest.yaml
+    - name: Update kubernetes image
+      run: |
+        kubectl set image deployment/hotel-frontend hotel-api=ghcr.io/everaertalexander/hotel-reservatie-frontend
