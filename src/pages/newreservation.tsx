@@ -19,11 +19,16 @@ import { useAuth } from 'src/providers/authProvider'
 import { useMutation } from '@apollo/client'
 import { CreateReservation } from 'src/schema/reservation/createReservation.schema'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import FormItem from 'src/classes/FormItem'
+import { useTranslation } from 'react-i18next'
+import Form from 'src/components/form'
 
 const NewReservation = () => {
   const { setUserInfo, setDates, removeRoom, newReservation } =
     useNewReservation()
+  const [submitting, setSubmitting] = useState(false)
   const { user } = useAuth()
+  const { t } = useTranslation('common')
 
   const [createReservation, createReservationResult] =
     useMutation(CreateReservation)
@@ -56,6 +61,7 @@ const NewReservation = () => {
   }
 
   const handleConfirmButton = () => {
+    setSubmitting(true)
     if (newReservation) {
       createReservation({
         variables: {
@@ -92,6 +98,88 @@ const NewReservation = () => {
     newReservation?.details?.endDate,
     newReservation?.roomIds,
   ])
+
+  function handleSubmit(e: FormItem[]) {
+    console.log(e)
+  }
+
+  // TODO: Add dateform that uses filterValue for the dates OR if there's already a reservation use those dates
+  const dateForm: Array<FormItem> = [
+    new FormItem({
+      placeholder: t('datepicker.arrivaldate'),
+      type: 'date',
+      name: 'arrivalDate',
+      id: 'startDate',
+    }),
+    new FormItem({
+      placeholder: t('datepicker.departuredate'),
+      type: 'date',
+      name: 'departureDate',
+      id: 'endDate',
+    }),
+  ]
+
+  const userInfoForm: Array<FormItem> = [
+    new FormItem({
+      label: 'First Name',
+      placeholder: 'John',
+      id: 'firstname',
+      autoComplete: 'given-name',
+      value: newReservation?.details?.user?.firstName,
+      name: 'firstname',
+      className: 'col-span-2',
+    }),
+    new FormItem({
+      label: 'Last Name',
+      id: 'lastname',
+      autoComplete: 'family-name',
+      value: newReservation?.details?.user?.lastName,
+      placeholder: 'Doe',
+      name: 'lastname',
+      className: 'col-span-2',
+    }),
+    new FormItem({
+      label: 'Email',
+      id: 'email',
+      value: newReservation?.details?.user?.reservationEmail,
+      type: 'email',
+      autoComplete: 'email',
+      placeholder: 'Doe',
+      name: 'email',
+      className: 'col-span-2',
+    }),
+    new FormItem({
+      label: 'Phone',
+      id: 'phone',
+      value: newReservation?.details?.user?.phone,
+      autoComplete: 'tel',
+      name: 'phone',
+      className: 'col-span-2',
+    }),
+    new FormItem({
+      label: 'Address',
+      id: 'address',
+      value: newReservation?.details?.user?.address,
+      autoComplete: 'street-address',
+      name: 'address',
+      className: 'col-span-2',
+    }),
+    new FormItem({
+      label: 'City',
+      id: 'city',
+      value: '',
+      autoComplete: 'address-level2',
+      name: 'city',
+    }),
+    new FormItem({
+      type: 'number',
+      label: 'Postal Code',
+      id: 'postal',
+      value: newReservation?.details?.user?.city,
+      autoComplete: 'postal-code',
+      name: 'postal',
+    }),
+  ]
 
   return (
     <PageLayout>
@@ -151,7 +239,7 @@ const NewReservation = () => {
         </Link>
       </div>
       <SubTitle>Customer Info</SubTitle>
-      <form className="md:grid grid-cols-2 gap-6 mb-8" action="">
+      {/* <form className="md:grid grid-cols-2 gap-6 mb-8" action="">
         <Input
           label={'First Name'}
           id="fristname"
@@ -273,7 +361,17 @@ const NewReservation = () => {
             }}
           />
         </div>
-      </form>
+      </form> */}
+      <Form
+        cols={4}
+        rows={3}
+        colGap={6}
+        formItems={userInfoForm}
+        onSubmit={handleSubmit}
+        submitting={submitting}
+        setSubmitting={setSubmitting}
+      />
+
       <SubTitle>Booking Info</SubTitle>
       <div className="mb-8">
         <div className="flex justify-between mb">

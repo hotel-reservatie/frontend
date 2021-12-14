@@ -27,6 +27,7 @@ class FormItem {
   faulty?: 'true' | 'false'
   errormessage?: string
   autoComplete?: string
+  selected?: any
   type?:
     | 'button'
     | 'checkbox'

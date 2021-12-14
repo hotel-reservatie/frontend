@@ -46,7 +46,7 @@ const Form: FunctionComponent<FormProps> = ({
         new FormItem({ ...items[index], value: e.currentTarget.value }),
         ...items.slice(index + 1),
       ]
-      onItemChange(newItems[index])
+      if (onItemChange) onItemChange(newItems[index])
 
       setItems(newItems)
     }
@@ -60,7 +60,7 @@ const Form: FunctionComponent<FormProps> = ({
         new FormItem({ ...items[index], value: e.id }),
         ...items.slice(index + 1),
       ]
-      onItemChange(newItems[index])
+      if (onItemChange) onItemChange(newItems[index])
       setItems(newItems)
     }
   }
@@ -169,6 +169,8 @@ const Form: FunctionComponent<FormProps> = ({
   return (
     <form className={formStyling} noValidate onKeyPress={handleEnterKeyPress}>
       {items.map(({ value, className, ...item }, index) => {
+        console.log(item)
+
         if (item.type === 'date') {
           return (
             <DateInput
