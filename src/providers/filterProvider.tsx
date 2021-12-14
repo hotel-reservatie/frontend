@@ -1,11 +1,4 @@
-import {
-  createContext,
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from 'react'
+import { createContext, FunctionComponent, useContext, useReducer } from 'react'
 import { RoomFilters } from 'src/schema'
 
 interface IFilterContext {

@@ -11,9 +11,7 @@ import { useNewReservation } from 'src/providers/reservationProvider'
 import {
   Room,
   useGetFilteredRoomsQuery,
-  UserInput,
   useValidateReservationLazyQuery,
-  useValidateReservationQuery,
 } from 'src/schema'
 import Link from 'next/link'
 import Button from 'src/components/button'
@@ -22,10 +20,12 @@ import { useMutation } from '@apollo/client'
 import { CreateReservation } from 'src/schema/reservation/createReservation.schema'
 
 const NewReservation = () => {
-  const { setUserInfo, setDates, removeRoom, newReservation } = useNewReservation()
+  const { setUserInfo, setDates, removeRoom, newReservation } =
+    useNewReservation()
   const { user } = useAuth()
 
-  const [createReservation, createReservationResult] = useMutation(CreateReservation)
+  const [createReservation, createReservationResult] =
+    useMutation(CreateReservation)
   const [validateReservation, validated] = useValidateReservationLazyQuery()
   const res = useGetFilteredRoomsQuery({
     variables: {
@@ -55,15 +55,18 @@ const NewReservation = () => {
   }
 
   const handleConfirmButton = () => {
-    
-    if(newReservation){
-      createReservation({variables: {newReservation: newReservation.details, roomIds: newReservation.roomIds}})
+    if (newReservation) {
+      createReservation({
+        variables: {
+          newReservation: newReservation.details,
+          roomIds: newReservation.roomIds,
+        },
+      })
     }
   }
 
   useEffect(() => {
-    console.log(createReservationResult);
-    
+    console.log(createReservationResult)
   }, [createReservationResult])
 
   useEffect(() => {
@@ -151,65 +154,111 @@ const NewReservation = () => {
         <Input
           label={'First Name'}
           id="fristname"
-          value={newReservation?.details?.user?.firstName? newReservation?.details?.user?.firstName as string: ''}
+          value={
+            newReservation?.details?.user?.firstName
+              ? (newReservation?.details?.user?.firstName as string)
+              : ''
+          }
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setUserInfo({ ...newReservation?.details?.user, firstName: e.target.value })
+            setUserInfo({
+              ...newReservation?.details?.user,
+              firstName: e.target.value,
+            })
           }}
           placeholder={'John'}
         />
         <Input
           label={'Last Name'}
           id="lastname"
-          value={newReservation?.details?.user?.lastName? newReservation?.details?.user?.lastName as string: ''}
+          value={
+            newReservation?.details?.user?.lastName
+              ? (newReservation?.details?.user?.lastName as string)
+              : ''
+          }
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setUserInfo({ ...newReservation?.details?.user, lastName: e.target.value })
+            setUserInfo({
+              ...newReservation?.details?.user,
+              lastName: e.target.value,
+            })
           }}
           placeholder={'Doe'}
         />
         <Input
           label={'Email'}
           id="email"
-          value={newReservation?.details?.user?.reservationEmail? newReservation?.details?.user?.reservationEmail as string: ''}
+          value={
+            newReservation?.details?.user?.reservationEmail
+              ? (newReservation?.details?.user?.reservationEmail as string)
+              : ''
+          }
           autoComplete={'email'}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setUserInfo({ ...newReservation?.details?.user, reservationEmail: e.target.value })
+            setUserInfo({
+              ...newReservation?.details?.user,
+              reservationEmail: e.target.value,
+            })
           }}
           placeholder={'Doe'}
         />
         <Input
           label={'Phone'}
           id="phone"
-          value={newReservation?.details?.user?.phone? newReservation?.details?.user?.phone as string: ''}
+          value={
+            newReservation?.details?.user?.phone
+              ? (newReservation?.details?.user?.phone as string)
+              : ''
+          }
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setUserInfo({ ...newReservation?.details?.user, phone: e.target.value })
+            setUserInfo({
+              ...newReservation?.details?.user,
+              phone: e.target.value,
+            })
           }}
         />
         <Input
           label={'Address'}
           id="address"
-          value={newReservation?.details?.user?.address? newReservation.details.user.address as string: ''}
+          value={
+            newReservation?.details?.user?.address
+              ? (newReservation.details.user.address as string)
+              : ''
+          }
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setUserInfo({ ...newReservation?.details?.user, address: e.target.value })
+            setUserInfo({
+              ...newReservation?.details?.user,
+              address: e.target.value,
+            })
           }}
         />
         <div className="grid grid-cols-2 gap-6">
           <Input
             label={'City'}
             id="city"
-            value={newReservation?.details?.user?.city? newReservation?.details?.user?.city as string: ''}
+            value={
+              newReservation?.details?.user?.city
+                ? (newReservation?.details?.user?.city as string)
+                : ''
+            }
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setUserInfo({ ...newReservation?.details?.user, city: e.target.value })
+              setUserInfo({
+                ...newReservation?.details?.user,
+                city: e.target.value,
+              })
             }}
           />
           <Input
             type={'number'}
             label={'Postal Code'}
             id="postal"
-            value={newReservation?.details?.user?.postal? newReservation?.details?.user.postal : ''}
+            value={
+              newReservation?.details?.user?.postal
+                ? newReservation?.details?.user.postal
+                : ''
+            }
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               const val = e.target.valueAsNumber
 
-              if(val){
+              if (val) {
                 setUserInfo({
                   ...newReservation?.details?.user,
                   postal: e.target.valueAsNumber,
@@ -220,7 +269,6 @@ const NewReservation = () => {
                   postal: undefined,
                 })
               }
-              
             }}
           />
         </div>
