@@ -72,7 +72,7 @@ const Rooms = () => {
   }
 
   const sliderChange = (event: Event, value: number | Array<number>) => {
-    if (Array.isArray(value)) {
+    if (value instanceof Array) {
       updateFilterValue('maxPrice', value[1])
       updateFilterValue('minPrice', value[0])
     }
