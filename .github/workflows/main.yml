@@ -18,7 +18,7 @@ jobs:
         BACKEND_URL: ${{secrets.NEXT_PUBLIC_BACKEND}}
     - name: Check env
       run: cat ./.env
-    - name: Install code generator
+    - name: Install codegen
       run: |
         npm install --save graphql
         npm install --save @graphql-codegen/cli
