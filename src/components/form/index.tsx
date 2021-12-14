@@ -139,7 +139,7 @@ const Form: FunctionComponent<FormProps> = ({
 
   function handleEnterKeyPress(e: React.KeyboardEvent<HTMLFormElement>) {
     if (e.key === 'Enter') {
-      setSubmitting(true)
+      if (setSubmitting) setSubmitting(true)
     }
   }
 
@@ -150,7 +150,7 @@ const Form: FunctionComponent<FormProps> = ({
       } else {
         onSubmit(items)
       }
-      setSubmitting(false)
+      if (setSubmitting) setSubmitting(false)
     }
     if (submitting) {
       handleSubmit()
