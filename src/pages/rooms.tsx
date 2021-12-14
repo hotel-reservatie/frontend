@@ -19,13 +19,15 @@ import PageTitle from 'src/components/text/PageTitle'
 import { useTranslation } from 'react-i18next'
 import Form from 'src/components/form'
 import FormItem, { FormItemOption } from 'src/classes/FormItem'
+import { useFilterValues } from 'src/providers/filterProvider'
 
 const Rooms = () => {
   const { user } = useAuth()
   const { query } = useRouter()
   const { t } = useTranslation('common')
+  const { filters: filterValues, updateFilterValue } = useFilterValues()
 
-  const [filters, setFilters] = useState<RoomFilters>({})
+  const [filters, setFilters] = useState<RoomFilters>(filterValues)
   const [filterOptions, setFilterOptions] = useState<{
     roomTypes: FormItemOption[]
     roomCapacity: FormItemOption[]
@@ -152,7 +154,7 @@ const Rooms = () => {
       placeholder: t('datepicker.arrivaldate'),
       type: 'date',
       name: 'arrivalDate',
-      id: 'arrivalDate',
+      id: 'startDate',
       className: 'col-span-3',
       value: filters?.startDate,
     }),
@@ -160,7 +162,7 @@ const Rooms = () => {
       placeholder: t('datepicker.departuredate'),
       type: 'date',
       name: 'departureDate',
-      id: 'departureDate',
+      id: 'endDate',
       className: 'col-span-3',
       value: filters?.endDate,
     }),
@@ -176,44 +178,35 @@ const Rooms = () => {
       placeholder: 'Room Type',
       options: filterOptions?.roomTypes,
       name: 'roomType',
+      id: 'roomTypeIds',
     }),
     new FormItem({
       type: 'dropdown',
       placeholder: 'Room Capacity',
       options: filterOptions?.roomCapacity,
       name: 'roomCapacity',
+      id: 'maxCapacity',
     }),
     new FormItem({
       type: 'dropdown',
       placeholder: 'Tags',
       options: filterOptions?.tags,
       name: 'tags',
+      id: 'tagIds',
     }),
   ]
 
-  function onItemChange(e: FormItem[]) {
-    const hasValue = (val: string) => {
-      return val.trim().length > 0
-    }
-    let newFilters = {}
-    Object.assign(
-      newFilters,
-      hasValue(e[2].value) ? { roomName: e[2].value } : null,
-      e[0].value ? { startDate: e[0].value } : null,
-      e[1].value ? { endDate: e[1].value } : null,
-      e[4].value > 0 ? { maxCapacity: e[4].value } : null,
-      hasValue(e[3].value) ? { roomTypeIds: e[3].value } : null,
-    )
-    setFilters(newFilters)
+  function onItemChange(e: FormItem) {
+    updateFilterValue(e.id, e.value)
   }
 
-  const debouncedItemChange = useMemo(() => debounce(onItemChange, 300), [])
-
   useEffect(() => {
-    console.log(filters)
-    console.log(data)
-    console.log(error)
-  }, [filters, data, error])
+    console.log(filterValues)
+
+    setFilters(filterValues)
+  }, [filterValues])
+
+  const debouncedItemChange = useMemo(() => debounce(onItemChange, 300), [])
 
   return (
     <div className="max-w-7xl mx-auto">

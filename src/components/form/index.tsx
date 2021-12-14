@@ -46,9 +46,7 @@ const Form: FunctionComponent<FormProps> = ({
         new FormItem({ ...items[index], value: e.currentTarget.value }),
         ...items.slice(index + 1),
       ]
-      if (onItemChange) {
-        onItemChange(newItems)
-      }
+      onItemChange(newItems[index])
 
       setItems(newItems)
     }
@@ -62,7 +60,7 @@ const Form: FunctionComponent<FormProps> = ({
         new FormItem({ ...items[index], value: e.id }),
         ...items.slice(index + 1),
       ]
-      onItemChange(newItems)
+      onItemChange(newItems[index])
       setItems(newItems)
     }
   }
@@ -74,7 +72,7 @@ const Form: FunctionComponent<FormProps> = ({
       ...items.slice(index + 1),
     ]
     if (onItemChange) {
-      onItemChange(newItems)
+      onItemChange(newItems[index])
     }
     setItems(newItems)
   }
