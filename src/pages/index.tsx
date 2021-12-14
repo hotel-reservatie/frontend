@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import type { NextPage } from 'next'
 import Card from 'src/components/card'
-import DateInput from 'src/components/input/DateInput'
 import Button from 'src/components/button'
 import { useGetAllRoomTypesQuery } from 'src/schema'
 import RoomCard from 'src/components/roomCard'
-import { i18n, withTranslation } from 'next-i18next'
 
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
