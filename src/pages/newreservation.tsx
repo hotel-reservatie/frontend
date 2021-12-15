@@ -292,23 +292,55 @@ const NewReservation = () => {
             <p>Total amount of days</p>
             <p>{validated.data?.validateReservation.totalDays}</p>
           </div>
-          <div className="flex justify-between">
-            <SubTitle>Total Price</SubTitle>
-            <SubTitle>{`€${
-              validated.data?.validateReservation.totalPrice
-                ? validated.data?.validateReservation.totalPrice
-                : 0
-            }`}</SubTitle>
+          <div className="flex justify-between mb">
+            <p>Amount of weekend days</p>
+            <p>{validated.data?.validateReservation.weekendDays}</p>
           </div>
-          <div className="flex justify-center">
-            <Button
-              className="w w-72"
-              disabled={!validated.data?.validateReservation.isValid}
-              onClick={handleConfirmButton}
-            >
-              Confirm Booking
-            </Button>
+          <div className="flex justify-between mb">
+            <p>Rooms</p>
+            <p>{newReservation?.roomIds?.length}</p>
           </div>
+          <ul className=" pl-8 list-disc">
+            {res.data?.getRooms?.map(r => {
+              return (
+                <li key={`roominfo ${r.roomId}`}>
+                  <div className="flex justify-between">
+                    {r.roomName}
+                    <span>
+                      {`€${
+                        validated.data?.validateReservation.isValid
+                          ? calculateRoomPrice(
+                              r as Room,
+                              validated.data.validateReservation
+                                .totalDays as number,
+                              validated.data.validateReservation
+                                .weekendDays as number,
+                            )
+                          : 0
+                      }`}
+                    </span>
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+        <div className="flex justify-between">
+          <SubTitle>Total Price</SubTitle>
+          <SubTitle>{`€${
+            validated.data?.validateReservation.totalPrice
+              ? validated.data?.validateReservation.totalPrice
+              : 0
+          }`}</SubTitle>
+        </div>
+        <div className="flex justify-center">
+          <Button
+            className="w w-72"
+            disabled={!validated.data?.validateReservation.isValid}
+            onClick={handleConfirmButton}
+          >
+            Confirm Booking
+          </Button>
         </div>
       </Authenticated>
       <NotAuthenticated>

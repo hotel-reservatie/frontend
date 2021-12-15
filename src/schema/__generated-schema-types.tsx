@@ -312,7 +312,7 @@ export type ValidateReservationResponse = {
 export type GetUserFavoritesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserFavoritesQuery = { __typename?: 'Query', getUserFavorites: Array<{ __typename?: 'Room', roomId?: string | null | undefined }> };
+export type GetUserFavoritesQuery = { __typename?: 'Query', getUserFavorites: Array<{ __typename?: 'Room', roomId?: string | null | undefined, images?: Array<string> | null | undefined, roomName?: string | null | undefined, currentPrice?: number | null | undefined, surface?: number | null | undefined, description?: string | null | undefined, roomType: { __typename?: 'RoomType', capacity: number } }> };
 
 export type ToggleFavoriteMutationVariables = Exact<{
   roomId: Scalars['String'];
@@ -334,6 +334,18 @@ export type CreateReservationMutationVariables = Exact<{
 
 export type CreateReservationMutation = { __typename?: 'Mutation', createReservation: { __typename?: 'Reservation', reservationId?: string | null | undefined, createdAt?: any | null | undefined, startDate: any, endDate: any, totalPrice?: number | null | undefined, user?: { __typename?: 'User', userName?: string | null | undefined } | null | undefined, roomsReserved?: Array<{ __typename?: 'RoomReserved', roomReservedId: string, price: number, room: { __typename?: 'Room', roomName?: string | null | undefined, currentPrice?: number | null | undefined, weekendMultiplier?: number | null | undefined } }> | null | undefined } };
 
+export type DeleteReservationMutationVariables = Exact<{
+  reservationId: Scalars['String'];
+}>;
+
+
+export type DeleteReservationMutation = { __typename?: 'Mutation', deleteReservation: string };
+
+export type GetUserReservationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserReservationsQuery = { __typename?: 'Query', getUserReservations: Array<{ __typename?: 'Reservation', reservationId?: string | null | undefined, startDate: any, endDate: any, totalPrice?: number | null | undefined, roomsReserved?: Array<{ __typename?: 'RoomReserved', room: { __typename?: 'Room', roomName?: string | null | undefined } }> | null | undefined }> };
+
 export type ValidateReservationQueryVariables = Exact<{
   roomIds: Array<Scalars['String']> | Scalars['String'];
   newReservation: NewReservationInput;
@@ -352,7 +364,7 @@ export type AddReviewMutation = { __typename?: 'Mutation', addReview?: { __typen
 export type GetAllRoomTypesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllRoomTypesQuery = { __typename?: 'Query', getRoomTypes: Array<{ __typename?: 'RoomTypeResponse', roomTypeId?: string | null | undefined, typeName: string, description: string, capacity: number, sampleImage?: string | null | undefined }> };
+export type GetAllRoomTypesQuery = { __typename?: 'Query', getRoomTypes: Array<{ __typename?: 'RoomTypeResponse', roomTypeId?: string | null | undefined, typeName: string, description: string, capacity: number, sampleImage?: string | null | undefined, startingPrice?: number | null | undefined }> };
 
 export type GetAllRoomsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -378,6 +390,14 @@ export const GetUserFavoritesDocument = gql`
     query getUserFavorites {
   getUserFavorites {
     roomId
+    images
+    roomName
+    currentPrice
+    roomType {
+      capacity
+    }
+    surface
+    description
   }
 }
     `;
@@ -531,6 +551,79 @@ export function useCreateReservationMutation(baseOptions?: Apollo.MutationHookOp
 export type CreateReservationMutationHookResult = ReturnType<typeof useCreateReservationMutation>;
 export type CreateReservationMutationResult = Apollo.MutationResult<CreateReservationMutation>;
 export type CreateReservationMutationOptions = Apollo.BaseMutationOptions<CreateReservationMutation, CreateReservationMutationVariables>;
+export const DeleteReservationDocument = gql`
+    mutation deleteReservation($reservationId: String!) {
+  deleteReservation(reservationId: $reservationId)
+}
+    `;
+export type DeleteReservationMutationFn = Apollo.MutationFunction<DeleteReservationMutation, DeleteReservationMutationVariables>;
+
+/**
+ * __useDeleteReservationMutation__
+ *
+ * To run a mutation, you first call `useDeleteReservationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteReservationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteReservationMutation, { data, loading, error }] = useDeleteReservationMutation({
+ *   variables: {
+ *      reservationId: // value for 'reservationId'
+ *   },
+ * });
+ */
+export function useDeleteReservationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteReservationMutation, DeleteReservationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteReservationMutation, DeleteReservationMutationVariables>(DeleteReservationDocument, options);
+      }
+export type DeleteReservationMutationHookResult = ReturnType<typeof useDeleteReservationMutation>;
+export type DeleteReservationMutationResult = Apollo.MutationResult<DeleteReservationMutation>;
+export type DeleteReservationMutationOptions = Apollo.BaseMutationOptions<DeleteReservationMutation, DeleteReservationMutationVariables>;
+export const GetUserReservationsDocument = gql`
+    query getUserReservations {
+  getUserReservations {
+    reservationId
+    startDate
+    endDate
+    totalPrice
+    roomsReserved {
+      room {
+        roomName
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserReservationsQuery__
+ *
+ * To run a query within a React component, call `useGetUserReservationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserReservationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserReservationsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserReservationsQuery(baseOptions?: Apollo.QueryHookOptions<GetUserReservationsQuery, GetUserReservationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserReservationsQuery, GetUserReservationsQueryVariables>(GetUserReservationsDocument, options);
+      }
+export function useGetUserReservationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserReservationsQuery, GetUserReservationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserReservationsQuery, GetUserReservationsQueryVariables>(GetUserReservationsDocument, options);
+        }
+export type GetUserReservationsQueryHookResult = ReturnType<typeof useGetUserReservationsQuery>;
+export type GetUserReservationsLazyQueryHookResult = ReturnType<typeof useGetUserReservationsLazyQuery>;
+export type GetUserReservationsQueryResult = Apollo.QueryResult<GetUserReservationsQuery, GetUserReservationsQueryVariables>;
 export const ValidateReservationDocument = gql`
     query validateReservation($roomIds: [String!]!, $newReservation: NewReservationInput!) {
   validateReservation(roomIds: $roomIds, data: $newReservation) {
@@ -616,6 +709,7 @@ export const GetAllRoomTypesDocument = gql`
     description
     capacity
     sampleImage
+    startingPrice
   }
 }
     `;
