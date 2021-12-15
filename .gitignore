@@ -51,3 +51,6 @@ env-config.js
 
 # codegen
 # __generated-schema-types.tsx
+
+# Sentry
+.sentryclirc
