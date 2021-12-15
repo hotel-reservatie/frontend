@@ -32,7 +32,7 @@ spec:
         - secretRef:
             name: frontend-env
             optional: false
-        image: ghcr.io/everaertalexander/hotel-reservatie-frontend:v0.0.1
+        image: ghcr.io/everaertalexander/hotel-reservatie-frontend
         imagePullPolicy: Always
         name: hotel-frontend
         ports:
