@@ -12,6 +12,12 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v2
+    - name: Set env
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+    - name: Test
+      run: |
+        echo $RELEASE_VERSION
+        echo ${{ env.RELEASE_VERSION }}
     - name: Get env
       run: | 
         echo NEXT_PUBLIC_BACKEND=$BACKEND >> ./.env
@@ -38,13 +44,13 @@ jobs:
     # - name: Run codegen
     #   run: npm run gen-types
     - name: Build docker image
-      run: docker build -t ghcr.io/everaertalexander/hotel-reservatie-frontend .
+      run: docker build -t ghcr.io/everaertalexander/hotel-reservatie-frontend:$RELEASE_VERSION .
     - name: Push docker image
-      run: docker push ghcr.io/everaertalexander/hotel-reservatie-frontend
+      run: docker push ghcr.io/everaertalexander/hotel-reservatie-frontend:$RELEASE_VERSION
     - name: Check kubernetes
       run: kubectl get pods --namespace hotelreservaties-app
     - name: Create or update K8 deployment
       run: kubectl apply -f ./k8/frontend-manifest.yaml
     - name: Update kubernetes image
       run: |
-        kubectl set image deployment/hotel-frontend hotel-frontend=ghcr.io/everaertalexander/hotel-reservatie-frontend
+        kubectl set image deployment/hotel-frontend hotel-frontend=ghcr.io/everaertalexander/hotel-reservatie-frontend:$RELEASE_VERSION
