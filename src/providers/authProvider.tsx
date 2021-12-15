@@ -159,6 +159,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     return new Promise((resolve, reject) => {
       signInWithEmailAndPassword(auth, email, password)
         .then(async userCredential => {
+          SetgraphqlClient(createGraphqlClient(await userCredential.user.getIdToken()))
           setUser(userCredential.user)
           setSignedIn(true)
           resolve(true)

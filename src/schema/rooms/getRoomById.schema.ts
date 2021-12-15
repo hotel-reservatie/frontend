@@ -18,11 +18,13 @@ query getRoomById($roomId: String!){
         name
       }
       reviews{
+        reviewId
         title
         description
         reviewScore
         createdAt
         user{
+          userId
           userName
         }
       }

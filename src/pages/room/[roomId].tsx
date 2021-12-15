@@ -6,6 +6,7 @@ import PageTitle from 'src/components/text/PageTitle'
 import {
   NewReviewInput,
   Room,
+  useDeleteReviewMutation,
   useGetRoomByIdLazyQuery,
   useGetRoomByIdQuery,
   useGetUserFavoritesLazyQuery,
@@ -32,6 +33,7 @@ import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
 import { NewReviewStars, ReviewStars } from 'src/components/reviewStar'
 import { useNewReservation } from 'src/providers/reservationProvider'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import ReviewCard from 'src/components/card/ReviewCard'
 
 const RoomPage: NextPage = () => {
   const router = useRouter()
@@ -42,6 +44,7 @@ const RoomPage: NextPage = () => {
   const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
   const [toggleFavorite, toggleFavoriteResult] = useMutation(ToggleFavorite)
   const [createReview, createReviewResult] = useMutation(AddReview)
+  const [deleteReview] = useDeleteReviewMutation()
   const [newReview, setNewReview] = useState<NewReviewInput>({
     reviewScore: 0,
     title: '',
@@ -92,6 +95,12 @@ const RoomPage: NextPage = () => {
       addRoom(roomId as string)
       router.push('/newreservation')
     }
+  }
+
+  const handleDeleteReview = (reviewId: string) => {
+    deleteReview({ variables: { reviewId: reviewId } }).then(r => {
+      if (refetch) refetch()
+    })
   }
   const isFav = (roomId: string | null | undefined) => {
     if (userFavs.data && roomId) {
@@ -193,31 +202,16 @@ const RoomPage: NextPage = () => {
         {data?.getRoomById?.reviews && data.getRoomById.reviews.length > 0
           ? data?.getRoomById?.reviews?.map(r => {
               return (
-                <Card
-                  className=" w-full sm:p-8 p-8 flex flex-col justify-between"
-                  key={r.createdAt}
-                >
-                  <div>
-                    <div className="flex justify-between">
-                      <SubTitle className=" text-xl">{r.title}</SubTitle>
-                      <ReviewStars score={r.reviewScore} />
-                    </div>
-                    <p>{r.description}</p>
-                  </div>
-                  <div className="flex justify-between mt-4">
-                    <div className="flex gap-x-2">
-                      <div>
-                        <MdOutlinePerson size={24} className=" text-blue-300" />
-                      </div>
-                      <p className=" text-base text-blue-300">
-                        {r.user?.userName}
-                      </p>
-                    </div>
-                    <p className=" text-base text-blue-300">
-                      {formatDate(r.createdAt)}
-                    </p>
-                  </div>
-                </Card>
+                <ReviewCard
+                  key={r.reviewId}
+                  reviewId={r.reviewId!}
+                  title={r.title}
+                  score={r.reviewScore}
+                  description={r.description!}
+                  fromuser={r.user!}
+                  createdAt={formatDate(r.createdAt)}
+                  onRequestDelete={handleDeleteReview}
+                />
               )
             })
           : null}
@@ -246,7 +240,7 @@ const RoomPage: NextPage = () => {
               onChange={onInputChange}
               value={newReview.description!}
             />
-            <Button>{'schrijf'}</Button>
+            <Button>WRITE</Button>
           </form>
         </div>
       </Authenticated>

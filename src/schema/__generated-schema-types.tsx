@@ -380,6 +380,13 @@ export type AddReviewMutationVariables = Exact<{
 
 export type AddReviewMutation = { __typename?: 'Mutation', addReview?: { __typename?: 'Review', reviewId?: string | null | undefined, reviewScore: number, title: string, description?: string | null | undefined, createdAt?: any | null | undefined } | null | undefined };
 
+export type DeleteReviewMutationVariables = Exact<{
+  reviewId: Scalars['String'];
+}>;
+
+
+export type DeleteReviewMutation = { __typename?: 'Mutation', deleteReview: string };
+
 export type GetAllRoomTypesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -402,7 +409,7 @@ export type GetRoomByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetRoomByIdQuery = { __typename?: 'Query', getRoomById?: { __typename?: 'Room', roomId?: string | null | undefined, roomName?: string | null | undefined, facilities?: Array<string> | null | undefined, description?: string | null | undefined, images?: Array<string> | null | undefined, surface?: number | null | undefined, currentPrice?: number | null | undefined, roomType: { __typename?: 'RoomType', typeName: string, description: string }, tags?: Array<{ __typename?: 'Tag', name: string }> | null | undefined, reviews?: Array<{ __typename?: 'Review', title: string, description?: string | null | undefined, reviewScore: number, createdAt?: any | null | undefined, user?: { __typename?: 'User', userName?: string | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
+export type GetRoomByIdQuery = { __typename?: 'Query', getRoomById?: { __typename?: 'Room', roomId?: string | null | undefined, roomName?: string | null | undefined, facilities?: Array<string> | null | undefined, description?: string | null | undefined, images?: Array<string> | null | undefined, surface?: number | null | undefined, currentPrice?: number | null | undefined, roomType: { __typename?: 'RoomType', typeName: string, description: string }, tags?: Array<{ __typename?: 'Tag', name: string }> | null | undefined, reviews?: Array<{ __typename?: 'Review', reviewId?: string | null | undefined, title: string, description?: string | null | undefined, reviewScore: number, createdAt?: any | null | undefined, user?: { __typename?: 'User', userId?: string | null | undefined, userName?: string | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
 
 
 export const GetUserFavoritesDocument = gql`
@@ -773,6 +780,37 @@ export function useAddReviewMutation(baseOptions?: Apollo.MutationHookOptions<Ad
 export type AddReviewMutationHookResult = ReturnType<typeof useAddReviewMutation>;
 export type AddReviewMutationResult = Apollo.MutationResult<AddReviewMutation>;
 export type AddReviewMutationOptions = Apollo.BaseMutationOptions<AddReviewMutation, AddReviewMutationVariables>;
+export const DeleteReviewDocument = gql`
+    mutation deleteReview($reviewId: String!) {
+  deleteReview(reviewId: $reviewId)
+}
+    `;
+export type DeleteReviewMutationFn = Apollo.MutationFunction<DeleteReviewMutation, DeleteReviewMutationVariables>;
+
+/**
+ * __useDeleteReviewMutation__
+ *
+ * To run a mutation, you first call `useDeleteReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteReviewMutation, { data, loading, error }] = useDeleteReviewMutation({
+ *   variables: {
+ *      reviewId: // value for 'reviewId'
+ *   },
+ * });
+ */
+export function useDeleteReviewMutation(baseOptions?: Apollo.MutationHookOptions<DeleteReviewMutation, DeleteReviewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteReviewMutation, DeleteReviewMutationVariables>(DeleteReviewDocument, options);
+      }
+export type DeleteReviewMutationHookResult = ReturnType<typeof useDeleteReviewMutation>;
+export type DeleteReviewMutationResult = Apollo.MutationResult<DeleteReviewMutation>;
+export type DeleteReviewMutationOptions = Apollo.BaseMutationOptions<DeleteReviewMutation, DeleteReviewMutationVariables>;
 export const GetAllRoomTypesDocument = gql`
     query getAllRoomTypes {
   getRoomTypes {
@@ -917,11 +955,13 @@ export const GetRoomByIdDocument = gql`
       name
     }
     reviews {
+      reviewId
       title
       description
       reviewScore
       createdAt
       user {
+        userId
         userName
       }
     }
