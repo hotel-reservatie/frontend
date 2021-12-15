@@ -6,6 +6,7 @@ import SubTitle from '../text/SubTitle'
 import Link from 'next/link'
 
 interface SmallRoomCardProps {
+  isEditable?: boolean
   title?: string
   capacity?: number
   surface?: number
@@ -17,6 +18,7 @@ interface SmallRoomCardProps {
 }
 
 const SmallRoomCard: FunctionComponent<SmallRoomCardProps> = ({
+  isEditable = true,
   title,
   capacity,
   surface,
@@ -50,7 +52,9 @@ const SmallRoomCard: FunctionComponent<SmallRoomCardProps> = ({
               <MdArrowForward size={24} className=" inline-block" />
             </a>
           </Link>
-          <span className=" text-red-600">{!isValid ? 'Not available for given time' : <br></br>}</span>
+          <span className=" text-red-600">
+            {!isValid ? 'Not available for given time' : <br></br>}
+          </span>
         </div>
         <div>
           <div className="flex items-center gap-2 mb-3">
@@ -75,11 +79,13 @@ const SmallRoomCard: FunctionComponent<SmallRoomCardProps> = ({
               per night
             </div>
           </div>
-          <HiMinusCircle
-            onClick={handleDelete}
-            size={32}
-            className=" text-blue-300 hover:text-red-500 hover:scale-105 hover:cursor-pointer transition-transform"
-          />
+          {isEditable ? (
+            <HiMinusCircle
+              onClick={handleDelete}
+              size={32}
+              className=" text-blue-300 hover:text-red-500 hover:scale-105 hover:cursor-pointer transition-transform"
+            />
+          ) : null}
         </div>
       </div>
     </Card>

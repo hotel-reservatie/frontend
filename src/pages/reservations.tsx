@@ -19,6 +19,7 @@ import { MdArrowForward, MdPeople } from 'react-icons/md'
 import { HiMinusCircle } from 'react-icons/hi'
 import Dialog from 'src/components/dialog'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 const Reservations = () => {
   const router = useRouter()
@@ -36,8 +37,7 @@ const Reservations = () => {
   }
 
   const [getUserReservations, userReservationResult] =
-    useGetUserReservationsLazyQuery({fetchPolicy: "no-cache"})
-
+    useGetUserReservationsLazyQuery({ fetchPolicy: 'no-cache' })
 
   useEffect(() => {
     if (user) {
@@ -83,7 +83,14 @@ const Reservations = () => {
                     </div>
                   </div>
                   <div className="flex flex-col justify-between text-right">
-                    <MdArrowForward size={24} className=" ml-auto" />
+                    <Link href={`reservation/${r.reservationId}`}>
+                      <a>
+                        <MdArrowForward
+                          size={24}
+                          className=" ml-auto"
+                        />
+                      </a>
+                    </Link>
                     <span className="font-bold text-3xl text-blue-600">
                       €{r.totalPrice}
                     </span>
