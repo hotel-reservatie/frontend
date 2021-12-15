@@ -49,8 +49,8 @@ jobs:
       run: docker push ghcr.io/everaertalexander/hotel-reservatie-frontend:$RELEASE_VERSION
     - name: Check kubernetes
       run: kubectl get pods --namespace hotelreservaties-app
-    - name: Create or update K8 deployment
-      run: kubectl apply -f ./k8/frontend-manifest.yaml
+    # - name: Create or update K8 deployment
+    #   run: kubectl apply -f ./k8/frontend-manifest.yaml
     - name: Update kubernetes image
       run: |
         kubectl set image deployment/hotel-frontend hotel-frontend=ghcr.io/everaertalexander/hotel-reservatie-frontend:$RELEASE_VERSION
