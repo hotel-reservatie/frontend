@@ -2,8 +2,8 @@ name: Workflow
 
 on:
   push:
-    branches:
-      - feature/github-actions
+    tags:
+      - 'v*.*.*'
     
   workflow_dispatch:
 
@@ -31,12 +31,12 @@ jobs:
         STORAGEBUCKET: ${{secrets.NEXT_PUBLIC_FB_STORAGEBUCKET}}
     - name: Check env
       run: cat ./.env
-    - name: Install codegen
-      run: |
-        npm install --save graphql
-        npm install --save @graphql-codegen/cli
-    - name: Run codegen
-      run: npm run gen-types
+    # - name: Install codegen
+    #   run: |
+    #     npm install --save graphql
+    #     npm install --save @graphql-codegen/cli
+    # - name: Run codegen
+    #   run: npm run gen-types
     - name: Build docker image
       run: docker build -t ghcr.io/everaertalexander/hotel-reservatie-frontend .
     - name: Push docker image
