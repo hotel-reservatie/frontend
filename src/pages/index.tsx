@@ -12,7 +12,6 @@ import FormItem from 'src/classes/FormItem'
 import Form from 'src/components/form'
 import { useFilterValues } from 'src/providers/filterProvider'
 import Skeleton from 'src/components/roomCard/Skeleton'
-import * as Sentry from '@sentry/nextjs'
 
 const Home: NextPage = () => {
   const { t } = useTranslation('common')
@@ -46,20 +45,6 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Button
-        onClick={() => {
-          throw new Error('THIS IS A TUNNELED SENTRY TEST!!!')
-        }}
-      >
-        test errors
-      </Button>
-      <Button
-        onClick={() => {
-          throw new Error('This is some other sentry test')
-        }}
-      >
-        test errors
-      </Button>
       <div className="max-w-7xl mx-auto my-4 md:grid  md:grid-cols-2 md:mt-16">
         <div className="mb-8 mx-auto md:my-auto md:pr-4">
           <h1 className="font-bold text-blue-700 mb-2 md:text-4xl">
