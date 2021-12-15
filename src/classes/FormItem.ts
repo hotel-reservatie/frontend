@@ -1,6 +1,6 @@
 export interface FormItemOption {
-  [key: number]: string
-  id: number
+  [key: string]: string
+  id: string
   name: string
 }
 
@@ -26,6 +26,8 @@ class FormItem {
   options?: FormItemOption[]
   faulty?: 'true' | 'false'
   errormessage?: string
+  autoComplete?: string
+  selected?: any
   type?:
     | 'button'
     | 'checkbox'
@@ -50,6 +52,7 @@ class FormItem {
     | 'url'
     | 'week'
     | 'dropdown'
+    | 'dropdown-multi-select'
 
   constructor(formItem: FormItem) {
     this.type = getValueFromObject(formItem, 'type', 'text')
@@ -66,6 +69,7 @@ class FormItem {
     this.options = getValueFromObject(formItem, 'options', undefined)
     this.faulty = getValueFromObject(formItem, 'faulty', undefined)
     this.errormessage = getValueFromObject(formItem, 'errormessage', undefined)
+    this.autoComplete = getValueFromObject(formItem, 'autoComplete', 'on')
   }
 }
 

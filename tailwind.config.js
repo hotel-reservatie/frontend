@@ -8,7 +8,7 @@ module.exports = {
       './src/pages/**/*.{js,ts,jsx,tsx}',
       './src/components/**/*.{js,ts,jsx,tsx}',
     ],
-    safeList: [
+    safelist: [
       'grid-cols-1',
       'grid-cols-2',
       'grid-cols-3',

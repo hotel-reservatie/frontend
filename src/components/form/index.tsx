@@ -11,8 +11,8 @@ interface FormProps {
   cols?: number
   rowGap?: number
   colGap?: number
-  submitting: boolean
-  setSubmitting: React.Dispatch<React.SetStateAction<boolean>>
+  submitting?: boolean
+  setSubmitting?: React.Dispatch<React.SetStateAction<boolean>>
   onItemChange?: any
   onSubmit?: any
   className?: string
@@ -38,7 +38,6 @@ const Form: FunctionComponent<FormProps> = ({
 
   function onFormItemChange(e: FormEvent<HTMLInputElement>) {
     const index = findIndexByName(items, e.currentTarget.name)
-    console.log(e.currentTarget.name)
 
     if (index > -1) {
       const newItems = [
@@ -46,9 +45,7 @@ const Form: FunctionComponent<FormProps> = ({
         new FormItem({ ...items[index], value: e.currentTarget.value }),
         ...items.slice(index + 1),
       ]
-      if (onItemChange) {
-        onItemChange(newItems)
-      }
+      if (onItemChange) onItemChange(newItems[index])
 
       setItems(newItems)
     }
@@ -59,10 +56,10 @@ const Form: FunctionComponent<FormProps> = ({
     if (index > -1) {
       const newItems = [
         ...items.slice(0, index),
-        new FormItem({ ...items[index], value: e.name }),
+        new FormItem({ ...items[index], value: e.id }),
         ...items.slice(index + 1),
       ]
-      onItemChange(newItems)
+      if (onItemChange) onItemChange(newItems[index])
       setItems(newItems)
     }
   }
@@ -74,7 +71,7 @@ const Form: FunctionComponent<FormProps> = ({
       ...items.slice(index + 1),
     ]
     if (onItemChange) {
-      onItemChange(newItems)
+      onItemChange(newItems[index])
     }
     setItems(newItems)
   }
@@ -93,15 +90,6 @@ const Form: FunctionComponent<FormProps> = ({
   function isValidEmail(fi: FormItem) {
     const re = /\S+@\S+\.\S+/
     return re.test(fi.value)
-  }
-
-  function checkForPasswords(formItems: Array<FormItem>) {
-    const passwordItems = formItems.filter(e => e.type === 'password')
-    return passwordItems
-  }
-
-  function passwordsMatch(passwordItems: Array<FormItem>) {
-    return passwordItems[0].value === passwordItems[1].value
   }
 
   function formHasErrors(formItems: Array<FormItem>) {
@@ -140,20 +128,6 @@ const Form: FunctionComponent<FormProps> = ({
     return false
   }
 
-  useEffect(() => {
-    function handleSubmit() {
-      if (formHasErrors(items)) {
-        console.log('form has errors')
-      } else {
-        onSubmit(items)
-      }
-      setSubmitting(false)
-    }
-    if (submitting) {
-      handleSubmit()
-    }
-  }, [submitting])
-
   function dynamicRowCols(amount: number | undefined, type: 'rows' | 'cols') {
     return `grid-${type}-${amount}`
   }
@@ -161,6 +135,26 @@ const Form: FunctionComponent<FormProps> = ({
   function dynamicGaps(amount: number | undefined, type: 'x' | 'y') {
     return `gap-${type}-${amount}`
   }
+
+  function handleEnterKeyPress(e: React.KeyboardEvent<HTMLFormElement>) {
+    if (e.key === 'Enter') {
+      if (setSubmitting) setSubmitting(true)
+    }
+  }
+
+  useEffect(() => {
+    function handleSubmit() {
+      if (formHasErrors(items)) {
+        console.log('form has errors')
+      } else {
+        onSubmit(items)
+      }
+      if (setSubmitting) setSubmitting(false)
+    }
+    if (submitting) {
+      handleSubmit()
+    }
+  }, [submitting])
 
   const formStyling = classNames(
     'grid items-end',
@@ -172,7 +166,7 @@ const Form: FunctionComponent<FormProps> = ({
   )
 
   return (
-    <form className={formStyling} noValidate>
+    <form className={formStyling} noValidate onKeyPress={handleEnterKeyPress}>
       {items.map(({ value, className, ...item }, index) => {
         if (item.type === 'date') {
           return (
@@ -185,16 +179,20 @@ const Form: FunctionComponent<FormProps> = ({
               {...item}
             />
           )
-        } else if (item.type === 'dropdown') {
+        } else if (
+          item.type === 'dropdown' ||
+          item.type === 'dropdown-multi-select'
+        ) {
           return (
             <Dropdown
               key={`dropdown-${index}`}
               options={
-                item.options ?? [{ id: 1, name: 'option array required' }]
+                item.options ?? [{ id: '', name: 'option array required' }]
               }
               onChange={handleDropdownChange}
               placeholder={item.placeholder ?? 'Placeholder is required'}
               name={item.name ?? 'name is required'}
+              multiSelect={item.type === 'dropdown-multi-select'}
             />
           )
         } else {

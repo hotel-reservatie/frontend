@@ -1,47 +1,54 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
+import debounce from 'lodash.debounce'
 
 import RangeSlider from 'src/components/rangeSlider'
 import RoomCard from 'src/components/roomCard'
 import {
   Maybe,
   RoomFilters,
-  useGetFilteredRoomsQuery,
+  useGetAllFilterValuesQuery,
+  useGetFilteredRoomsLazyQuery,
   useGetUserFavoritesLazyQuery,
-  useGetUserFavoritesQuery,
 } from 'src/schema'
 import { useMutation } from '@apollo/client'
 import { useAuth } from 'src/providers/authProvider'
 import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
-import SubTitle from 'src/components/text/SubTitle'
 import PageTitle from 'src/components/text/PageTitle'
-import DateInput from 'src/components/input/DateInput'
 import { useTranslation } from 'react-i18next'
-import Input from 'src/components/input'
-import Dropdown from 'src/components/dropdown'
 import Form from 'src/components/form'
-import FormItem from 'src/classes/FormItem'
-import Button from 'src/components/button'
+import FormItem, { FormItemOption } from 'src/classes/FormItem'
+import { useFilterValues } from 'src/providers/filterProvider'
 
 const Rooms = () => {
   const { user } = useAuth()
   const { query } = useRouter()
   const { t } = useTranslation('common')
+  const { filters: filterValues, updateFilterValue } = useFilterValues()
 
-  const [filters, setFilters] = useState<RoomFilters>()
+  const [filters, setFilters] = useState<RoomFilters>(filterValues)
+  const [filterOptions, setFilterOptions] = useState<{
+    roomTypes: FormItemOption[]
+    roomCapacity: FormItemOption[]
+    tags: FormItemOption[]
+  }>()
+
   const [boundries, setBoundries] = useState<{
     min: number | null
     max: number | null
   }>({ min: null, max: null })
-  const [marks, setMarks] = useState([])
 
-  const { loading, error, data } = useGetFilteredRoomsQuery({
-    variables: { roomFilter: { ...filters } },
-  })
+  const [getFilteredRooms, { loading, error, data }] =
+    useGetFilteredRoomsLazyQuery({
+      variables: { roomFilter: { ...filters } },
+    })
   const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
   const [toggleFavorite, toggleFavoriteResult] = useMutation(ToggleFavorite)
   const [submitting, setSubmitting] = useState(false)
+
+  const { loading: filterOptionsLoading, data: filterData } =
+    useGetAllFilterValuesQuery()
 
   const isFavorite = (roomId: string | null | undefined) => {
     if (userFavs.data && roomId) {
@@ -64,9 +71,14 @@ const Rooms = () => {
     }
   }
 
-  const sliderChange = (event: Event, value: number | number[]) => {
-    console.log('non-memoized: ', value)
+  const sliderChange = (event: Event, value: number | Array<number>) => {
+    if (value instanceof Array) {
+      updateFilterValue('maxPrice', value[1])
+      updateFilterValue('minPrice', value[0])
+    }
   }
+
+  const debouncedSliderChange = useMemo(() => debounce(sliderChange, 300), [])
 
   const defineBoundries = (price: number | null | undefined) => {
     if (price) {
@@ -83,9 +95,19 @@ const Rooms = () => {
   }
 
   useEffect(() => {
-    setFilters({
-      roomTypeIds: query['roomtype'] as Maybe<string[]> | undefined,
-    })
+    if (query['roomtype']) {
+      setFilters({
+        roomTypeIds: query['roomtype'] as Maybe<string[]> | undefined,
+      })
+    } else if (query['daterange']) {
+      const dateRange: { arrival: string; departure: string } = JSON.parse(
+        query['daterange'] as string,
+      )
+      setFilters({
+        startDate: new Date(dateRange.arrival),
+        endDate: new Date(dateRange.departure),
+      })
+    }
   }, [query])
 
   useEffect(() => {
@@ -94,63 +116,60 @@ const Rooms = () => {
     }
   }, [user])
 
-  const roomTypes = [
-    {
-      id: 1,
-      name: 'test 1 label',
-    },
-    {
-      id: 2,
-      name: 'test 2 label',
-    },
-    {
-      id: 3,
-      name: 'test 3 label',
-    },
-  ]
-  const roomCapacity = [
-    {
-      id: 1,
-      name: 'test 1 label',
-    },
-    {
-      id: 2,
-      name: 'test 2 label',
-    },
-    {
-      id: 3,
-      name: 'test 3 label',
-    },
-  ]
-  const tags = [
-    {
-      id: 1,
-      name: 'test 1 label',
-    },
-    {
-      id: 2,
-      name: 'test 2 label',
-    },
-    {
-      id: 3,
-      name: 'test 3 label',
-    },
-  ]
+  useEffect(() => {
+    if (filters) {
+      getFilteredRooms({
+        variables: { roomFilter: { ...filters } },
+      })
+    }
+  }, [filters])
+
+  useEffect(() => {
+    if (!filterOptionsLoading) {
+      const roomCapacity: Array<FormItemOption> = []
+      const roomTypes: Array<FormItemOption> = []
+      const tags: Array<FormItemOption> = []
+      if (filterData?.getFilters.maxCapacity) {
+        for (
+          let index = 0;
+          index < filterData?.getFilters.maxCapacity;
+          index++
+        ) {
+          roomCapacity.push({ id: String(index + 1), name: String(index + 1) })
+        }
+      }
+      if (filterData?.getFilters.roomTypes) {
+        const types = filterData.getFilters.roomTypes
+        // TODO: sort alphabeticaly
+        types.forEach(rt => {
+          roomTypes.push({ id: rt.roomTypeId ?? '', name: rt.typeName })
+        })
+      }
+      if (filterData?.getFilters.tags) {
+        filterData.getFilters.tags.forEach((t, i) => {
+          tags.push({ id: String(i), name: t.name })
+        })
+      }
+      setFilterOptions({ roomTypes, roomCapacity, tags })
+    }
+  }, [filterOptionsLoading])
 
   const formItems = [
     new FormItem({
       placeholder: t('datepicker.arrivaldate'),
       type: 'date',
       name: 'arrivalDate',
-      id: 'arrivalDate',
+      id: 'startDate',
       className: 'col-span-3',
+      value: filterValues.startDate,
     }),
     new FormItem({
       placeholder: t('datepicker.departuredate'),
       type: 'date',
       name: 'departureDate',
-      id: 'departureDate',
+      id: 'endDate',
       className: 'col-span-3',
+      value: filterValues.endDate,
     }),
     new FormItem({
       placeholder: 'Search room name',
@@ -162,57 +181,60 @@ const Rooms = () => {
     new FormItem({
       type: 'dropdown',
       placeholder: 'Room Type',
-      options: roomTypes,
+      options: filterOptions?.roomTypes,
       name: 'roomType',
+      id: 'roomTypeIds',
     }),
     new FormItem({
       type: 'dropdown',
       placeholder: 'Room Capacity',
-      options: roomCapacity,
+      options: filterOptions?.roomCapacity,
       name: 'roomCapacity',
+      id: 'maxCapacity',
     }),
     new FormItem({
-      type: 'dropdown',
+      type: 'dropdown-multi-select',
       placeholder: 'Tags',
-      options: tags,
+      options: filterOptions?.tags,
       name: 'tags',
+      id: 'tagIds',
     }),
   ]
 
-  function onItemChange(e: FormItem[]) {
-    console.log('onItemChange: ', e)
+  function onItemChange(e: FormItem) {
+    updateFilterValue(e.id, e.value)
   }
+
+  useEffect(() => {
+    console.log(filterValues)
+
+    setFilters(filterValues)
+  }, [filterValues])
+
+  const debouncedItemChange = useMemo(() => debounce(onItemChange, 300), [])
 
   return (
     <div className="max-w-7xl mx-auto">
       <div>
         <PageTitle>Rooms</PageTitle>
-        {/* <div className="grid grid-cols-2 grid-rows-2">
-          <DateInput
-            placeholder={t('datepicker.arrivaldate')}
-            className="text-center placeholder-blue-500"
-            onChange={(d: Date) => {}}
+
+        {filterOptions && (
+          <Form
+            onItemChange={debouncedItemChange}
+            submitting={submitting}
+            setSubmitting={setSubmitting}
+            formItems={formItems}
+            rows={2}
+            cols={6}
+            rowGap={8}
+            className="mb-4"
           />
-          <DateInput
-            placeholder={t('datepicker.departuredate')}
-            className="text-center placeholder-blue-500 row-start-1"
-            onChange={(d: Date) => {}}
-          />
-          <Input placeholder="Search room name" />
-          <div className="flex "> */}
-        <Form
-          onItemChange={onItemChange}
-          submitting={submitting}
-          setSubmitting={setSubmitting}
-          formItems={formItems}
-          rows={2}
-          cols={6}
-          rowGap={8}
-          className="mb-4"
+        )}
+
+        <RangeSlider
+          boundries={boundries}
+          onValueChange={debouncedSliderChange}
         />
-        {/* </div> */}
-        {/* </div> */}
-        <RangeSlider boundries={boundries} onValueChange={sliderChange} />
       </div>
       {data?.getRooms?.map((room, index) => {
         defineBoundries(room.currentPrice)

@@ -11,9 +11,7 @@ import { useNewReservation } from 'src/providers/reservationProvider'
 import {
   Room,
   useGetFilteredRoomsQuery,
-  UserInput,
   useValidateReservationLazyQuery,
-  useValidateReservationQuery,
 } from 'src/schema'
 import Link from 'next/link'
 import Button from 'src/components/button'
@@ -27,17 +25,22 @@ import { CreateReservation } from 'src/schema/reservation/createReservation.sche
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import Dialog from 'src/components/dialog'
+import FormItem from 'src/classes/FormItem'
+import { useTranslation } from 'react-i18next'
+import Form from 'src/components/form'
 
 const NewReservation = () => {
   const {
     setUserInfo,
     setDates,
     removeRoom,
-    resetReservation,
     newReservation,
+    resetReservation,
   } = useNewReservation()
-  const router = useRouter()
+  const [submitting, setSubmitting] = useState(false)
   const { user } = useAuth()
+  const { t } = useTranslation('common')
+  const router = useRouter()
 
   const [showDialog, setShowDialog] = useState(false)
   const [roomToRemove, setroomToRemove] = useState('')
@@ -82,6 +85,7 @@ const NewReservation = () => {
   }
 
   const handleConfirmButton = () => {
+    setSubmitting(true)
     if (newReservation) {
       createReservation({
         variables: {
@@ -121,6 +125,88 @@ const NewReservation = () => {
     newReservation?.details?.endDate,
     newReservation?.roomIds,
   ])
+
+  function handleSubmit(e: FormItem[]) {
+    console.log(e)
+  }
+
+  // TODO: Add dateform that uses filterValue for the dates OR if there's already a reservation use those dates
+  const dateForm: Array<FormItem> = [
+    new FormItem({
+      placeholder: t('datepicker.arrivaldate'),
+      type: 'date',
+      name: 'arrivalDate',
+      id: 'startDate',
+    }),
+    new FormItem({
+      placeholder: t('datepicker.departuredate'),
+      type: 'date',
+      name: 'departureDate',
+      id: 'endDate',
+    }),
+  ]
+
+  const userInfoForm: Array<FormItem> = [
+    new FormItem({
+      label: 'First Name',
+      placeholder: 'John',
+      id: 'firstname',
+      autoComplete: 'given-name',
+      value: newReservation?.details?.user?.firstName,
+      name: 'firstname',
+      className: 'col-span-2',
+    }),
+    new FormItem({
+      label: 'Last Name',
+      id: 'lastname',
+      autoComplete: 'family-name',
+      value: newReservation?.details?.user?.lastName,
+      placeholder: 'Doe',
+      name: 'lastname',
+      className: 'col-span-2',
+    }),
+    new FormItem({
+      label: 'Email',
+      id: 'email',
+      value: newReservation?.details?.user?.reservationEmail,
+      type: 'email',
+      autoComplete: 'email',
+      placeholder: 'Doe',
+      name: 'email',
+      className: 'col-span-2',
+    }),
+    new FormItem({
+      label: 'Phone',
+      id: 'phone',
+      value: newReservation?.details?.user?.phone,
+      autoComplete: 'tel',
+      name: 'phone',
+      className: 'col-span-2',
+    }),
+    new FormItem({
+      label: 'Address',
+      id: 'address',
+      value: newReservation?.details?.user?.address,
+      autoComplete: 'street-address',
+      name: 'address',
+      className: 'col-span-2',
+    }),
+    new FormItem({
+      label: 'City',
+      id: 'city',
+      value: '',
+      autoComplete: 'address-level2',
+      name: 'city',
+    }),
+    new FormItem({
+      type: 'number',
+      label: 'Postal Code',
+      id: 'postal',
+      value: newReservation?.details?.user?.city,
+      autoComplete: 'postal-code',
+      name: 'postal',
+    }),
+  ]
 
   return (
     <PageLayout>
@@ -190,184 +276,39 @@ const NewReservation = () => {
           </Link>
         </div>
         <SubTitle>Customer Info</SubTitle>
-        <form className="md:grid grid-cols-2 gap-6 mb-8" action="">
-          <Input
-            label={'First Name'}
-            id="fristname"
-            value={
-              newReservation?.details?.user?.firstName
-                ? (newReservation?.details?.user?.firstName as string)
-                : ''
-            }
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setUserInfo({
-                ...newReservation?.details?.user,
-                firstName: e.target.value,
-              })
-            }}
-            placeholder={'John'}
-          />
-          <Input
-            label={'Last Name'}
-            id="lastname"
-            value={
-              newReservation?.details?.user?.lastName
-                ? (newReservation?.details?.user?.lastName as string)
-                : ''
-            }
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setUserInfo({
-                ...newReservation?.details?.user,
-                lastName: e.target.value,
-              })
-            }}
-            placeholder={'Doe'}
-          />
-          <Input
-            label={'Email'}
-            id="email"
-            value={
-              newReservation?.details?.user?.reservationEmail
-                ? (newReservation?.details?.user?.reservationEmail as string)
-                : ''
-            }
-            autoComplete={'email'}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setUserInfo({
-                ...newReservation?.details?.user,
-                reservationEmail: e.target.value,
-              })
-            }}
-            placeholder={'Doe'}
-          />
-          <Input
-            label={'Phone'}
-            id="phone"
-            value={
-              newReservation?.details?.user?.phone
-                ? (newReservation?.details?.user?.phone as string)
-                : ''
-            }
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setUserInfo({
-                ...newReservation?.details?.user,
-                phone: e.target.value,
-              })
-            }}
-          />
-          <Input
-            label={'Address'}
-            id="address"
-            value={
-              newReservation?.details?.user?.address
-                ? (newReservation.details.user.address as string)
-                : ''
-            }
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setUserInfo({
-                ...newReservation?.details?.user,
-                address: e.target.value,
-              })
-            }}
-          />
-          <div className="grid grid-cols-2 gap-6">
-            <Input
-              label={'City'}
-              id="city"
-              value={
-                newReservation?.details?.user?.city
-                  ? (newReservation?.details?.user?.city as string)
-                  : ''
-              }
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setUserInfo({
-                  ...newReservation?.details?.user,
-                  city: e.target.value,
-                })
-              }}
-            />
-            <Input
-              type={'number'}
-              label={'Postal Code'}
-              id="postal"
-              value={
-                newReservation?.details?.user?.postal
-                  ? newReservation?.details?.user.postal
-                  : ''
-              }
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                const val = e.target.valueAsNumber
+        <Form
+          cols={4}
+          rows={3}
+          colGap={6}
+          formItems={userInfoForm}
+          onSubmit={handleSubmit}
+          submitting={submitting}
+          setSubmitting={setSubmitting}
+        />
 
-                if (val) {
-                  setUserInfo({
-                    ...newReservation?.details?.user,
-                    postal: e.target.valueAsNumber,
-                  })
-                } else {
-                  setUserInfo({
-                    ...newReservation?.details?.user,
-                    postal: undefined,
-                  })
-                }
-              }}
-            />
-          </div>
-        </form>
         <SubTitle>Booking Info</SubTitle>
         <div className="mb-8">
           <div className="flex justify-between mb">
             <p>Total amount of days</p>
             <p>{validated.data?.validateReservation.totalDays}</p>
           </div>
-          <div className="flex justify-between mb">
-            <p>Amount of weekend days</p>
-            <p>{validated.data?.validateReservation.weekendDays}</p>
+          <div className="flex justify-between">
+            <SubTitle>Total Price</SubTitle>
+            <SubTitle>{`€${
+              validated.data?.validateReservation.totalPrice
+                ? validated.data?.validateReservation.totalPrice
+                : 0
+            }`}</SubTitle>
           </div>
-          <div className="flex justify-between mb">
-            <p>Rooms</p>
-            <p>{newReservation?.roomIds?.length}</p>
+          <div className="flex justify-center">
+            <Button
+              className="w w-72"
+              disabled={!validated.data?.validateReservation.isValid}
+              onClick={handleConfirmButton}
+            >
+              Confirm Booking
+            </Button>
           </div>
-          <ul className=" pl-8 list-disc">
-            {res.data?.getRooms?.map(r => {
-              return (
-                <li key={`roominfo ${r.roomId}`}>
-                  <div className="flex justify-between">
-                    {r.roomName}
-                    <span>
-                      {`€${
-                        validated.data?.validateReservation.isValid
-                          ? calculateRoomPrice(
-                              r as Room,
-                              validated.data.validateReservation
-                                .totalDays as number,
-                              validated.data.validateReservation
-                                .weekendDays as number,
-                            )
-                          : 0
-                      }`}
-                    </span>
-                  </div>
-                </li>
-              )
-            })}
-          </ul>
-        </div>
-        <div className="flex justify-between">
-          <SubTitle>Total Price</SubTitle>
-          <SubTitle>{`€${
-            validated.data?.validateReservation.totalPrice
-              ? validated.data?.validateReservation.totalPrice
-              : 0
-          }`}</SubTitle>
-        </div>
-        <div className="flex justify-center">
-          <Button
-            className="w w-72"
-            disabled={!validated.data?.validateReservation.isValid}
-            onClick={handleConfirmButton}
-          >
-            Confirm Booking
-          </Button>
         </div>
       </Authenticated>
       <NotAuthenticated>
@@ -377,10 +318,10 @@ const NewReservation = () => {
   )
 }
 
-export default NewReservation
-
-export const getServerSideProps = async ({ locale }: any) => ({
+export const getStaticProps = async ({ locale }: any) => ({
   props: {
     ...(await serverSideTranslations(locale, ['common'])),
   },
 })
+
+export default NewReservation
