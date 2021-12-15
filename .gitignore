@@ -54,3 +54,6 @@ env-config.js
 
 # Sentry
 .sentryclirc
+
+# Sentry
+.sentryclirc

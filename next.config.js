@@ -5,7 +5,7 @@ const { withSentryConfig } = require('@sentry/nextjs')
 
 const isDev = process.env.NODE_ENV === 'development'
 
-const moduleExports = withPWA({
+const moduleExports = {
   reactStrictMode: true,
   distDir: 'dist',
   images: {
@@ -29,7 +29,7 @@ const moduleExports = withPWA({
       { source: '/kamers', destination: '/rooms' },
     ]
   },
-})
+}
 // https://stackoverflow.com/questions/68723485/how-to-setup-i18n-translated-url-routes-in-next-js
 
 const sentryWebpackPluginOptions = {
@@ -46,4 +46,6 @@ const sentryWebpackPluginOptions = {
 
 // Make sure adding Sentry options is the last code to run before exporting, to
 // ensure that your source maps include changes from all other Webpack plugins
-module.exports = withSentryConfig(moduleExports, sentryWebpackPluginOptions)
+module.exports = withPWA(
+  withSentryConfig(moduleExports, sentryWebpackPluginOptions),
+)
