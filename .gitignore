@@ -50,4 +50,4 @@ env-config.js
 **/public/fallback-*.js
 
 # codegen
-__generated-schema-types.tsx
+# __generated-schema-types.tsx

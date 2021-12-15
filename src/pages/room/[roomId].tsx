@@ -33,7 +33,7 @@ import { NewReviewStars, ReviewStars } from 'src/components/reviewStar'
 import { useNewReservation } from 'src/providers/reservationProvider'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-const Room: NextPage = () => {
+const RoomPage: NextPage = () => {
   const router = useRouter()
   const { roomId } = router.query
   const { user } = useAuth()
@@ -263,4 +263,4 @@ export const getServerSideProps = async ({ locale }: any) => ({
   },
 })
 
-export default Room
+export default RoomPage
