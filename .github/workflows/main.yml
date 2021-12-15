@@ -49,16 +49,17 @@ jobs:
       run: docker build -t ghcr.io/everaertalexander/hotel-reservatie-frontend:$RELEASE_VERSION .
     - name: Push docker image
       run: docker push ghcr.io/everaertalexander/hotel-reservatie-frontend:$RELEASE_VERSION
-    Update:
-      runs-on: self-hosted
-      strategy:
-        max-parallel: 1
-      steps:
-      - uses: actions/checkout@v2
-      - name: Set env
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      - name: Check kubernetes
-        run: kubectl get pods --namespace hotelreservaties-app
-      - name: Update kubernetes image
-        run: |
-          kubectl set image deployment/hotel-frontend hotel-frontend=ghcr.io/everaertalexander/hotel-reservatie-frontend:$RELEASE_VERSION
+
+  Update:
+    runs-on: self-hosted
+    strategy:
+      max-parallel: 1
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set env
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+    - name: Check kubernetes
+      run: kubectl get pods --namespace hotelreservaties-app
+    - name: Update kubernetes image
+      run: |
+        kubectl set image deployment/hotel-frontend hotel-frontend=ghcr.io/everaertalexander/hotel-reservatie-frontend:$RELEASE_VERSION
