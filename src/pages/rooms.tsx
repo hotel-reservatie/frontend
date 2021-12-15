@@ -219,16 +219,18 @@ const Rooms = () => {
       <div>
         <PageTitle>Rooms</PageTitle>
 
-        <Form
-          onItemChange={debouncedItemChange}
-          submitting={submitting}
-          setSubmitting={setSubmitting}
-          formItems={formItems}
-          rows={2}
-          cols={6}
-          rowGap={8}
-          className="mb-4"
-        />
+        {filterOptions && (
+          <Form
+            onItemChange={debouncedItemChange}
+            submitting={submitting}
+            setSubmitting={setSubmitting}
+            formItems={formItems}
+            rows={2}
+            cols={6}
+            rowGap={8}
+            className="mb-4"
+          />
+        )}
 
         <RangeSlider
           boundries={boundries}
