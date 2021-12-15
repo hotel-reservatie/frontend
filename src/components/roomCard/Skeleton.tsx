@@ -33,8 +33,6 @@ export const Skeleton: FunctionComponent<SkeletonProps> = ({ amount }) => {
   useEffect(() => {
     const tempLoaders = []
     for (let i = 0; i < amount; i++) {
-      console.log('pushing')
-
       tempLoaders.push(<SkeletonBody key={`skeleton-${i}`} />)
     }
     setLoaders(tempLoaders)

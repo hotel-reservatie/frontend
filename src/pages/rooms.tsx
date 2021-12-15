@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 import Form from 'src/components/form'
 import FormItem, { FormItemOption } from 'src/classes/FormItem'
 import { useFilterValues } from 'src/providers/filterProvider'
+import Skeleton from 'src/components/roomCard/Skeleton'
 
 const Rooms = () => {
   const { user } = useAuth()
@@ -218,24 +219,30 @@ const Rooms = () => {
       <div>
         <PageTitle>Rooms</PageTitle>
 
-        {filterOptions && (
-          <Form
-            onItemChange={debouncedItemChange}
-            submitting={submitting}
-            setSubmitting={setSubmitting}
-            formItems={formItems}
-            rows={2}
-            cols={6}
-            rowGap={8}
-            className="mb-4"
-          />
-        )}
+        <Form
+          onItemChange={debouncedItemChange}
+          submitting={submitting}
+          setSubmitting={setSubmitting}
+          formItems={formItems}
+          rows={2}
+          cols={6}
+          rowGap={8}
+          className="mb-4"
+        />
 
         <RangeSlider
           boundries={boundries}
           onValueChange={debouncedSliderChange}
         />
       </div>
+      {data && data.getRooms && data.getRooms?.length < 1 && (
+        <div className="flex justify-center">
+          <h1 className="font-semibold text-2xl">
+            No rooms currently available
+          </h1>
+        </div>
+      )}
+      {loading && <Skeleton amount={3} />}
       {data?.getRooms?.map((room, index) => {
         defineBoundries(room.currentPrice)
         return (
