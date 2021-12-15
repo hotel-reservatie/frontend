@@ -1,10 +1,9 @@
-import React, { FunctionComponent, useEffect, useRef } from 'react'
+import React, { FunctionComponent } from 'react'
 import Image from 'next/image'
 import router, { useRouter } from 'next/router'
 import localizedPrice from 'src/utils/localePrice'
 import Button from 'src/components/button'
 import Link from 'next/link'
-import { MdFavorite } from 'react-icons/md'
 import FavButton from '../button/FavButton'
 import {
   Authenticated,
@@ -12,6 +11,7 @@ import {
   useAuth,
 } from 'src/providers/authProvider'
 import { useNewReservation } from 'src/providers/reservationProvider'
+
 interface RoomCardProps {
   img: string | undefined | null
   title: string | undefined | null
@@ -157,14 +157,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
     }
   }
 
-  if (loading) {
-    return (
-      <>
-        {/* replace this with skeleton loader */}
-        <p>loading..</p>
-      </>
-    )
-  } else if (type === 'roomType' && img?.includes('http')) {
+  if (type === 'roomType' && img?.includes('http')) {
     return (
       <RoomCardHolder img={img} title={title}>
         <div className="flex flex-row justify-between items-start">

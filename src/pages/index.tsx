@@ -11,6 +11,7 @@ import router from 'next/router'
 import FormItem from 'src/classes/FormItem'
 import Form from 'src/components/form'
 import { useFilterValues } from 'src/providers/filterProvider'
+import Skeleton from 'src/components/roomCard/Skeleton'
 
 const Home: NextPage = () => {
   const { t } = useTranslation('common')
@@ -67,6 +68,7 @@ const Home: NextPage = () => {
           </Button>
         </Card>
       </div>
+      {loading && <Skeleton amount={3} />}
       {data?.getRoomTypes.map((type, index) => (
         <RoomCard
           key={`roomcard-${index}`}
