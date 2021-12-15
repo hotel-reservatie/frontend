@@ -1,10 +1,9 @@
-import React, { FunctionComponent, useEffect, useRef } from 'react'
+import React, { FunctionComponent } from 'react'
 import Image from 'next/image'
 import router, { useRouter } from 'next/router'
 import localizedPrice from 'src/utils/localePrice'
 import Button from 'src/components/button'
 import Link from 'next/link'
-import { MdFavorite } from 'react-icons/md'
 import FavButton from '../button/FavButton'
 import {
   Authenticated,
@@ -12,8 +11,7 @@ import {
   useAuth,
 } from 'src/providers/authProvider'
 import { useNewReservation } from 'src/providers/reservationProvider'
-import ReactPlaceholder from 'react-placeholder/lib'
-import Skeleton from './Skeleton'
+
 interface RoomCardProps {
   img: string | undefined | null
   title: string | undefined | null
@@ -158,39 +156,34 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
       onFavToggle(id)
     }
   }
+
   if (type === 'roomType' && img?.includes('http')) {
     return (
-      <ReactPlaceholder
-        ready={!loading}
-        customPlaceholder={Skeleton}
-        delay={2000}
-      >
-        <RoomCardHolder img={img} title={title}>
-          <div className="flex flex-row justify-between items-start">
-            <RoomCardTitleSection title={title} desc={desc} />
-            <div>
-              <p className="mt-8 text-gray-400">Starting from</p>
-              <p className="font-bold text-2xl">
-                {price ? localizedPrice(price, locale) : ''}
-              </p>
-            </div>
+      <RoomCardHolder img={img} title={title}>
+        <div className="flex flex-row justify-between items-start">
+          <RoomCardTitleSection title={title} desc={desc} />
+          <div>
+            <p className="mt-8 text-gray-400">Starting from</p>
+            <p className="font-bold text-2xl">
+              {price ? localizedPrice(price, locale) : ''}
+            </p>
           </div>
-          <div className="flex flex-row justify-between my-8">
-            <span className="flex flex-row align-baseline">
-              <People />
-              <p className="font-bold text-2xl text-blue-700 ml-3">
-                {size ? size : ''}
-              </p>
-            </span>
-            <Button
-              className="w-max py-2 px-8 text-base font-normal leading-tight"
-              onClick={RoomTypeOnClick}
-            >
-              Show Availability
-            </Button>
-          </div>
-        </RoomCardHolder>
-      </ReactPlaceholder>
+        </div>
+        <div className="flex flex-row justify-between my-8">
+          <span className="flex flex-row align-baseline">
+            <People />
+            <p className="font-bold text-2xl text-blue-700 ml-3">
+              {size ? size : ''}
+            </p>
+          </span>
+          <Button
+            className="w-max py-2 px-8 text-base font-normal leading-tight"
+            onClick={RoomTypeOnClick}
+          >
+            Show Availability
+          </Button>
+        </div>
+      </RoomCardHolder>
     )
   } else if (type === 'room' && img?.includes('http')) {
     return (
