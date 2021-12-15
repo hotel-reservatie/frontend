@@ -1,0 +1,37 @@
+{
+  "home": {
+    "welcome": "Welkom bij Hotel MCT!",
+    "p1": "We hebben kamers voor iedere vakantieganger.",
+    "p2": "Neem eens een kijkje!"
+  },
+  "header": {
+    "about": "Over Ons",
+    "rooms": "Kamers",
+    "contact": "Contact",
+    "signin": "Inloggen",
+    "register": "Registreren"
+  },
+  "datepicker": {
+    "title": "In welke periode wilt u bij ons verblijven?",
+    "arrivaldate": "Aankomst datum",
+    "departuredate": "Vertrek datum",
+    "availability": "Toon beschikbaarheid"
+  },
+  "email": {
+    "address": "E-mail adres",
+    "placeholder": "bv. mark@gmail.com"
+  },
+  "login": "Log in",
+  "subtext": {
+    "register": "Ik heb nog geen login, laat me",
+    "login": "Heb je al een account?"
+  },
+  "loginpage": {
+    "register": "registreren"
+  },
+  "username": "Gebruikersnaam",
+  "password": {
+    "repeat": "Herhaal wachtwoord"
+  },
+  "register": "Registreer"
+}
