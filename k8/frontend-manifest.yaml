@@ -4,9 +4,10 @@ metadata:
   annotations:
     deployment.kubernetes.io/revision: "1"
     field.cattle.io/publicEndpoints: '[{"addresses":["192.168.10.150"],"port":30502,"protocol":"TCP","serviceName":"hotelreservaties-app:hotel-frontend-nodeport","allNodes":true}]'
+  creationTimestamp: "2021-12-15T09:53:54Z"
   name: hotel-frontend
   namespace: hotelreservaties-app
-  uid: 4d30f305-77bd-48ab-9ea9-d1d8ea65d135
+  uid: 1a0d8bee-0c9f-46fd-ab7a-6fac6f326783
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -31,9 +32,9 @@ spec:
         - secretRef:
             name: frontend-env
             optional: false
-        image: ghcr.io/everaertalexander/hotel-reservatie-frontend
+        image: ghcr.io/everaertalexander/hotel-reservatie-frontend:v0.0.1
         imagePullPolicy: Always
-        name: hotel-frontend
+        name: hotel-api
         ports:
         - containerPort: 3001
           name: 3001tcp30502
@@ -42,6 +43,8 @@ spec:
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: ghcrsecret
       nodeName: everaert-alexander
       restartPolicy: Always
       schedulerName: default-scheduler
