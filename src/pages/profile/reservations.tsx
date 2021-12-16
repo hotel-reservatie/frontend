@@ -83,7 +83,7 @@ const Reservations = () => {
                     </div>
                   </div>
                   <div className="flex flex-col justify-between text-right">
-                    <Link href={`reservation/${r.reservationId}`}>
+                    <Link href={`/reservation/${r.reservationId}`}>
                       <a>
                         <MdArrowForward
                           size={24}
