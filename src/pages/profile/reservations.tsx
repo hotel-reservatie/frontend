@@ -20,6 +20,7 @@ import { HiMinusCircle } from 'react-icons/hi'
 import Dialog from 'src/components/dialog'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import ProfileNavigation from 'src/components/navigation/profileNavigation'
 
 const Reservations = () => {
   const router = useRouter()
@@ -46,14 +47,13 @@ const Reservations = () => {
   }, [user])
 
   return (
-    <PageLayout>
-      <PageTitle>My Reservations</PageTitle>
+    <ProfileNavigation title='My Reservations'>
       <Authenticated>
-        <div className="md:grid md:grid-cols-2 gap-8">
+        <div className="lg:grid lg:grid-cols-2 gap-x-8">
           {userReservationResult?.data?.getUserReservations.map((r, index) => {
             return (
               <Card
-                className="w-full px-8 py-8 max-w-full"
+                className="w-full px-8 py-8 max-w-full mb-8 mx-0"
                 key={r.reservationId}
               >
                 <div className="flex justify-between">
@@ -69,7 +69,7 @@ const Reservations = () => {
                         <MdPeople size={32} />
                         <p className="font-bold text-2xl  ml-3">0</p>
                       </span>
-                      <p className=" font-semibold text-2xl ">
+                      <p className=" font-semibold text-2xl whitespace-nowrap">
                         Rooms: {r.roomsReserved?.length}
                       </p>
                       <HiMinusCircle
@@ -113,7 +113,7 @@ const Reservations = () => {
         onRequestClose={handleClose}
         description="This action will delete your reservation permanently. Continue?"
       />
-    </PageLayout>
+    </ProfileNavigation>
   )
 }
 

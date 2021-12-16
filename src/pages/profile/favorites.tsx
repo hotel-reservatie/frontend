@@ -3,6 +3,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import PageLayout from 'src/components/layout/PageLayout'
+import ProfileNavigation from 'src/components/navigation/profileNavigation'
 import RoomCard from 'src/components/roomCard'
 import PageTitle from 'src/components/text/PageTitle'
 import {
@@ -33,8 +34,7 @@ const Favorites = () => {
     }
   }, [user])
   return (
-    <PageLayout>
-      <PageTitle>My Favorites</PageTitle>
+    <ProfileNavigation title='My Favorites'>
       <Authenticated>
         {userFavs.data?.getUserFavorites &&
           userFavs.data.getUserFavorites.length < 1 && (
@@ -71,7 +71,7 @@ const Favorites = () => {
       <NotAuthenticated>
         <p>Please sign in to view your favorites...</p>
       </NotAuthenticated>
-    </PageLayout>
+    </ProfileNavigation>
   )
 }
 
