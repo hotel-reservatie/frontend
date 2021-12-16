@@ -71,9 +71,11 @@ export type NewReservationInput = {
   reservationId?: Maybe<Scalars['ID']>;
   roomsReserved?: Maybe<Array<RoomReservedInput>>;
   startDate: Scalars['DateTime'];
+  totalAmountOfDays?: Maybe<Scalars['Float']>;
   totalAmountOfPeople?: Maybe<Scalars['Float']>;
   totalPrice?: Maybe<Scalars['Float']>;
   user?: Maybe<UserInput>;
+  weekendDays?: Maybe<Scalars['Float']>;
 };
 
 export type NewReviewInput = {
@@ -90,6 +92,7 @@ export type Query = {
   __typename?: 'Query';
   getAllRooms?: Maybe<Array<Room>>;
   getFilters: FiltersResponse;
+  getReservation: Reservation;
   getRoomById?: Maybe<Room>;
   getRoomReviews: Array<Review>;
   getRoomTypes: Array<RoomTypeResponse>;
@@ -98,6 +101,11 @@ export type Query = {
   getUserReservations: Array<Reservation>;
   getUserReviews?: Maybe<Array<Review>>;
   validateReservation: ValidateReservationResponse;
+};
+
+
+export type QueryGetReservationArgs = {
+  data: Scalars['String'];
 };
 
 
@@ -128,9 +136,11 @@ export type Reservation = {
   reservationId?: Maybe<Scalars['ID']>;
   roomsReserved?: Maybe<Array<RoomReserved>>;
   startDate: Scalars['DateTime'];
+  totalAmountOfDays?: Maybe<Scalars['Float']>;
   totalAmountOfPeople?: Maybe<Scalars['Float']>;
   totalPrice?: Maybe<Scalars['Float']>;
   user?: Maybe<User>;
+  weekendDays?: Maybe<Scalars['Float']>;
 };
 
 export type ReservationInput = {
@@ -139,9 +149,11 @@ export type ReservationInput = {
   reservationId?: Maybe<Scalars['ID']>;
   roomsReserved?: Maybe<Array<RoomReservedInput>>;
   startDate: Scalars['DateTime'];
+  totalAmountOfDays?: Maybe<Scalars['Float']>;
   totalAmountOfPeople?: Maybe<Scalars['Float']>;
   totalPrice?: Maybe<Scalars['Float']>;
   user?: Maybe<UserInput>;
+  weekendDays?: Maybe<Scalars['Float']>;
 };
 
 export type Review = {
@@ -341,6 +353,13 @@ export type DeleteReservationMutationVariables = Exact<{
 
 export type DeleteReservationMutation = { __typename?: 'Mutation', deleteReservation: string };
 
+export type GetReservationQueryVariables = Exact<{
+  reservationId: Scalars['String'];
+}>;
+
+
+export type GetReservationQuery = { __typename?: 'Query', getReservation: { __typename?: 'Reservation', reservationId?: string | null | undefined, startDate: any, endDate: any, totalPrice?: number | null | undefined, totalAmountOfDays?: number | null | undefined, weekendDays?: number | null | undefined, roomsReserved?: Array<{ __typename?: 'RoomReserved', price: number, room: { __typename?: 'Room', roomId?: string | null | undefined, roomName?: string | null | undefined, surface?: number | null | undefined, currentPrice?: number | null | undefined, weekendMultiplier?: number | null | undefined, roomType: { __typename?: 'RoomType', capacity: number } } }> | null | undefined } };
+
 export type GetUserReservationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -360,6 +379,13 @@ export type AddReviewMutationVariables = Exact<{
 
 
 export type AddReviewMutation = { __typename?: 'Mutation', addReview?: { __typename?: 'Review', reviewId?: string | null | undefined, reviewScore: number, title: string, description?: string | null | undefined, createdAt?: any | null | undefined } | null | undefined };
+
+export type DeleteReviewMutationVariables = Exact<{
+  reviewId: Scalars['String'];
+}>;
+
+
+export type DeleteReviewMutation = { __typename?: 'Mutation', deleteReview: string };
 
 export type GetAllRoomTypesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -383,7 +409,7 @@ export type GetRoomByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetRoomByIdQuery = { __typename?: 'Query', getRoomById?: { __typename?: 'Room', roomId?: string | null | undefined, roomName?: string | null | undefined, facilities?: Array<string> | null | undefined, description?: string | null | undefined, images?: Array<string> | null | undefined, surface?: number | null | undefined, currentPrice?: number | null | undefined, roomType: { __typename?: 'RoomType', typeName: string, description: string }, tags?: Array<{ __typename?: 'Tag', name: string }> | null | undefined, reviews?: Array<{ __typename?: 'Review', title: string, description?: string | null | undefined, reviewScore: number, createdAt?: any | null | undefined, user?: { __typename?: 'User', userName?: string | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
+export type GetRoomByIdQuery = { __typename?: 'Query', getRoomById?: { __typename?: 'Room', roomId?: string | null | undefined, roomName?: string | null | undefined, facilities?: Array<string> | null | undefined, description?: string | null | undefined, images?: Array<string> | null | undefined, surface?: number | null | undefined, currentPrice?: number | null | undefined, roomType: { __typename?: 'RoomType', typeName: string, description: string }, tags?: Array<{ __typename?: 'Tag', name: string }> | null | undefined, reviews?: Array<{ __typename?: 'Review', reviewId?: string | null | undefined, title: string, description?: string | null | undefined, reviewScore: number, createdAt?: any | null | undefined, user?: { __typename?: 'User', userId?: string | null | undefined, userName?: string | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
 
 
 export const GetUserFavoritesDocument = gql`
@@ -582,6 +608,59 @@ export function useDeleteReservationMutation(baseOptions?: Apollo.MutationHookOp
 export type DeleteReservationMutationHookResult = ReturnType<typeof useDeleteReservationMutation>;
 export type DeleteReservationMutationResult = Apollo.MutationResult<DeleteReservationMutation>;
 export type DeleteReservationMutationOptions = Apollo.BaseMutationOptions<DeleteReservationMutation, DeleteReservationMutationVariables>;
+export const GetReservationDocument = gql`
+    query getReservation($reservationId: String!) {
+  getReservation(data: $reservationId) {
+    reservationId
+    startDate
+    endDate
+    totalPrice
+    totalAmountOfDays
+    weekendDays
+    roomsReserved {
+      price
+      room {
+        roomId
+        roomName
+        roomType {
+          capacity
+        }
+        surface
+        currentPrice
+        weekendMultiplier
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetReservationQuery__
+ *
+ * To run a query within a React component, call `useGetReservationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReservationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetReservationQuery({
+ *   variables: {
+ *      reservationId: // value for 'reservationId'
+ *   },
+ * });
+ */
+export function useGetReservationQuery(baseOptions: Apollo.QueryHookOptions<GetReservationQuery, GetReservationQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetReservationQuery, GetReservationQueryVariables>(GetReservationDocument, options);
+      }
+export function useGetReservationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReservationQuery, GetReservationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetReservationQuery, GetReservationQueryVariables>(GetReservationDocument, options);
+        }
+export type GetReservationQueryHookResult = ReturnType<typeof useGetReservationQuery>;
+export type GetReservationLazyQueryHookResult = ReturnType<typeof useGetReservationLazyQuery>;
+export type GetReservationQueryResult = Apollo.QueryResult<GetReservationQuery, GetReservationQueryVariables>;
 export const GetUserReservationsDocument = gql`
     query getUserReservations {
   getUserReservations {
@@ -701,6 +780,37 @@ export function useAddReviewMutation(baseOptions?: Apollo.MutationHookOptions<Ad
 export type AddReviewMutationHookResult = ReturnType<typeof useAddReviewMutation>;
 export type AddReviewMutationResult = Apollo.MutationResult<AddReviewMutation>;
 export type AddReviewMutationOptions = Apollo.BaseMutationOptions<AddReviewMutation, AddReviewMutationVariables>;
+export const DeleteReviewDocument = gql`
+    mutation deleteReview($reviewId: String!) {
+  deleteReview(reviewId: $reviewId)
+}
+    `;
+export type DeleteReviewMutationFn = Apollo.MutationFunction<DeleteReviewMutation, DeleteReviewMutationVariables>;
+
+/**
+ * __useDeleteReviewMutation__
+ *
+ * To run a mutation, you first call `useDeleteReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteReviewMutation, { data, loading, error }] = useDeleteReviewMutation({
+ *   variables: {
+ *      reviewId: // value for 'reviewId'
+ *   },
+ * });
+ */
+export function useDeleteReviewMutation(baseOptions?: Apollo.MutationHookOptions<DeleteReviewMutation, DeleteReviewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteReviewMutation, DeleteReviewMutationVariables>(DeleteReviewDocument, options);
+      }
+export type DeleteReviewMutationHookResult = ReturnType<typeof useDeleteReviewMutation>;
+export type DeleteReviewMutationResult = Apollo.MutationResult<DeleteReviewMutation>;
+export type DeleteReviewMutationOptions = Apollo.BaseMutationOptions<DeleteReviewMutation, DeleteReviewMutationVariables>;
 export const GetAllRoomTypesDocument = gql`
     query getAllRoomTypes {
   getRoomTypes {
@@ -845,11 +955,13 @@ export const GetRoomByIdDocument = gql`
       name
     }
     reviews {
+      reviewId
       title
       description
       reviewScore
       createdAt
       user {
+        userId
         userName
       }
     }
