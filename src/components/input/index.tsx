@@ -28,7 +28,11 @@ const Input: FunctionComponent<InputProps> = ({
     { 'text-red-600': faulty === 'true' },
   )
   const inputStyling = classNames(
-    'px-4 py-4 mb-4 rounded-full border border-blue-400 bg-blue-100 w-full focus:outline-none focus-visible:ring focus-visible:ring-blue-50 placeholder-blue-400',
+    'px-4 py-4 mb-4 rounded-full border w-full focus:outline-none focus-visible:ring ',
+    {
+      'border-blue-400 bg-blue-100 focus-visible:ring-blue-50 placeholder-blue-400':
+        faulty === 'false',
+    },
     {
       'border-red-400 focus-visible:ring-red-50 placeholder-red-400 bg-red-100':
         faulty === 'true',
@@ -37,9 +41,14 @@ const Input: FunctionComponent<InputProps> = ({
 
   return (
     <div className={className}>
-      <label className={labelStyling} htmlFor={id}>
-        {label ?? ''}
-      </label>
+      <span className="flex justify-between items-center">
+        <label className={labelStyling} htmlFor={id}>
+          {label ?? ''}
+        </label>
+        {faulty && errormessage && (
+          <p className={classNames(labelStyling, 'text-xs')}>{errormessage}</p>
+        )}
+      </span>
       <input
         autoComplete={autoComplete}
         onChange={onChange}
