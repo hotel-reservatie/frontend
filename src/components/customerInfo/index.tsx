@@ -11,6 +11,7 @@ interface CustomerInfoSectionProps {
   onSubmit: (e: FormItem[]) => void
   setSubmitting: React.Dispatch<React.SetStateAction<boolean>>
   submitting: boolean
+  requiredFormFields?: boolean
 }
 
 interface CustomerInfoItemProps
@@ -40,6 +41,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
   submitting,
   onSubmit,
   setSubmitting,
+  requiredFormFields = false
 }) => {
   const userInfoForm: Array<FormItem> = [
     new FormItem({
@@ -50,7 +52,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       value: userInfo.firstName,
       name: 'firstname',
       className: 'col-span-2',
-      required: false,
+      required: requiredFormFields,
     }),
     new FormItem({
       label: 'Last Name',
@@ -60,7 +62,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       placeholder: 'Doe',
       name: 'lastname',
       className: 'col-span-2',
-      required: false,
+      required: requiredFormFields,
     }),
     new FormItem({
       label: 'Billing Email',
@@ -71,7 +73,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       placeholder: 'Doe',
       name: 'email',
       className: 'col-span-2',
-      required: false,
+      required: requiredFormFields,
     }),
     new FormItem({
       label: 'Phone',
@@ -80,7 +82,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       autoComplete: 'tel',
       name: 'phone',
       className: 'col-span-2',
-      required: false,
+      required: requiredFormFields,
     }),
     new FormItem({
       label: 'Address',
@@ -89,7 +91,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       autoComplete: 'street-address',
       name: 'address',
       className: 'col-span-2',
-      required: false,
+      required: requiredFormFields,
     }),
     new FormItem({
       label: 'City',
@@ -97,7 +99,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       value: userInfo.city,
       autoComplete: 'address-level2',
       name: 'city',
-      required: false,
+      required: requiredFormFields,
     }),
     new FormItem({
       type: 'number',
@@ -106,7 +108,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       value: userInfo.postal,
       autoComplete: 'postal-code',
       name: 'postal',
-      required: false,
+      required: requiredFormFields,
     }),
   ]
 
@@ -130,7 +132,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
         />
         <CustomerInfoItem
           title="Billing Email"
-          value={userInfo.email as string}
+          value={userInfo.reservationEmail as string}
           className='col-span-2'
         />
         <CustomerInfoItem

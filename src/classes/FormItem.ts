@@ -74,15 +74,9 @@ class FormItem {
 
     if (formItem.required == undefined) {
       this.required = true
-    }
-    if (formItem.required == false) {
-      this.required = false
-    }
-    if (formItem.required) {
+    } else {
       this.required = formItem.required
     }
-
-
 
   }
 }

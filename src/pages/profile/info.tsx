@@ -29,9 +29,11 @@ const Info = () => {
   }
 
   const isEmpty = (item: FormItem) => {
-    if (!item.value || item.value == '') {
+    if (!item.value) {
       return true
     }
+
+    if (!'') console.log('hi')
 
     return false
   }
@@ -39,27 +41,15 @@ const Info = () => {
   const handleSubmit = (e: FormItem[]) => {
     const user: UserInput = {}
 
-    if (!isEmpty(e[0])) {
-      user.firstName = e[0].value
-    }
-    if (!isEmpty(e[1])) {
-      user.lastName = e[1].value
-    }
-    if (!isEmpty(e[2])) {
-      user.reservationEmail = e[2].value
-    }
-    if (!isEmpty(e[3])) {
-      user.phone = e[3].value
-    }
-    if (!isEmpty(e[4])) {
-      user.address = e[4].value
-    }
-    if (!isEmpty(e[5])) {
-      user.city = e[5].value
-    }
-    if (!isEmpty(e[6])) {
-      user.postal = parseInt(e[6].value) 
-    }
+    user.firstName = e[0].value
+    user.lastName = e[1].value
+    user.reservationEmail = e[2].value
+    user.phone = e[3].value
+    user.address = e[4].value
+    user.city = e[5].value
+    user.postal = parseInt(e[6].value)
+
+    console.log(user)
 
     updateUserInfo({ variables: { user: user } }).then(() => {
       setIsEditing(false)
