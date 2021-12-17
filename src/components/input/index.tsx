@@ -37,9 +37,14 @@ const Input: FunctionComponent<InputProps> = ({
 
   return (
     <div className={className}>
-      <label className={labelStyling} htmlFor={id}>
-        {label ?? ''}
-      </label>
+      <span className="flex justify-between items-center">
+        <label className={labelStyling} htmlFor={id}>
+          {label ?? ''}
+        </label>
+        {faulty && errormessage && (
+          <p className={classNames(labelStyling, 'text-xs')}>{errormessage}</p>
+        )}
+      </span>
       <input
         autoComplete={autoComplete}
         onChange={onChange}
