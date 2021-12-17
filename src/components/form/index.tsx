@@ -4,6 +4,7 @@ import FormItem, { FormItemOption } from 'src/classes/FormItem'
 import Dropdown from '../dropdown'
 import Input from '../input'
 import DateInput from '../input/DateInput'
+import TextArea from '../input/TextArea'
 
 interface FormProps {
   formItems: Array<FormItem>
@@ -76,6 +77,21 @@ const Form: FunctionComponent<FormProps> = ({
     setItems(newItems)
   }
 
+  function handleTextAreaChange(e: FormEvent<HTMLTextAreaElement>) {
+    const index = findIndexByName(items, e.currentTarget.name)
+
+    if (index > -1) {
+      const newItems = [
+        ...items.slice(0, index),
+        new FormItem({ ...items[index], value: e.currentTarget.value }),
+        ...items.slice(index + 1),
+      ]
+      if (onItemChange) onItemChange(newItems[index])
+
+      setItems(newItems)
+    }
+  }
+
   function isEmpty(formItem: FormItem, index: number) {
     if (formItem.required) {
       if (formItem.value) {
@@ -137,7 +153,8 @@ const Form: FunctionComponent<FormProps> = ({
   }
 
   function handleEnterKeyPress(e: React.KeyboardEvent<HTMLFormElement>) {
-    if (e.key === 'Enter') {
+    const target = e.target as HTMLElement
+    if (e.key === 'Enter' && target.tagName !== 'TEXTAREA') {
       if (setSubmitting) setSubmitting(true)
     }
   }
@@ -193,6 +210,18 @@ const Form: FunctionComponent<FormProps> = ({
               placeholder={item.placeholder ?? 'Placeholder is required'}
               name={item.name ?? 'name is required'}
               multiSelect={item.type === 'dropdown-multi-select'}
+            />
+          )
+        } else if (item.type === 'text-area') {
+          return (
+            <TextArea
+              key={`textarea-${index}`}
+              onChange={handleTextAreaChange}
+              value={items[index].value}
+              errormessage={item.errormessage}
+              faulty={items[index].faulty}
+              className={className}
+              {...item}
             />
           )
         } else {

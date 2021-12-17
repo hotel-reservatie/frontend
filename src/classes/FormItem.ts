@@ -53,10 +53,10 @@ class FormItem {
     | 'week'
     | 'dropdown'
     | 'dropdown-multi-select'
+    | 'text-area'
+  rows?: number
 
   constructor(formItem: FormItem) {
-
-
     this.type = getValueFromObject(formItem, 'type', 'text')
     this.value = getValueFromObject(formItem, 'value', '')
     this.maxchars = getValueFromObject(formItem, 'maxchars', 30)
@@ -78,6 +78,9 @@ class FormItem {
       this.required = formItem.required
     }
 
+    if (this.type === 'text-area') {
+      this.rows = getValueFromObject(formItem, 'rows', undefined)
+    }
   }
 }
 
