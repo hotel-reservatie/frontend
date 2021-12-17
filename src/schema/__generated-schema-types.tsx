@@ -16,19 +16,6 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type Favorite = {
-  __typename?: 'Favorite';
-  favoriteId: Scalars['String'];
-  room: Room;
-  user: User;
-};
-
-export type FavoriteInput = {
-  favoriteId: Scalars['String'];
-  room: RoomInput;
-  user: UserInput;
-};
-
 export type FiltersResponse = {
   __typename?: 'FiltersResponse';
   maxCapacity?: Maybe<Scalars['Float']>;
@@ -310,14 +297,11 @@ export type User = {
   address?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
-  favorites?: Maybe<Array<Favorite>>;
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   postal?: Maybe<Scalars['Float']>;
   reservationEmail?: Maybe<Scalars['String']>;
-  reservations?: Maybe<Array<Reservation>>;
-  reviews?: Maybe<Array<Review>>;
   userId?: Maybe<Scalars['String']>;
   userName?: Maybe<Scalars['String']>;
 };
@@ -326,14 +310,11 @@ export type UserInput = {
   address?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
-  favorites?: Maybe<Array<FavoriteInput>>;
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   postal?: Maybe<Scalars['Float']>;
   reservationEmail?: Maybe<Scalars['String']>;
-  reservations?: Maybe<Array<ReservationInput>>;
-  reviews?: Maybe<Array<ReviewInput>>;
   userId?: Maybe<Scalars['String']>;
   userName?: Maybe<Scalars['String']>;
 };
@@ -440,7 +421,7 @@ export type GetRoomByIdQuery = { __typename?: 'Query', getRoomById?: { __typenam
 export type GetUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'User', userId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, userName?: string | null | undefined, email?: string | null | undefined, reservationEmail?: string | null | undefined, phone?: string | null | undefined, address?: string | null | undefined, city?: string | null | undefined, postal?: number | null | undefined, reviews?: Array<{ __typename?: 'Review', reviewId?: string | null | undefined, reviewScore: number, room: { __typename?: 'Room', roomName?: string | null | undefined } }> | null | undefined, reservations?: Array<{ __typename?: 'Reservation', reservationId?: string | null | undefined, startDate: any, totalPrice?: number | null | undefined }> | null | undefined, favorites?: Array<{ __typename?: 'Favorite', favoriteId: string }> | null | undefined } };
+export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'User', userId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, userName?: string | null | undefined, email?: string | null | undefined, reservationEmail?: string | null | undefined, phone?: string | null | undefined, address?: string | null | undefined, city?: string | null | undefined, postal?: number | null | undefined } };
 
 export type UpdateUserMutationVariables = Exact<{
   user: UserInput;
@@ -1047,21 +1028,6 @@ export const GetUserInfoDocument = gql`
     address
     city
     postal
-    reviews {
-      reviewId
-      reviewScore
-      room {
-        roomName
-      }
-    }
-    reservations {
-      reservationId
-      startDate
-      totalPrice
-    }
-    favorites {
-      favoriteId
-    }
   }
 }
     `;

@@ -31,7 +31,7 @@ const Reservation = () => {
   const handleCancelBtn = () => {
     deleteReservation({ variables: { reservationId: reservationId as string } }).then(() => {
         setDialogIsVisible(false);
-        router.push('/reservations')
+        router.push('/profile/reservations')
       })
   }
 
