@@ -5,6 +5,7 @@ import Dropdown from '../dropdown'
 import Input from '../input'
 import DateInput from '../input/DateInput'
 import TextArea from '../input/TextArea'
+import FormError from './Error'
 
 interface FormProps {
   formItems: Array<FormItem>
@@ -17,6 +18,7 @@ interface FormProps {
   onItemChange?: any
   onSubmit?: any
   className?: string
+  externalError?: string
 }
 
 const findIndexByName = (arr: FormItem[], searchName: string) => {
@@ -34,6 +36,7 @@ const Form: FunctionComponent<FormProps> = ({
   setSubmitting,
   onItemChange,
   className = '',
+  externalError,
 }) => {
   const [items, setItems] = useState<Array<FormItem>>(formItems)
 
@@ -117,7 +120,11 @@ const Form: FunctionComponent<FormProps> = ({
         item.errormessage = 'Verplicht!'
         counter++
         return item
-      } else if (item.type === 'email' && !isValidEmail(item) && item.required) {
+      } else if (
+        item.type === 'email' &&
+        !isValidEmail(item) &&
+        item.required
+      ) {
         counter++
         item.faulty = 'true'
         item.errormessage = 'Geen geldig e-mail'
@@ -238,6 +245,7 @@ const Form: FunctionComponent<FormProps> = ({
           )
         }
       })}
+      {externalError && <FormError message={externalError} />}
     </form>
   )
 }
