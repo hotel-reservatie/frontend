@@ -131,23 +131,11 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
   onFavToggle,
 }) => {
   const { locale } = useRouter()
-  const { user } = useAuth()
   const { addRoom } = useNewReservation()
-
-  function RoomTypeOnClick() {
-    router.push({ pathname: '/rooms', query: { roomtype: id ?? '' } })
-  }
 
   const handleBookRoom = () => {
     if (id) {
       addRoom(id as string)
-      router.push('/newreservation')
-    }
-  }
-
-  const handleMoreInfo = () => {
-    if (id) {
-      router.push(`/room/${id}`)
     }
   }
 
@@ -176,11 +164,8 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
               {size ? size : ''}
             </p>
           </span>
-          <Button
-            className="w-max py-2 px-8 text-base font-normal leading-tight"
-            onClick={RoomTypeOnClick}
-          >
-            Show Availability
+          <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
+            <Link href={'/rooms'}>Show Availability</Link>
           </Button>
         </div>
       </RoomCardHolder>
@@ -236,15 +221,12 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
                 onClick={handleBookRoom}
                 className="w-max py-2 px-8 text-base font-normal leading-tight"
               >
-                Book this room
+                <Link href={'/newreservation'}>Book this room</Link>
               </Button>
             </Authenticated>
             <NotAuthenticated>
-              <Button
-                onClick={handleMoreInfo}
-                className="w-max py-2 px-8 text-base font-normal leading-tight"
-              >
-                More info
+              <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
+                <Link href={`/room/${id}`}>More info</Link>
               </Button>
             </NotAuthenticated>
           </div>
