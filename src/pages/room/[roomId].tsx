@@ -1,21 +1,17 @@
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import React, { FormEvent, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PageLayout from 'src/components/layout/PageLayout'
 import PageTitle from 'src/components/text/PageTitle'
 import {
   NewReviewInput,
-  Room,
   useDeleteReviewMutation,
   useGetRoomByIdLazyQuery,
-  useGetRoomByIdQuery,
   useGetUserFavoritesLazyQuery,
-  useGetUserFavoritesQuery,
 } from 'src/schema'
-import Image from 'next/image'
 import Button from 'src/components/button'
 import SubTitle from 'src/components/text/SubTitle'
-import { MdDone, MdOutlinePerson, MdStar, MdFavorite } from 'react-icons/md'
+import { MdDone } from 'react-icons/md'
 import Card from 'src/components/card'
 import ImageScroller from 'src/components/image/ImageScroller'
 import { BsTag } from 'react-icons/bs'
@@ -30,10 +26,11 @@ import AddReview from 'src/schema/reviews/addReview.schema'
 import formatDate from 'src/utils/formatDate'
 import FavButton from 'src/components/button/FavButton'
 import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
-import { NewReviewStars, ReviewStars } from 'src/components/reviewStar'
+import { NewReviewStars } from 'src/components/reviewStar'
 import { useNewReservation } from 'src/providers/reservationProvider'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import ReviewCard from 'src/components/card/ReviewCard'
+import Link from 'next/link'
 
 const RoomPage: NextPage = () => {
   const router = useRouter()
@@ -93,7 +90,6 @@ const RoomPage: NextPage = () => {
   const handleBookRoom = () => {
     if (roomId) {
       addRoom(roomId as string)
-      router.push('/newreservation')
     }
   }
 
@@ -168,7 +164,9 @@ const RoomPage: NextPage = () => {
           </h2>
           <p>{data?.getRoomById?.description}</p>
           <Authenticated>
-            <Button onClick={handleBookRoom}>Book this room</Button>
+            <Button onClick={handleBookRoom}>
+              <Link href={`/newreservation`}>Book this room</Link>
+            </Button>
           </Authenticated>
         </div>
       </div>

@@ -87,16 +87,18 @@ const RoomCardHolder: FunctionComponent<RoomCardHolderProps> = ({
   title,
 }) => {
   return (
-    <div className="max-w-7xl mx-auto grid grid-cols-4 mb-8 items-center rounded-xl shadow bg-white">
+    <div className="max-w-7xl mx-auto grid grid-cols-4 mb-8 items-center rounded-xl shadow bg-white relative">
       <div className="h-80 relative">
-        <Image
-          src={img ? img : '/not_found.svg'}
-          alt={title ? title : 'Not found'}
-          layout="fill" // required
-          objectFit="cover" // change to suit your needs
-          className="rounded-l-xl"
-          priority
-        />
+        {img && title && (
+          <Image
+            src={img}
+            alt={title}
+            layout="fill" // required
+            objectFit="cover" // change to suit your needs
+            className="rounded-l-xl"
+            priority
+          />
+        )}
       </div>
       <div className="col-span-3 flex  flex-col px-8 h-full content-between justify-between">
         {children}
