@@ -1,9 +1,4 @@
-import React, {
-  Fragment,
-  FunctionComponent,
-  MouseEventHandler,
-  useState,
-} from 'react'
+import React, { Fragment, FunctionComponent, MouseEventHandler } from 'react'
 import { MdClose } from 'react-icons/md'
 import SubTitle from '../text/SubTitle'
 import { Dialog as Modal, Transition } from '@headlessui/react'
