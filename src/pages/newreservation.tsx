@@ -86,17 +86,6 @@ const NewReservation = () => {
 
   const handleConfirmButton = () => {
     setSubmitting(true)
-    if (newReservation) {
-      createReservation({
-        variables: {
-          newReservation: newReservation.details,
-          roomIds: newReservation.roomIds,
-        },
-      }).then(async () => {
-        resetReservation()
-        await router.push('/reservations')
-      })
-    }
   }
 
   useEffect(() => {
@@ -128,6 +117,17 @@ const NewReservation = () => {
 
   function handleSubmit(e: FormItem[]) {
     console.log(e)
+    if (newReservation) {
+      createReservation({
+        variables: {
+          newReservation: newReservation.details,
+          roomIds: newReservation.roomIds,
+        },
+      }).then(async () => {
+        resetReservation()
+        await router.push('profile/reservations')
+      })
+    }
   }
 
   // TODO: Add dateform that uses filterValue for the dates OR if there's already a reservation use those dates

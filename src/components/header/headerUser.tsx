@@ -51,11 +51,11 @@ export const UserDropDown = () => {
     <div className=" z-50 absolute top-16 right-0 bg-white border-1 rounded-lg border-blue-400 shadow">
       <ul>
         <DropDownItem Icon={MdPerson} title={'Profile'} href="/profile/info" />
-        <DropDownItem Icon={MdFavorite} title={'Favorites'} href="profile/favorites" />
+        <DropDownItem Icon={MdFavorite} title={'Favorites'} href="/profile/favorites" />
         <DropDownItem
           Icon={MdListAlt}
           title={'My Reservations'}
-          href="profile/reservations"
+          href="/profile/reservations"
         />
         <DropDownItem
           Icon={MdOutlineShoppingBasket}

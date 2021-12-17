@@ -42,6 +42,7 @@ export type Mutation = {
   createReservation: Reservation;
   deleteReservation: Scalars['String'];
   deleteReview: Scalars['String'];
+  saveUser: Scalars['Boolean'];
   toggleFavorite: Scalars['String'];
   updateReview: Review;
 };
@@ -65,6 +66,11 @@ export type MutationDeleteReservationArgs = {
 
 export type MutationDeleteReviewArgs = {
   reviewId: Scalars['String'];
+};
+
+
+export type MutationSaveUserArgs = {
+  data: UserInput;
 };
 
 
@@ -435,6 +441,13 @@ export type GetUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'User', userId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, userName?: string | null | undefined, email?: string | null | undefined, reservationEmail?: string | null | undefined, phone?: string | null | undefined, address?: string | null | undefined, city?: string | null | undefined, postal?: number | null | undefined, reviews?: Array<{ __typename?: 'Review', reviewId?: string | null | undefined, reviewScore: number, room: { __typename?: 'Room', roomName?: string | null | undefined } }> | null | undefined, reservations?: Array<{ __typename?: 'Reservation', reservationId?: string | null | undefined, startDate: any, totalPrice?: number | null | undefined }> | null | undefined, favorites?: Array<{ __typename?: 'Favorite', favoriteId: string }> | null | undefined } };
+
+export type UpdateUserMutationVariables = Exact<{
+  user: UserInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', saveUser: boolean };
 
 
 export const GetUserFavoritesDocument = gql`
@@ -1079,3 +1092,34 @@ export function useGetUserInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetUserInfoQueryHookResult = ReturnType<typeof useGetUserInfoQuery>;
 export type GetUserInfoLazyQueryHookResult = ReturnType<typeof useGetUserInfoLazyQuery>;
 export type GetUserInfoQueryResult = Apollo.QueryResult<GetUserInfoQuery, GetUserInfoQueryVariables>;
+export const UpdateUserDocument = gql`
+    mutation updateUser($user: UserInput!) {
+  saveUser(data: $user)
+}
+    `;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      user: // value for 'user'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;

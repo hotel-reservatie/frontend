@@ -101,7 +101,7 @@ const Form: FunctionComponent<FormProps> = ({
         item.errormessage = 'Verplicht!'
         counter++
         return item
-      } else if (item.type === 'email' && !isValidEmail(item)) {
+      } else if (item.type === 'email' && !isValidEmail(item) || isEmpty(item, index)) {
         counter++
         item.faulty = 'true'
         item.errormessage = 'Geen geldig e-mail'
