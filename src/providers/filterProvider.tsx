@@ -26,7 +26,10 @@ const initialFilterValues: RoomFilters = {
 
 function reducer(
   state: RoomFilters,
-  action: { type: string; payload: { filterName: string; value: any } },
+  action: {
+    type: string
+    payload: { filterName: string; value: any }
+  },
 ): RoomFilters {
   switch (action.type) {
     case 'update':
@@ -45,7 +48,12 @@ const FilterProvider: FunctionComponent = ({ children }) => {
 
   const updateFilterValue = (filterName: string | undefined, value: any) => {
     if (filterName && filterName in filters) {
-      dispatch({ type: 'update', payload: { filterName, value } })
+      if (filterName === 'maxCapacity')
+        dispatch({
+          type: 'update',
+          payload: { filterName, value: Number(value) },
+        })
+      else dispatch({ type: 'update', payload: { filterName, value } })
     }
   }
 

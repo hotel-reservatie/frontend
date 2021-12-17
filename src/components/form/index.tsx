@@ -55,16 +55,32 @@ const Form: FunctionComponent<FormProps> = ({
     }
   }
 
-  function handleDropdownChange(e: FormItemOption, name: string) {
+  function handleDropdownChange(
+    e: FormItemOption | Array<FormItemOption>,
+    name: string,
+  ) {
     const index = findIndexByName(items, name)
     if (index > -1) {
-      const newItems = [
-        ...items.slice(0, index),
-        new FormItem({ ...items[index], value: e.id }),
-        ...items.slice(index + 1),
-      ]
-      if (onItemChange) onItemChange(newItems[index])
-      setItems(newItems)
+      if (Array.isArray(e)) {
+        const ids = e.map(i => i.id)
+        const newItems = [
+          ...items.slice(0, index),
+          new FormItem({ ...items[index], value: ids }),
+          ...items.slice(index + 1),
+        ]
+        console.log(newItems[index])
+
+        if (onItemChange) onItemChange(newItems[index])
+        setItems(newItems)
+      } else {
+        const newItems = [
+          ...items.slice(0, index),
+          new FormItem({ ...items[index], value: e.id }),
+          ...items.slice(index + 1),
+        ]
+        if (onItemChange) onItemChange(newItems[index])
+        setItems(newItems)
+      }
     }
   }
 

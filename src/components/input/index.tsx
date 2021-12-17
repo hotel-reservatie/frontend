@@ -31,7 +31,7 @@ const Input: FunctionComponent<InputProps> = ({
     'px-4 py-4 mb-4 rounded-full border w-full focus:outline-none focus-visible:ring ',
     {
       'border-blue-400 bg-blue-100 focus-visible:ring-blue-50 placeholder-blue-400':
-        faulty === 'false',
+        faulty === 'false' || faulty === undefined,
     },
     {
       'border-red-400 focus-visible:ring-red-50 placeholder-red-400 bg-red-100':
