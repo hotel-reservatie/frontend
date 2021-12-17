@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import PageLayout from 'src/components/layout/PageLayout'
-import PageTitle from 'src/components/text/PageTitle'
 import {
   Authenticated,
   NotAuthenticated,
@@ -23,7 +21,6 @@ import Link from 'next/link'
 import ProfileNavigation from 'src/components/navigation/profileNavigation'
 
 const Reservations = () => {
-  const router = useRouter()
   const [show, setShow] = useState(false)
   const [idToDelete, setIdToDelete] = useState<string>('')
   const handleClose = () => setShow(false)
@@ -47,7 +44,7 @@ const Reservations = () => {
   }, [user])
 
   return (
-    <ProfileNavigation title='My Reservations'>
+    <ProfileNavigation title="My Reservations">
       <Authenticated>
         <div className="lg:grid lg:grid-cols-2 gap-x-8">
           {userReservationResult?.data?.getUserReservations.map((r, index) => {
@@ -85,10 +82,7 @@ const Reservations = () => {
                   <div className="flex flex-col justify-between text-right">
                     <Link href={`/reservation/${r.reservationId}`}>
                       <a>
-                        <MdArrowForward
-                          size={24}
-                          className=" ml-auto"
-                        />
+                        <MdArrowForward size={24} className=" ml-auto" />
                       </a>
                     </Link>
                     <span className="font-bold text-3xl text-blue-600">
