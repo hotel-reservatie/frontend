@@ -53,6 +53,8 @@ class FormItem {
     | 'week'
     | 'dropdown'
     | 'dropdown-multi-select'
+    | 'text-area'
+  rows?: number
 
   constructor(formItem: FormItem) {
     this.type = getValueFromObject(formItem, 'type', 'text')
@@ -70,6 +72,10 @@ class FormItem {
     this.faulty = getValueFromObject(formItem, 'faulty', undefined)
     this.errormessage = getValueFromObject(formItem, 'errormessage', undefined)
     this.autoComplete = getValueFromObject(formItem, 'autoComplete', 'on')
+
+    if (this.type === 'text-area') {
+      this.rows = getValueFromObject(formItem, 'rows', undefined)
+    }
   }
 }
 
