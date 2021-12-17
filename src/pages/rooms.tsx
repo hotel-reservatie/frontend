@@ -203,14 +203,10 @@ const Rooms = () => {
   ]
 
   function onItemChange(e: FormItem) {
-    console.log(e.value)
-
     updateFilterValue(e.id, e.value)
   }
 
   useEffect(() => {
-    console.log(filterValues)
-
     setFilters(filterValues)
   }, [filterValues])
 

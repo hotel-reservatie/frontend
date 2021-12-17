@@ -30,8 +30,6 @@ function reducer(
 ): RoomFilters {
   switch (action.type) {
     case 'update':
-      console.log('action.payload.value:', action.payload.value)
-
       return { ...state, [action.payload.filterName]: action.payload.value }
     default:
       return state
@@ -47,8 +45,6 @@ const FilterProvider: FunctionComponent = ({ children }) => {
 
   const updateFilterValue = (filterName: string | undefined, value: any) => {
     if (filterName && filterName in filters) {
-      console.log(value)
-
       dispatch({ type: 'update', payload: { filterName, value } })
     }
   }
