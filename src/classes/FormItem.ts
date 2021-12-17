@@ -70,7 +70,7 @@ class FormItem {
     this.options = getValueFromObject(formItem, 'options', undefined)
     this.faulty = getValueFromObject(formItem, 'faulty', undefined)
     this.errormessage = getValueFromObject(formItem, 'errormessage', undefined)
-    this.autoComplete = getValueFromObject(formItem, 'autoComplete', 'on')
+    this.autoComplete = getValueFromObject(formItem, 'autoComplete', 'off')
 
     if (formItem.required == undefined) {
       this.required = true

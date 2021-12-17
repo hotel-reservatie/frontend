@@ -34,8 +34,6 @@ const Dropdown: FunctionComponent<DropdownProps> = ({
   const DdRef = useRef<HTMLDivElement>(null)
 
   const handleClickOutside = (e: MouseEvent) => {
-    console.log(e.target)
-
     if (DdRef.current?.contains(e.target as Node)) {
       return
     }
@@ -79,15 +77,9 @@ const Dropdown: FunctionComponent<DropdownProps> = ({
     }
   }
 
-  useEffect(() => {
-    console.log(isOpen)
-    console.log(multiSelected)
-  }, [isOpen, multiSelected])
-
   const DropdownWrapper: FunctionComponent = ({ children }) => {
     function handleClick() {
       if (multiSelect) {
-        console.log('click')
         setIsOpen(true)
       } else {
         setIsOpen(!isOpen)
