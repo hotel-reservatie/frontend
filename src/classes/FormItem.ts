@@ -55,13 +55,14 @@ class FormItem {
     | 'dropdown-multi-select'
 
   constructor(formItem: FormItem) {
+
+
     this.type = getValueFromObject(formItem, 'type', 'text')
     this.value = getValueFromObject(formItem, 'value', '')
     this.maxchars = getValueFromObject(formItem, 'maxchars', 30)
     this.minchars = getValueFromObject(formItem, 'minchars', 0)
     this.placeholder = getValueFromObject(formItem, 'placeholder', '')
     this.className = getValueFromObject(formItem, 'className', undefined)
-    this.required = getValueFromObject(formItem, 'required', true)
     this.disabled = getValueFromObject(formItem, 'disabled', false)
     this.label = getValueFromObject(formItem, 'label', null)
     this.name = getValueFromObject(formItem, 'name', undefined)
@@ -70,6 +71,13 @@ class FormItem {
     this.faulty = getValueFromObject(formItem, 'faulty', undefined)
     this.errormessage = getValueFromObject(formItem, 'errormessage', undefined)
     this.autoComplete = getValueFromObject(formItem, 'autoComplete', 'on')
+
+    if (formItem.required == undefined) {
+      this.required = true
+    } else {
+      this.required = formItem.required
+    }
+
   }
 }
 

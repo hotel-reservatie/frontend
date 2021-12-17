@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
-import { MdAddCircle } from 'react-icons/md'
+import { MdAddCircle, MdEdit } from 'react-icons/md'
 import Card from 'src/components/card'
 import Input from 'src/components/input'
 import DateInput from 'src/components/input/DateInput'
@@ -11,6 +11,9 @@ import { useNewReservation } from 'src/providers/reservationProvider'
 import {
   Room,
   useGetFilteredRoomsQuery,
+  useGetUserInfoLazyQuery,
+  useGetUserInfoQuery,
+  UserInput,
   useValidateReservationLazyQuery,
 } from 'src/schema'
 import Link from 'next/link'
@@ -28,6 +31,7 @@ import Dialog from 'src/components/dialog'
 import FormItem from 'src/classes/FormItem'
 import { useTranslation } from 'react-i18next'
 import Form from 'src/components/form'
+import CustomerInfoSection from 'src/components/customerInfo'
 
 const NewReservation = () => {
   const {
@@ -47,6 +51,7 @@ const NewReservation = () => {
 
   const [createReservation, createReservationResult] =
     useMutation(CreateReservation)
+  const [getUserInfo, { data, refetch }] = useGetUserInfoLazyQuery()
 
   const [validateReservation, validated] = useValidateReservationLazyQuery()
   const res = useGetFilteredRoomsQuery({
@@ -86,25 +91,12 @@ const NewReservation = () => {
 
   const handleConfirmButton = () => {
     setSubmitting(true)
-    if (newReservation) {
-      createReservation({
-        variables: {
-          newReservation: newReservation.details,
-          roomIds: newReservation.roomIds,
-        },
-      }).then(async () => {
-        resetReservation()
-        await router.push('/reservations')
-      })
-    }
   }
 
   useEffect(() => {
-    console.log(createReservationResult)
-  }, [createReservationResult])
-
-  useEffect(() => {
-    console.log(user)
+    if (user) {
+      getUserInfo()
+    }
   }, [user])
 
   useEffect(() => {
@@ -127,7 +119,17 @@ const NewReservation = () => {
   ])
 
   function handleSubmit(e: FormItem[]) {
-    console.log(e)
+    if (newReservation) {
+      createReservation({
+        variables: {
+          newReservation: newReservation.details,
+          roomIds: newReservation.roomIds,
+        },
+      }).then(async () => {
+        resetReservation()
+        await router.push('profile/reservations')
+      })
+    }
   }
 
   // TODO: Add dateform that uses filterValue for the dates OR if there's already a reservation use those dates
@@ -276,15 +278,16 @@ const NewReservation = () => {
           </Link>
         </div>
         <SubTitle>Customer Info</SubTitle>
-        <Form
-          cols={4}
-          rows={3}
-          colGap={6}
-          formItems={userInfoForm}
-          onSubmit={handleSubmit}
-          submitting={submitting}
-          setSubmitting={setSubmitting}
-        />
+        {data ? (
+          <CustomerInfoSection
+            userInfo={data?.getUserInfo as UserInput}
+            isEditing={true}
+            submitting={submitting}
+            setSubmitting={setSubmitting}
+            onSubmit={handleSubmit}
+            requiredFormFields={true}
+          />
+        ) : null}
 
         <SubTitle>Booking Info</SubTitle>
         <div className="mb-8">

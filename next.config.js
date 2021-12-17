@@ -49,3 +49,7 @@ const sentryWebpackPluginOptions = {
 module.exports = isDev
   ? withPWA(moduleExports)
   : withPWA(withSentryConfig(moduleExports, sentryWebpackPluginOptions))
+
+module.exports = isDev
+  ? withPWA(moduleExports)
+  : withPWA(withSentryConfig(moduleExports, sentryWebpackPluginOptions))

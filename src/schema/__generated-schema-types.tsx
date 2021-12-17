@@ -16,6 +16,19 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type Favorite = {
+  __typename?: 'Favorite';
+  favoriteId: Scalars['String'];
+  room: Room;
+  user: User;
+};
+
+export type FavoriteInput = {
+  favoriteId: Scalars['String'];
+  room: RoomInput;
+  user: UserInput;
+};
+
 export type FiltersResponse = {
   __typename?: 'FiltersResponse';
   maxCapacity?: Maybe<Scalars['Float']>;
@@ -29,6 +42,7 @@ export type Mutation = {
   createReservation: Reservation;
   deleteReservation: Scalars['String'];
   deleteReview: Scalars['String'];
+  saveUser: Scalars['Boolean'];
   toggleFavorite: Scalars['String'];
   updateReview: Review;
 };
@@ -52,6 +66,11 @@ export type MutationDeleteReservationArgs = {
 
 export type MutationDeleteReviewArgs = {
   reviewId: Scalars['String'];
+};
+
+
+export type MutationSaveUserArgs = {
+  data: UserInput;
 };
 
 
@@ -98,6 +117,7 @@ export type Query = {
   getRoomTypes: Array<RoomTypeResponse>;
   getRooms?: Maybe<Array<Room>>;
   getUserFavorites: Array<Room>;
+  getUserInfo: User;
   getUserReservations: Array<Reservation>;
   getUserReviews?: Maybe<Array<Review>>;
   validateReservation: ValidateReservationResponse;
@@ -290,11 +310,14 @@ export type User = {
   address?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
+  favorites?: Maybe<Array<Favorite>>;
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   postal?: Maybe<Scalars['Float']>;
   reservationEmail?: Maybe<Scalars['String']>;
+  reservations?: Maybe<Array<Reservation>>;
+  reviews?: Maybe<Array<Review>>;
   userId?: Maybe<Scalars['String']>;
   userName?: Maybe<Scalars['String']>;
 };
@@ -303,11 +326,14 @@ export type UserInput = {
   address?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
+  favorites?: Maybe<Array<FavoriteInput>>;
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   postal?: Maybe<Scalars['Float']>;
   reservationEmail?: Maybe<Scalars['String']>;
+  reservations?: Maybe<Array<ReservationInput>>;
+  reviews?: Maybe<Array<ReviewInput>>;
   userId?: Maybe<Scalars['String']>;
   userName?: Maybe<Scalars['String']>;
 };
@@ -410,6 +436,18 @@ export type GetRoomByIdQueryVariables = Exact<{
 
 
 export type GetRoomByIdQuery = { __typename?: 'Query', getRoomById?: { __typename?: 'Room', roomId?: string | null | undefined, roomName?: string | null | undefined, facilities?: Array<string> | null | undefined, description?: string | null | undefined, images?: Array<string> | null | undefined, surface?: number | null | undefined, currentPrice?: number | null | undefined, roomType: { __typename?: 'RoomType', typeName: string, description: string }, tags?: Array<{ __typename?: 'Tag', name: string }> | null | undefined, reviews?: Array<{ __typename?: 'Review', reviewId?: string | null | undefined, title: string, description?: string | null | undefined, reviewScore: number, createdAt?: any | null | undefined, user?: { __typename?: 'User', userId?: string | null | undefined, userName?: string | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
+
+export type GetUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'User', userId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, userName?: string | null | undefined, email?: string | null | undefined, reservationEmail?: string | null | undefined, phone?: string | null | undefined, address?: string | null | undefined, city?: string | null | undefined, postal?: number | null | undefined, reviews?: Array<{ __typename?: 'Review', reviewId?: string | null | undefined, reviewScore: number, room: { __typename?: 'Room', roomName?: string | null | undefined } }> | null | undefined, reservations?: Array<{ __typename?: 'Reservation', reservationId?: string | null | undefined, startDate: any, totalPrice?: number | null | undefined }> | null | undefined, favorites?: Array<{ __typename?: 'Favorite', favoriteId: string }> | null | undefined } };
+
+export type UpdateUserMutationVariables = Exact<{
+  user: UserInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', saveUser: boolean };
 
 
 export const GetUserFavoritesDocument = gql`
@@ -996,3 +1034,92 @@ export function useGetRoomByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetRoomByIdQueryHookResult = ReturnType<typeof useGetRoomByIdQuery>;
 export type GetRoomByIdLazyQueryHookResult = ReturnType<typeof useGetRoomByIdLazyQuery>;
 export type GetRoomByIdQueryResult = Apollo.QueryResult<GetRoomByIdQuery, GetRoomByIdQueryVariables>;
+export const GetUserInfoDocument = gql`
+    query getUserInfo {
+  getUserInfo {
+    userId
+    firstName
+    lastName
+    userName
+    email
+    reservationEmail
+    phone
+    address
+    city
+    postal
+    reviews {
+      reviewId
+      reviewScore
+      room {
+        roomName
+      }
+    }
+    reservations {
+      reservationId
+      startDate
+      totalPrice
+    }
+    favorites {
+      favoriteId
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserInfoQuery__
+ *
+ * To run a query within a React component, call `useGetUserInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserInfoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserInfoQuery(baseOptions?: Apollo.QueryHookOptions<GetUserInfoQuery, GetUserInfoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserInfoQuery, GetUserInfoQueryVariables>(GetUserInfoDocument, options);
+      }
+export function useGetUserInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserInfoQuery, GetUserInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserInfoQuery, GetUserInfoQueryVariables>(GetUserInfoDocument, options);
+        }
+export type GetUserInfoQueryHookResult = ReturnType<typeof useGetUserInfoQuery>;
+export type GetUserInfoLazyQueryHookResult = ReturnType<typeof useGetUserInfoLazyQuery>;
+export type GetUserInfoQueryResult = Apollo.QueryResult<GetUserInfoQuery, GetUserInfoQueryVariables>;
+export const UpdateUserDocument = gql`
+    mutation updateUser($user: UserInput!) {
+  saveUser(data: $user)
+}
+    `;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      user: // value for 'user'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
