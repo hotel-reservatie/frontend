@@ -14,21 +14,6 @@ const GetUser = gql`
             address
             city
             postal
-            reviews{
-                reviewId
-                reviewScore
-                room{
-                    roomName
-                }
-            }
-            reservations{
-                reservationId
-                startDate
-                totalPrice
-            }
-            favorites {
-                favoriteId
-            }
         }
     }
 `
