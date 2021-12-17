@@ -50,7 +50,7 @@ const Reservations = () => {
     <ProfileNavigation title='My Reservations'>
       <Authenticated>
         <div className="lg:grid lg:grid-cols-2 gap-x-8">
-          {userReservationResult?.data?.getUserReservations.map((r, index) => {
+          {userReservationResult.data?.getUserReservations[0]? userReservationResult.data.getUserReservations.map((r, index) => {
             return (
               <Card
                 className="w-full px-8 py-8 max-w-full mb-8 mx-0"
@@ -98,7 +98,7 @@ const Reservations = () => {
                 </div>
               </Card>
             )
-          })}
+          }): <p>It looks empty here...</p>}
         </div>
       </Authenticated>
       <NotAuthenticated>
