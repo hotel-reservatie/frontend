@@ -8,7 +8,7 @@ const sentryHost = 'o1091498.ingest.sentry.io'
 // want to accept through this proxy.
 const knownProjectIds = ['/6108506']
 
-async function handler(req: any, res: any) {
+function handler(req: any, res: any) {
   try {
     const envelope = req.body
     const pieces = envelope.split('\n')
@@ -28,11 +28,15 @@ async function handler(req: any, res: any) {
     }
 
     const url = `https://${sentryHost}/api/${projectId}/envelope/`
-    const response = await fetch(url, {
+
+    fetch(url, {
       method: 'POST',
       body: envelope,
-    })
-    return response.json()
+    }).then((response => {
+      return res.status(200).json(response)
+    }))
+
+
   } catch (e) {
     captureException(e)
     return res.status(400).json({ status: 'invalid request' })
