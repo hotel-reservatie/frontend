@@ -7,14 +7,19 @@ import CustomerInfoSection from 'src/components/customerInfo'
 import ProfileNavigation from 'src/components/navigation/profileNavigation'
 import PageTitle from 'src/components/text/PageTitle'
 import SubTitle from 'src/components/text/SubTitle'
+import { useAuth } from 'src/providers/authProvider'
 import {
+  useGetUserInfoLazyQuery,
   useGetUserInfoQuery,
   UserInput,
   useUpdateUserMutation,
 } from 'src/schema'
 
 const Info = () => {
-  const { data, refetch } = useGetUserInfoQuery()
+
+  const { user } = useAuth();
+
+  const [getUserInfo, { data, refetch }] = useGetUserInfoLazyQuery()
   const [isEditing, setIsEditing] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
@@ -28,16 +33,6 @@ const Info = () => {
     setSubmitting(true)
   }
 
-  const isEmpty = (item: FormItem) => {
-    if (!item.value) {
-      return true
-    }
-
-    if (!'') console.log('hi')
-
-    return false
-  }
-
   const handleSubmit = (e: FormItem[]) => {
     const user: UserInput = {}
 
@@ -49,8 +44,6 @@ const Info = () => {
     user.city = e[5].value
     user.postal = parseInt(e[6].value)
 
-    console.log(user)
-
     updateUserInfo({ variables: { user: user } }).then(() => {
       setIsEditing(false)
       if (refetch) refetch()
@@ -58,8 +51,11 @@ const Info = () => {
   }
 
   useEffect(() => {
-    console.log(data?.getUserInfo as UserInput)
-  }, [data])
+    if(user){
+      getUserInfo();
+    }
+    
+  }, [user])
   return (
     <ProfileNavigation title="Profile">
       {data ? (

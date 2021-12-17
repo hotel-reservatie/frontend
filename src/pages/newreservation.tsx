@@ -11,6 +11,7 @@ import { useNewReservation } from 'src/providers/reservationProvider'
 import {
   Room,
   useGetFilteredRoomsQuery,
+  useGetUserInfoLazyQuery,
   useGetUserInfoQuery,
   UserInput,
   useValidateReservationLazyQuery,
@@ -41,7 +42,6 @@ const NewReservation = () => {
     resetReservation,
   } = useNewReservation()
   const [submitting, setSubmitting] = useState(false)
-  const [isEditing, setIsEditing] = useState(false)
   const { user } = useAuth()
   const { t } = useTranslation('common')
   const router = useRouter()
@@ -51,7 +51,7 @@ const NewReservation = () => {
 
   const [createReservation, createReservationResult] =
     useMutation(CreateReservation)
-  const { data, refetch } = useGetUserInfoQuery()
+  const [getUserInfo, { data, refetch }] = useGetUserInfoLazyQuery()
 
   const [validateReservation, validated] = useValidateReservationLazyQuery()
   const res = useGetFilteredRoomsQuery({
@@ -93,16 +93,10 @@ const NewReservation = () => {
     setSubmitting(true)
   }
 
-  const handleEdit = () => {
-    setIsEditing(true)
-  }
-
   useEffect(() => {
-    console.log(createReservationResult)
-  }, [createReservationResult])
-
-  useEffect(() => {
-    console.log(user)
+    if (user) {
+      getUserInfo()
+    }
   }, [user])
 
   useEffect(() => {
@@ -125,7 +119,6 @@ const NewReservation = () => {
   ])
 
   function handleSubmit(e: FormItem[]) {
-    console.log(e)
     if (newReservation) {
       createReservation({
         variables: {
