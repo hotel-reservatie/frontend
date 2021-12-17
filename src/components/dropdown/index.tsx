@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useEffect, useState } from 'react'
+import React, { FunctionComponent, useEffect, useRef, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { MdExpandMore, MdDone } from 'react-icons/md'
 import { FormItemOption } from 'src/classes/FormItem'
@@ -11,15 +11,6 @@ interface DropdownProps {
   onChange: any
   name: string
   multiSelect?: boolean
-}
-
-interface DropdownWrapperProps {
-  selected: FormItemOption | Array<FormItemOption> | undefined
-  handleChange: (e: any) => void
-  className: string | undefined
-  placeholder: string
-  isOpen?: boolean
-  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 interface DropdownItemProps {
@@ -40,6 +31,24 @@ const Dropdown: FunctionComponent<DropdownProps> = ({
   const [selected, setSelected] = useState<FormItemOption>()
   const [multiSelected, setMultiSelected] = useState<Array<FormItemOption>>([])
   const [isOpen, setIsOpen] = useState(false)
+  const DdRef = useRef<HTMLDivElement>(null)
+
+  const handleClickOutside = (e: MouseEvent) => {
+    console.log(e.target)
+
+    if (DdRef.current?.contains(e.target as Node)) {
+      return
+    }
+    setIsOpen(false)
+  }
+
+  useEffect(() => {
+    document.addEventListener('mouseup', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mouseup', handleClickOutside)
+    }
+  }, [])
 
   function isSelected(value: string) {
     return multiSelected.find(el => el.id === value) ? true : false
@@ -99,6 +108,7 @@ const Dropdown: FunctionComponent<DropdownProps> = ({
         {({ open }) => (
           <>
             <div
+              ref={DdRef}
               className={classNames('relative w-full mb-4', {
                 className: className,
               })}
