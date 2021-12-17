@@ -148,7 +148,7 @@ const Rooms = () => {
       }
       if (filterData?.getFilters.tags) {
         filterData.getFilters.tags.forEach((t, i) => {
-          tags.push({ id: String(i), name: t.name })
+          tags.push({ id: t.tagId ?? String(i), name: t.name })
         })
       }
       setFilterOptions({ roomTypes, roomCapacity, tags })
@@ -203,6 +203,8 @@ const Rooms = () => {
   ]
 
   function onItemChange(e: FormItem) {
+    console.log(e.value)
+
     updateFilterValue(e.id, e.value)
   }
 
