@@ -8,53 +8,6 @@ import { MdClose } from 'react-icons/md'
 import SubTitle from '../text/SubTitle'
 import { Dialog as Modal, Transition } from '@headlessui/react'
 
-interface AlertProps extends ModalProps {
-  title: string
-  description: string
-  onRequestClose: MouseEventHandler<HTMLButtonElement>
-  onRequestConfirm: MouseEventHandler<HTMLButtonElement>
-}
-
-// const OldDialog: FunctionComponent<AlertProps> = ({
-//   show,
-//   onRequestClose,
-//   onRequestConfirm,
-//   description,
-//   ...props
-// }) => {
-//   return (
-//     <Modal
-//       {...props}
-//       contentClassName="rounded-xl p-8 border-1 border-blue-500 shadow"
-//       aria-labelledby="contained-modal-title-vcenter"
-//       centered
-//       backdrop="static"
-//       show={show}
-//       // onHide={handleClose}
-//     >
-//       <div className="flex justify-between items-center mb-8">
-//         <SubTitle className="mb-0">Warning!</SubTitle>
-//         <button
-//           onClick={onRequestClose}
-//           className="rounded-xl hover:bg-blue-300"
-//         >
-//           <MdClose size={24} />
-//         </button>
-//       </div>
-//       <p className="mb-8">{description}</p>
-//       <div className="flex justify-end gap-2">
-//         <button onClick={onRequestClose}>Cancel</button>
-//         <button
-//           onClick={onRequestConfirm}
-//           className=" bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-500"
-//         >
-//           Confirm
-//         </button>
-//       </div>
-//     </Modal>
-//   )
-// }
-
 interface DialogProps {
   title: string
   description: string
@@ -107,12 +60,21 @@ const Dialog: FunctionComponent<DialogProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-                <Modal.Title as={Fragment}>
+              <div className="inline-block w-full max-w-md p-8 my-8 overflow-hidden text-left align-middle transition-all transform bg-white rounded-xl border-1 border-blue-500 shadow">
+                <Modal.Title
+                  as="div"
+                  className="flex justify-between items-center mb-8"
+                >
                   <SubTitle className="mb-0">{title}</SubTitle>
+                  <button
+                    onClick={onRequestClose}
+                    className="rounded-xl hover:bg-blue-300"
+                  >
+                    <MdClose size={24} />
+                  </button>
                 </Modal.Title>
                 <div className="mt-2">
-                  <p className="text-sm text-gray-500">{description}</p>
+                  <p className="text-sm mb-8">{description}</p>
                 </div>
 
                 <div className="flex justify-end gap-2">
