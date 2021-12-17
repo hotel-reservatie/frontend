@@ -102,7 +102,7 @@ const Reservations = () => {
         </div>
       </Authenticated>
       <NotAuthenticated>
-        <SubTitle>Please sign in to view your reservations...</SubTitle>
+        <p>Please sign in to view your reservations...</p>
       </NotAuthenticated>
       <Dialog
         title="Warning!"

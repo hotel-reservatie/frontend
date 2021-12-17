@@ -167,6 +167,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
         onSubmit={onSubmit}
         submitting={submitting}
         setSubmitting={setSubmitting}
+        className=' mb-4'
       />
     )
   }

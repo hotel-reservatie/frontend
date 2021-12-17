@@ -7,7 +7,11 @@ import CustomerInfoSection from 'src/components/customerInfo'
 import ProfileNavigation from 'src/components/navigation/profileNavigation'
 import PageTitle from 'src/components/text/PageTitle'
 import SubTitle from 'src/components/text/SubTitle'
-import { useAuth } from 'src/providers/authProvider'
+import {
+  Authenticated,
+  NotAuthenticated,
+  useAuth,
+} from 'src/providers/authProvider'
 import {
   useGetUserInfoLazyQuery,
   useGetUserInfoQuery,
@@ -16,8 +20,7 @@ import {
 } from 'src/schema'
 
 const Info = () => {
-
-  const { user } = useAuth();
+  const { user } = useAuth()
 
   const [getUserInfo, { data, refetch }] = useGetUserInfoLazyQuery()
   const [isEditing, setIsEditing] = useState(false)
@@ -51,35 +54,39 @@ const Info = () => {
   }
 
   useEffect(() => {
-    if(user){
-      getUserInfo();
+    if (user) {
+      getUserInfo()
     }
-    
   }, [user])
   return (
     <ProfileNavigation title="Profile">
-      {data ? (
-        <div>
-          <div className="flex justify-between items-center gap-4 mb-8">
-            <SubTitle className="mb-0">Customer Info</SubTitle>
-            {!isEditing ? (
-              <MdEdit
-                onClick={handleEdit}
-                className=" text-blue-300 hover:text-blue-700 hover:cursor-pointer hover:scale-105 transition-all"
-                size={24}
-              />
-            ) : null}
+      <Authenticated>
+        {data ? (
+          <div>
+            <div className="flex justify-between items-center gap-4 mb-8">
+              <SubTitle className="mb-0">Customer Info</SubTitle>
+              {!isEditing ? (
+                <MdEdit
+                  onClick={handleEdit}
+                  className=" text-blue-300 hover:text-blue-700 hover:cursor-pointer hover:scale-105 transition-all"
+                  size={24}
+                />
+              ) : null}
+            </div>
+            <CustomerInfoSection
+              userInfo={data?.getUserInfo as UserInput}
+              isEditing={isEditing}
+              submitting={submitting}
+              setSubmitting={setSubmitting}
+              onSubmit={handleSubmit}
+            />
+            {isEditing ? <Button onClick={handleSave}>Save</Button> : null}
           </div>
-          <CustomerInfoSection
-            userInfo={data?.getUserInfo as UserInput}
-            isEditing={isEditing}
-            submitting={submitting}
-            setSubmitting={setSubmitting}
-            onSubmit={handleSubmit}
-          />
-          {isEditing ? <Button onClick={handleSave}>Save</Button> : null}
-        </div>
-      ) : null}
+        ) : null}
+      </Authenticated>
+      <NotAuthenticated>
+        <p>Please sign in to view your profile...</p>
+      </NotAuthenticated>
     </ProfileNavigation>
   )
 }
