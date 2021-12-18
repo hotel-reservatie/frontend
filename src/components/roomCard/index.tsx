@@ -182,7 +182,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
     return (
       <>
         <RoomCardHolder img={img} title={title}>
-          <div className="flex flex-row justify-between items-start">
+          <div className="flex flex-col sm:flex-row justify-between items-start">
             <RoomCardTitleSection title={title} desc={desc} />
             <div>
               <p className="mt-8 "></p>
@@ -201,7 +201,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
               </Link>
             </Authenticated>
           </div>
-          <div className="flex flex-row justify-between my-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-8 my-8">
             <div className="flex flex-row items-center">
               <span className="flex flex-row items-end mr-4">
                 <People />
