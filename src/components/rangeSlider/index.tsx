@@ -22,7 +22,7 @@ const RangeSlider: FunctionComponent<RangeSliderProps> = ({
   }
   if (boundries.min && boundries.max) {
     return (
-      <div className="flex flex-col items-center mb-28">
+      <div className="flex flex-col items-center mb-28 px-6">
         <h2 className=" text-blue-500 font text-2xl">Price Range</h2>
         <Slider
           min={boundries.min}

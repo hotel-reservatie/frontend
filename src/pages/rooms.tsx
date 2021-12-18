@@ -21,6 +21,7 @@ import Form from 'src/components/form'
 import FormItem, { FormItemOption } from 'src/classes/FormItem'
 import { useFilterValues } from 'src/providers/filterProvider'
 import Skeleton from 'src/components/roomCard/Skeleton'
+import PageLayout from 'src/components/layout/PageLayout'
 
 const Rooms = () => {
   const { user } = useAuth()
@@ -213,7 +214,7 @@ const Rooms = () => {
   const debouncedItemChange = useMemo(() => debounce(onItemChange, 300), [])
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <PageLayout>
       <div>
         <PageTitle>Rooms</PageTitle>
 
@@ -262,7 +263,7 @@ const Rooms = () => {
           />
         )
       })}
-    </div>
+    </PageLayout>
   )
 }
 
