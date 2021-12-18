@@ -14,6 +14,7 @@ import Form from 'src/components/form'
 const Login = () => {
   const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const { t } = useTranslation()
   const [credentials, setCredentials] = useState({ email: '', password: '' })
   const { login, user } = useAuth()
@@ -38,8 +39,10 @@ const Login = () => {
   }
 
   function handleSubmit(items: Array<FormItem>) {
-    login(items[0].value, items[1].value)
-    router.push('/')
+    setIsLoading(true)
+    login(items[0].value, items[1].value).then(r => {
+      router.push('/')
+    })
   }
 
   const formItems = [
@@ -47,7 +50,7 @@ const Login = () => {
       label: t('email.address'),
       id: 'email',
       name: 'email',
-      autoComplete:'email',
+      autoComplete: 'email',
       placeholder: t('email.placeholder'),
       type: 'email',
     }),
@@ -87,8 +90,11 @@ const Login = () => {
             onChange={onInputChange}
             type="password"
           /> */}
-
-        <Button onClick={handleLoginClick}>{t('login')}</Button>
+        {isLoading ? (
+          <p className=" text-center">Please wait...</p>
+        ) : (
+          <Button onClick={handleLoginClick}>{t('login')}</Button>
+        )}
         {/* </form> */}
 
         <Subtext>

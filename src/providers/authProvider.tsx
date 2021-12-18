@@ -27,11 +27,12 @@ import { setContext } from '@apollo/client/link/context'
 import client from 'src/utils/apollo'
 import { createLogicalWrapper } from 'src/utils/logicalWrapper'
 import { resolve } from 'path'
+import { json } from 'stream/consumers'
 
 interface IAuthContext {
   user: User | null
   restoreAuth: () => Promise<{ state: User; token: string }>
-  createUser: (email: string, password: string, username: string) => void
+  createUser: (email: string, password: string, username: string) => Promise<Boolean>
   login: (email: string, password: string) => Promise<boolean>
   logout: () => Promise<Boolean>
   signedIn: boolean
@@ -124,15 +125,39 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     })
   }
 
-  const createUser = (email: string, password: string, username: string) => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(async userCredential => {
-        setUser(userCredential.user)
-        changeUserDisplayName(username, userCredential.user)
-      })
-      .catch(error => {
-        console.log({ error })
-      })
+  const createUser = async (
+    email: string,
+    password: string,
+    username: string,
+  ): Promise<Boolean> => {
+    return new Promise((resolve, reject) => {
+      try {
+        const url: string = process.env.NEXT_PUBLIC_BACKEND as string
+        fetch(`http://${url.split('/')[2]}/auth/signup`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+            name: username,
+          }),
+        })
+          .then(async response => {
+            await login(email, password)
+              .then(res => {
+                resolve(true)
+              })
+              .catch(e => {
+                reject
+              })
+          })
+          .catch(e => {
+            reject
+          })
+      } catch (e) {
+        reject
+      }
+    })
   }
 
   const changeUserDisplayName = (
@@ -159,7 +184,9 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     return new Promise((resolve, reject) => {
       signInWithEmailAndPassword(auth, email, password)
         .then(async userCredential => {
-          SetgraphqlClient(createGraphqlClient(await userCredential.user.getIdToken()))
+          SetgraphqlClient(
+            createGraphqlClient(await userCredential.user.getIdToken()),
+          )
           setUser(userCredential.user)
           setSignedIn(true)
           resolve(true)
