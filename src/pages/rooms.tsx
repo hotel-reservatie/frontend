@@ -159,7 +159,7 @@ const Rooms = () => {
 
   const formItems = [
     new FormItem({
-      placeholder: t('datepicker.arrivaldate'),
+      placeholder: 'datepicker.arrivaldate',
       type: 'date',
       name: 'arrivalDate',
       id: 'startDate',
@@ -167,7 +167,7 @@ const Rooms = () => {
       value: filterValues.startDate,
     }),
     new FormItem({
-      placeholder: t('datepicker.departuredate'),
+      placeholder: 'datepicker.departuredate',
       type: 'date',
       name: 'departureDate',
       id: 'endDate',
@@ -175,7 +175,7 @@ const Rooms = () => {
       value: filterValues.endDate,
     }),
     new FormItem({
-      placeholder: t('Search room name'),
+      placeholder: 'Search room name',
       type: 'text',
       id: 'roomName',
       className: 'col-span-3',
@@ -183,14 +183,14 @@ const Rooms = () => {
     }),
     new FormItem({
       type: 'dropdown',
-      placeholder: t('Room Type'),
+      placeholder: 'Room Type',
       options: filterOptions?.roomTypes,
       name: 'roomType',
       id: 'roomTypeIds',
     }),
     new FormItem({
       type: 'dropdown',
-      placeholder: t('Room Capacity'),
+      placeholder: 'Room Capacity',
       options: filterOptions?.roomCapacity,
       name: 'roomCapacity',
       id: 'maxCapacity',
