@@ -5,7 +5,7 @@ import { IconType } from 'react-icons'
 import { MdFavorite, MdListAlt, MdPerson } from 'react-icons/md'
 import PageLayout from 'src/components/layout/PageLayout'
 import PageTitle from '../text/PageTitle'
-
+import Translater from '../translater'
 
 interface ProfileNavigationProps {
   title: string
@@ -42,7 +42,7 @@ export const NavElement: FunctionComponent<NavElementProps> = ({
         <div className="p-2 hover:translate-x-1 hover:cursor-pointer transition-all flex items-end justify-start gap-2">
           {<Icon size={32} />}
           <a className=" whitespace-nowrap" href="">
-            {title}
+            <Translater>{title}</Translater>
           </a>
         </div>
       </li>
@@ -50,9 +50,11 @@ export const NavElement: FunctionComponent<NavElementProps> = ({
   )
 }
 
-export const Nav: FunctionComponent<React.HTMLAttributes<HTMLDivElement>> = ({className}) => {
+export const Nav: FunctionComponent<React.HTMLAttributes<HTMLDivElement>> = ({
+  className,
+}) => {
   return (
-    <div className={className? className: ''}>
+    <div className={className ? className : ''}>
       <ul>
         <NavElement
           Icon={MdPerson}
@@ -81,7 +83,7 @@ const ProfileNavigation: FunctionComponent<ProfileNavigationProps> = ({
   return (
     <PageLayout>
       <div className="flex gap-8">
-        <Nav className=' hidden md:block'/>
+        <Nav className=" hidden md:block" />
         <div className="w-full">
           <PageTitle>{title}</PageTitle>
           {children}
