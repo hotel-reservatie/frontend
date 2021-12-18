@@ -17,7 +17,7 @@ import { MdArrowForward, MdPeople } from 'react-icons/md'
 import { HiMinusCircle } from 'react-icons/hi'
 import Dialog from 'src/components/dialog'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
+import Link from 'src/components/translatedLink'
 import ProfileNavigation from 'src/components/navigation/profileNavigation'
 import Translater from 'src/components/translater'
 

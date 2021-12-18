@@ -4,7 +4,7 @@ import Card from 'src/components/card'
 import Button from 'src/components/button'
 import { useGetAllRoomTypesQuery } from 'src/schema'
 import RoomCard from 'src/components/roomCard'
-
+import Link from 'src/components/translatedLink'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import router from 'next/router'
@@ -19,10 +19,6 @@ const Home: NextPage = () => {
   const { loading, error, data } = useGetAllRoomTypesQuery()
 
   const { updateFilterValue } = useFilterValues()
-
-  function showAvailability() {
-    router.push('/rooms')
-  }
 
   const formItems: Array<FormItem> = [
     new FormItem({
@@ -63,9 +59,9 @@ const Home: NextPage = () => {
             {t('datepicker.title')}
           </h1>
           <Form onItemChange={onDateChange} formItems={formItems} />
-          <Button onClick={showAvailability}>
-            {t('datepicker.availability')}
-          </Button>
+          <Link href="/rooms">
+            <Button>{t('datepicker.availability')}</Button>
+          </Link>
         </Card>
       </div>
       {loading && <Skeleton amount={3} />}
