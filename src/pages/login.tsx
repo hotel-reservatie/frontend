@@ -47,6 +47,7 @@ const Login = () => {
       label: t('email.address'),
       id: 'email',
       name: 'email',
+      autoComplete:'email',
       placeholder: t('email.placeholder'),
       type: 'email',
     }),
