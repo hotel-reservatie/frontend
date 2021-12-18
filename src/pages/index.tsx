@@ -13,6 +13,7 @@ import Form from 'src/components/form'
 import { useFilterValues } from 'src/providers/filterProvider'
 import Skeleton from 'src/components/roomCard/Skeleton'
 import PageLayout from 'src/components/layout/PageLayout'
+import LinkWrapper from 'src/components/linkWrapper'
 
 const Home: NextPage = () => {
   const { t } = useTranslation('common')
@@ -61,7 +62,9 @@ const Home: NextPage = () => {
           </h1>
           <Form onItemChange={onDateChange} formItems={formItems} />
           <Link href="/rooms">
-            <Button>{t('datepicker.availability')}</Button>
+            <LinkWrapper>
+              <Button>{t('datepicker.availability')}</Button>
+            </LinkWrapper>
           </Link>
         </Card>
       </div>
