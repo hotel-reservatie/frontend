@@ -52,7 +52,7 @@ const Contact = () => {
       <div className="min-h-full pt-12">
         <Card>
           <h1 className="font-semibold text-2xl leading-normal mb-6">
-            {Contact}
+            {'Contact'}
           </h1>
           <Form
             submitting={submitting}
