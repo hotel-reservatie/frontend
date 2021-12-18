@@ -6,6 +6,7 @@ import PageLayout from 'src/components/layout/PageLayout'
 import ProfileNavigation from 'src/components/navigation/profileNavigation'
 import RoomCard from 'src/components/roomCard'
 import PageTitle from 'src/components/text/PageTitle'
+import Translater from 'src/components/translater'
 import {
   Authenticated,
   NotAuthenticated,
@@ -34,17 +35,17 @@ const Favorites = () => {
     }
   }, [user])
   return (
-    <ProfileNavigation title='My Favorites'>
+    <ProfileNavigation title="My Favorites">
       <Authenticated>
         {userFavs.data?.getUserFavorites &&
           userFavs.data.getUserFavorites.length < 1 && (
             <div className="flex justify-center flex-row">
               <h1 className="font-semibold text-2xl">
-                It looks empty in here...
+                <Translater>It looks empty in here...</Translater>
               </h1>{' '}
               <Link href={'/rooms'}>
                 <h1 className="font-semibold text-2xl ml-1 underline cursor-pointer hover:text-blue-700">
-                  {'Add some of your favorites here!'}
+                  <Translater>{'Add some of your favorites here!'}</Translater>
                 </h1>
               </Link>
             </div>
@@ -69,7 +70,9 @@ const Favorites = () => {
         })}
       </Authenticated>
       <NotAuthenticated>
-        <p>Please sign in to view your favorites...</p>
+        <p>
+          <Translater>Please sign in to view your favorites...</Translater>
+        </p>
       </NotAuthenticated>
     </ProfileNavigation>
   )

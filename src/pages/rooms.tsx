@@ -22,6 +22,7 @@ import FormItem, { FormItemOption } from 'src/classes/FormItem'
 import { useFilterValues } from 'src/providers/filterProvider'
 import Skeleton from 'src/components/roomCard/Skeleton'
 import PageLayout from 'src/components/layout/PageLayout'
+import Translater from 'src/components/translater'
 
 const Rooms = () => {
   const { user } = useAuth()
@@ -158,7 +159,7 @@ const Rooms = () => {
 
   const formItems = [
     new FormItem({
-      placeholder: t('datepicker.arrivaldate'),
+      placeholder: 'Arrival Date',
       type: 'date',
       name: 'arrivalDate',
       id: 'startDate',
@@ -166,7 +167,7 @@ const Rooms = () => {
       value: filterValues.startDate,
     }),
     new FormItem({
-      placeholder: t('datepicker.departuredate'),
+      placeholder: 'Departure Date',
       type: 'date',
       name: 'departureDate',
       id: 'endDate',

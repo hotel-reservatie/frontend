@@ -11,6 +11,8 @@ import {
   useAuth,
 } from 'src/providers/authProvider'
 import { useNewReservation } from 'src/providers/reservationProvider'
+import { useTranslation } from 'next-i18next'
+import Translater from '../translater'
 
 interface RoomCardProps {
   img: string | undefined | null
@@ -138,6 +140,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
 }) => {
   const { locale } = useRouter()
   const { addRoom } = useNewReservation()
+  const { t } = useTranslation('common')
 
   const handleBookRoom = () => {
     if (id) {
@@ -158,7 +161,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
           <RoomCardTitleSection title={title} desc={desc} />
           <div>
             <p className="mt-8 text-gray-400 text-xs md:text-base">
-              Starting from
+              <Translater>Starting from</Translater>
             </p>
             <p className="font-bold md:text-2xl text-sm">
               {price ? localizedPrice(price, locale) : ''}
@@ -172,9 +175,11 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
               {size ? size : ''}
             </p>
           </span>
-          <Button className="w-max py-2 px-8 text-base font-normal leading-tight ">
-            <Link href={'/rooms'}>Show Availability</Link>
-          </Button>
+          <Link href={'/rooms'}>
+            <Button className="w-max py-2 px-8 text-base font-normal leading-tight ">
+              <Translater>Show Availability</Translater>
+            </Button>
+          </Link>
         </div>
       </RoomCardHolder>
     )
@@ -195,7 +200,9 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
             <Authenticated>
               <Link href={`/room/${id}`}>
                 <span className="flex flex-row items-center cursor-pointer">
-                  <a className="text-blue-500 mr-4">More info</a>
+                  <a className="text-blue-500 mr-4">
+                    <Translater>More info</Translater>
+                  </a>
                   <Arrow />
                 </span>
               </Link>
@@ -225,16 +232,20 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
               </Authenticated>
             </div>
             <Authenticated>
-              <Button
-                onClick={handleBookRoom}
-                className="w-max py-2 px-8 text-base font-normal leading-tight"
-              >
-                <Link href={'/newreservation'}>Book this room</Link>
-              </Button>
+              <Link href={'/newreservation'}>
+                <Button
+                  onClick={handleBookRoom}
+                  className="w-max py-2 px-8 text-base font-normal leading-tight"
+                >
+                  <Translater>Book this room</Translater>
+                </Button>
+              </Link>
             </Authenticated>
             <NotAuthenticated>
               <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
-                <Link href={`/room/${id}`}>More info</Link>
+                <Link href={`/room/${id}`}>
+                  <Translater>More info</Translater>
+                </Link>
               </Button>
             </NotAuthenticated>
           </div>

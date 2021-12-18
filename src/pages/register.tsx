@@ -29,25 +29,25 @@ const Register = () => {
 
   const formItems = [
     new FormItem({
-      label: t('username'),
+      label: 'username',
       id: 'username',
       name: 'username',
     }),
     new FormItem({
-      label: t('email.address'),
+      label: 'email.address',
       name: 'email',
       id: 'email',
-      placeholder: t('email.placeholder'),
+      placeholder: 'email.placeholder',
       type: 'email',
     }),
     new FormItem({
-      label: t('password'),
+      label: 'Password',
       name: 'password',
       id: 'password',
       type: 'password',
     }),
     new FormItem({
-      label: t('password.repeat'),
+      label: 'password.repeat',
       name: 'repeatpassword',
       id: 'repeatpassword',
       type: 'password',
@@ -69,7 +69,7 @@ const Register = () => {
 
         <Button onClick={onStartSubmit}>Register</Button>
 
-        <Subtext>
+        <p className="text-sm text-center text-blue-400 mt-12">
           {t('subtext.login')}{' '}
           <Link href="/login">
             <a className="underline focus:outline-none focus-visible:ring">
@@ -77,7 +77,7 @@ const Register = () => {
             </a>
           </Link>
           .
-        </Subtext>
+        </p>
       </Card>
     </div>
   )

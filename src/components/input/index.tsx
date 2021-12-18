@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import classNames from 'classnames/bind'
+import { useTranslation } from 'react-i18next'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
@@ -22,6 +23,7 @@ const Input: FunctionComponent<InputProps> = ({
   submitting = false,
   ...props
 }) => {
+  const { t } = useTranslation('common')
   const labelStyling = classNames(
     'block text-blue-600',
     { 'mb-1': label },
@@ -43,7 +45,7 @@ const Input: FunctionComponent<InputProps> = ({
     <div className={className}>
       <span className="flex justify-between items-center">
         <label className={labelStyling} htmlFor={id}>
-          {label ?? ''}
+          {t(`${label ?? ''}`)}
         </label>
         {faulty && errormessage && (
           <p className={classNames(labelStyling, 'text-xs')}>{errormessage}</p>
@@ -54,7 +56,7 @@ const Input: FunctionComponent<InputProps> = ({
         onChange={onChange}
         className={inputStyling}
         type={type}
-        placeholder={placeholder}
+        placeholder={t(`${placeholder}`)}
         id={id}
         {...props}
       />

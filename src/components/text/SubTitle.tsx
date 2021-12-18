@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react'
+import Translater from '../translater'
 
 const SubTitle = ({
   children,
@@ -13,7 +14,7 @@ const SubTitle = ({
         className ? className : ''
       }`}
     >
-      {children}
+      <Translater>{children}</Translater>
     </h2>
   )
 }

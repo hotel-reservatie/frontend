@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import classNames from 'classnames/bind'
+import Translater from '../translater'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLTextAreaElement> {
   label?: string
@@ -39,7 +40,7 @@ const TextArea: FunctionComponent<InputProps> = ({
     <div className={className}>
       <span className="flex justify-between items-center">
         <label className={labelStyling} htmlFor={id}>
-          {label ?? ''}
+          <Translater>{label ?? ''}</Translater>
         </label>
         {faulty && errormessage && (
           <p className={classNames(labelStyling, 'text-xs')}>{errormessage}</p>

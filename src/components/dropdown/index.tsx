@@ -3,6 +3,7 @@ import { Listbox, Transition } from '@headlessui/react'
 import { MdExpandMore, MdDone } from 'react-icons/md'
 import { FormItemOption } from 'src/classes/FormItem'
 import classNames from 'classnames'
+import { useTranslation } from 'next-i18next'
 
 interface DropdownProps {
   options: Array<FormItemOption>
@@ -78,6 +79,7 @@ const Dropdown: FunctionComponent<DropdownProps> = ({
   }
 
   const DropdownWrapper: FunctionComponent = ({ children }) => {
+    const { t } = useTranslation('common')
     function handleClick() {
       if (multiSelect) {
         setIsOpen(true)
@@ -112,7 +114,7 @@ const Dropdown: FunctionComponent<DropdownProps> = ({
                 <span className="block truncate">
                   {selected && !Array.isArray(selected)
                     ? selected.name
-                    : placeholder}
+                    : t(`${placeholder}`)}
                 </span>
                 <span className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
                   <MdExpandMore className="w-5 h-5" />
