@@ -10,7 +10,7 @@ const PageLayout: FunctionComponent<PLProps> = ({ children, className }) => {
     <div
       className={classNames(
         { [`${className}`]: className !== undefined },
-        'max-w-7xl mx-auto py-12',
+        'max-w-7xl mx-auto py-12 px-4',
       )}
     >
       {children}

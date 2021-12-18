@@ -16,6 +16,7 @@ const Register = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const [submitting, setSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const { createUser } = useAuth()
 
   function onStartSubmit() {
@@ -23,8 +24,12 @@ const Register = () => {
   }
 
   function handleSubmit(items: Array<FormItem>) {
-    createUser(items[1].value, items[2].value, items[0].value)
-    router.push('/')
+    setIsLoading(true)
+    createUser(items[1].value, items[2].value, items[0].value).then(r => {
+      if (r) {
+        router.push('/')
+      }
+    })
   }
 
   const formItems = [
@@ -66,9 +71,11 @@ const Register = () => {
           setSubmitting={setSubmitting}
           onSubmit={handleSubmit}
         />
-
-        <Button onClick={onStartSubmit}>Register</Button>
-
+        {isLoading ? (
+          <p className=' text-center'>Please wait...</p>
+        ) : (
+          <Button onClick={onStartSubmit}>Register</Button>
+        )}
         <p className="text-sm text-center text-blue-400 mt-12">
           {t('subtext.login')}{' '}
           <Link href="/login">

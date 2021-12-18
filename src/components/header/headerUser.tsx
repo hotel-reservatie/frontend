@@ -39,7 +39,7 @@ export const DropDownItem: FunctionComponent<DropDownItemProps> = ({
       >
         <div className=" flex items-center gap-2">
           {<Icon size={24} />}
-          <a href="">
+          <a className='whitespace-nowrap'>
             <Translater>{title}</Translater>
           </a>
         </div>
@@ -110,7 +110,7 @@ const HeaderUser = () => {
   }, [router])
 
   return (
-    <div ref={divRef} className="flex items-center gap-4 relative">
+    <div ref={divRef} className="hidden md:flex items-center gap-4 relative">
       <p className="">{user?.displayName}</p>
       <div
         onClick={handleOpenProfile}

@@ -12,6 +12,7 @@ import FormItem from 'src/classes/FormItem'
 import Form from 'src/components/form'
 import { useFilterValues } from 'src/providers/filterProvider'
 import Skeleton from 'src/components/roomCard/Skeleton'
+import PageLayout from 'src/components/layout/PageLayout'
 
 const Home: NextPage = () => {
   const { t } = useTranslation('common')
@@ -44,8 +45,8 @@ const Home: NextPage = () => {
   }
 
   return (
-    <>
-      <div className="max-w-7xl mx-auto my-4 md:grid  md:grid-cols-2 md:mt-16">
+    <PageLayout>
+      <div className="md:grid  md:grid-cols-2 md:mt-16 mb-8">
         <div className="mb-8 mx-auto md:my-auto md:pr-4 md:text-center">
           <h1 className="font-bold text-blue-700 mb-2 md:text-4xl text-center md:text-left">
             {t('home.welcome')}
@@ -82,7 +83,7 @@ const Home: NextPage = () => {
           type={'roomType'}
         />
       ))}
-    </>
+    </PageLayout>
   )
 }
 

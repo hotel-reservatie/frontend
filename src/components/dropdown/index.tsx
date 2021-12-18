@@ -98,6 +98,7 @@ const Dropdown: FunctionComponent<DropdownProps> = ({
         value={selected}
         onChange={onChange}
         onClick={handleClick}
+        className={className}
       >
         {({ open }) => (
           <>

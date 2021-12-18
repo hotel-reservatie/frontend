@@ -15,6 +15,7 @@ import Translater from 'src/components/translater'
 const Login = () => {
   const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const { t } = useTranslation()
   const [credentials, setCredentials] = useState({ email: '', password: '' })
   const { login, user } = useAuth()
@@ -39,8 +40,10 @@ const Login = () => {
   }
 
   function handleSubmit(items: Array<FormItem>) {
-    login(items[0].value, items[1].value)
-    router.push('/')
+    setIsLoading(true)
+    login(items[0].value, items[1].value).then(r => {
+      router.push('/')
+    })
   }
 
   const formItems = [
@@ -49,6 +52,7 @@ const Login = () => {
       id: 'email',
       name: 'email',
       placeholder: 'email.placeholder',
+      autoComplete: 'email',
       type: 'email',
     }),
     new FormItem({
@@ -89,8 +93,11 @@ const Login = () => {
             onChange={onInputChange}
             type="password"
           /> */}
-
-        <Button onClick={handleLoginClick}>{t('login')}</Button>
+        {isLoading ? (
+          <p className=" text-center">Please wait...</p>
+        ) : (
+          <Button onClick={handleLoginClick}>{t('login')}</Button>
+        )}
         {/* </form> */}
 
         <p className="text-sm text-center text-blue-400 mt-12">

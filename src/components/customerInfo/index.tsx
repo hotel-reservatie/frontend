@@ -55,7 +55,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       autoComplete: 'given-name',
       value: userInfo.firstName,
       name: 'firstname',
-      className: 'col-span-2',
+      className: 'col-span-4 sm:col-span-2',
       required: requiredFormFields,
     }),
     new FormItem({
@@ -65,7 +65,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       value: userInfo.lastName,
       placeholder: 'Doe',
       name: 'lastname',
-      className: 'col-span-2',
+      className: 'col-span-4 sm:col-span-2',
       required: requiredFormFields,
     }),
     new FormItem({
@@ -76,7 +76,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       autoComplete: 'email',
       placeholder: 'Doe',
       name: 'email',
-      className: 'col-span-2',
+      className: 'col-span-4 sm:col-span-2',
       required: requiredFormFields,
     }),
     new FormItem({
@@ -85,7 +85,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       value: userInfo.phone,
       autoComplete: 'tel',
       name: 'phone',
-      className: 'col-span-2',
+      className: 'col-span-4 sm:col-span-2',
       required: requiredFormFields,
     }),
     new FormItem({
@@ -94,7 +94,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       value: userInfo.address,
       autoComplete: 'street-address',
       name: 'address',
-      className: 'col-span-2',
+      className: 'col-span-4 sm:col-span-2',
       required: requiredFormFields,
     }),
     new FormItem({
@@ -102,6 +102,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       id: 'city',
       value: userInfo.city,
       autoComplete: 'address-level2',
+      className: 'col-span-2 sm:col-span-1',
       name: 'city',
       required: requiredFormFields,
     }),
@@ -111,6 +112,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       id: 'postal',
       value: userInfo.postal,
       autoComplete: 'postal-code',
+      className: 'col-span-2 sm:col-span-1',
       name: 'postal',
       required: requiredFormFields,
     }),

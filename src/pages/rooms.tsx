@@ -163,7 +163,7 @@ const Rooms = () => {
       type: 'date',
       name: 'arrivalDate',
       id: 'startDate',
-      className: 'col-span-3',
+      className: 'col-span-6 md:col-span-3',
       value: filterValues.startDate,
     }),
     new FormItem({
@@ -171,14 +171,14 @@ const Rooms = () => {
       type: 'date',
       name: 'departureDate',
       id: 'endDate',
-      className: 'col-span-3',
+      className: 'col-span-6 md:col-span-3',
       value: filterValues.endDate,
     }),
     new FormItem({
       placeholder: 'Search room name',
       type: 'text',
       id: 'roomName',
-      className: 'col-span-3',
+      className: 'col-span-6 md:col-span-3',
       name: 'roomName',
     }),
     new FormItem({
@@ -187,6 +187,7 @@ const Rooms = () => {
       options: filterOptions?.roomTypes,
       name: 'roomType',
       id: 'roomTypeIds',
+      className: 'col-span-2 md:col-span-1'
     }),
     new FormItem({
       type: 'dropdown',
@@ -194,6 +195,7 @@ const Rooms = () => {
       options: filterOptions?.roomCapacity,
       name: 'roomCapacity',
       id: 'maxCapacity',
+      className: 'col-span-2 md:col-span-1'
     }),
     new FormItem({
       type: 'dropdown-multi-select',
@@ -201,6 +203,7 @@ const Rooms = () => {
       options: filterOptions?.tags,
       name: 'tags',
       id: 'tagIds',
+      className: 'col-span-2 md:col-span-1'
     }),
   ]
 

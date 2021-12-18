@@ -15,12 +15,16 @@ interface NavElementProps {
   Icon: IconType
   href: string
   title: string
+  className?: string
+  onClick?: React.MouseEventHandler<HTMLLIElement | undefined>
 }
 
 export const NavElement: FunctionComponent<NavElementProps> = ({
   Icon,
   href,
   title,
+  onClick,
+  className = 'border-blue-50'
 }) => {
   const router = useRouter()
   const [selected, setSelected] = useState(true)
@@ -36,11 +40,12 @@ export const NavElement: FunctionComponent<NavElementProps> = ({
     <Link href={href}>
       <li
         className={
-          selected ? 'border-l-4 border-blue-700' : 'border-l-4 border-blue-50'
+          selected ? 'border-l-4 border-blue-700' : `border-l-4 ${className}`
         }
+        onClick={onClick}
       >
         <div className="p-2 hover:translate-x-1 hover:cursor-pointer transition-all flex items-end justify-start gap-2">
-          {<Icon size={32} />}
+          {<Icon size={24} />}
           <a className=" whitespace-nowrap" href="">
             <Translater>{title}</Translater>
           </a>
