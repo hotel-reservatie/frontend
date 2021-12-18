@@ -25,8 +25,42 @@ const moduleExports = {
   },
   async rewrites() {
     return [
-      { source: '/over-ons', destination: '/about' },
-      { source: '/kamers', destination: '/rooms' },
+      { source: '/nl', destination: '/', locale: false },
+      { source: '/nl/over-ons', destination: '/about', locale: false },
+      { source: '/nl/kamers', destination: '/rooms', locale: false },
+      { source: '/nl/contact', destination: '/contact', locale: false },
+      { source: '/nl/login', destination: '/login', locale: false },
+      { source: '/nl/registreer', destination: '/register', locale: false },
+      {
+        source: '/nl/nieuwereservatie',
+        destination: '/newreservation',
+        locale: false,
+      },
+      {
+        source: '/nl/profiel/favorieten',
+        destination: '/profile/favorites',
+        locale: false,
+      },
+      {
+        source: '/nl/profiel/info',
+        destination: '/profile/info',
+        locale: false,
+      },
+      {
+        source: '/nl/profiel/reservaties',
+        destination: '/profile/reservations',
+        locale: false,
+      },
+      {
+        source: '/nl/reservatie/:reservationId',
+        destination: '/reservations/:reservationId',
+        locale: false,
+      },
+      {
+        source: '/nl/kamer/:roomId',
+        destination: '/room/:roomId',
+        locale: false,
+      },
     ]
   },
 }
@@ -46,7 +80,6 @@ const sentryWebpackPluginOptions = {
 
 // Make sure adding Sentry options is the last code to run before exporting, to
 // ensure that your source maps include changes from all other Webpack plugins
-
 
 module.exports = isDev
   ? withPWA(moduleExports)

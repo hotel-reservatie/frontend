@@ -242,11 +242,11 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
               </Link>
             </Authenticated>
             <NotAuthenticated>
-              <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
-                <Link href={`/room/${id}`}>
+              <Link href={`/room/${id}`}>
+                <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
                   <Translater>More info</Translater>
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </NotAuthenticated>
           </div>
         </RoomCardHolder>
