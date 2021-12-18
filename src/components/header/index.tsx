@@ -33,7 +33,7 @@ const Header = () => {
 
   return (
     <nav className="bg-white shadow">
-      <PageLayout className="py-0">
+      <PageLayout className=" pt-0 pb-0">
         <div className="flex justify-between">
           <div className="flex space-x-7">
             <div>

@@ -47,52 +47,58 @@ const Reservations = () => {
     <ProfileNavigation title="My Reservations">
       <Authenticated>
         <div className="lg:grid lg:grid-cols-2 gap-x-8">
-          {userReservationResult.data?.getUserReservations[0]? userReservationResult.data.getUserReservations.map((r, index) => {
-            return (
-              <Card
-                className="w-full px-8 py-8 max-w-full mb-8 mx-0"
-                key={r.reservationId}
-              >
-                <div className="flex justify-between">
-                  <div>
-                    <div className="mb-8">
-                      <SubTitle className=" mb-0">{`Reservation # ${index}`}</SubTitle>
-                      <p>{`${formatDate(r.startDate)} - ${formatDate(
-                        r.endDate,
-                      )}`}</p>
+          {userReservationResult.data?.getUserReservations[0] ? (
+            userReservationResult.data.getUserReservations.map((r, index) => {
+              return (
+                <Card
+                  className="w-full px-8 py-8 max-w-full mb-8 mx-0"
+                  key={r.reservationId}
+                >
+                  <div className=" sm:flex justify-between">
+                    <div>
+                      <div className="mb-8">
+                        <Link href={`/reservation/${r.reservationId}`}>
+                          <a>
+                            <SubTitle className=" mb-0 flex items-center gap-2">
+                              {`Reservation # ${index}`}{' '}
+                              <div>
+                                <MdArrowForward size={24} />
+                              </div>
+                            </SubTitle>
+                          </a>
+                        </Link>
+                        <p>{`${formatDate(r.startDate)} - ${formatDate(
+                          r.endDate,
+                        )}`}</p>
+                      </div>
+                      <div className="flex flex-row gap-8 text-blue-600">
+                        <span className="flex flex-row align-baseline">
+                          <MdPeople size={32} />
+                          <p className="font-bold text-2xl  ml-3">0</p>
+                        </span>
+                        <p className=" font-semibold text-2xl whitespace-nowrap">
+                          Rooms: {r.roomsReserved?.length}
+                        </p>
+                        <HiMinusCircle
+                          onClick={() => {
+                            setIdToDelete(r.reservationId as string)
+                            setShow(true)
+                          }}
+                          size={32}
+                          className=" text-blue-300 hover:text-red-500 hover:scale-105 hover:cursor-pointer transition-transform"
+                        />
+                      </div>
                     </div>
-                    <div className="flex flex-row gap-8 text-blue-600">
-                      <span className="flex flex-row align-baseline">
-                        <MdPeople size={32} />
-                        <p className="font-bold text-2xl  ml-3">0</p>
-                      </span>
-                      <p className=" font-semibold text-2xl whitespace-nowrap">
-                        Rooms: {r.roomsReserved?.length}
-                      </p>
-                      <HiMinusCircle
-                        onClick={() => {
-                          setIdToDelete(r.reservationId as string)
-                          setShow(true)
-                        }}
-                        size={32}
-                        className=" text-blue-300 hover:text-red-500 hover:scale-105 hover:cursor-pointer transition-transform"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-col justify-between text-right">
-                    <Link href={`/reservation/${r.reservationId}`}>
-                      <a>
-                        <MdArrowForward size={24} className=" ml-auto" />
-                      </a>
-                    </Link>
-                    <span className="font-bold text-3xl text-blue-600">
+                    <p className=" mt-4 sm:mt-0 font-bold text-3xl text-blue-600">
                       €{r.totalPrice}
-                    </span>
+                    </p>
                   </div>
-                </div>
-              </Card>
-            )
-          }): <p>It looks empty here...</p>}
+                </Card>
+              )
+            })
+          ) : (
+            <p>It looks empty here...</p>
+          )}
         </div>
       </Authenticated>
       <NotAuthenticated>
