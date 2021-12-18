@@ -11,6 +11,7 @@ import {
   useAuth,
 } from 'src/providers/authProvider'
 import { useNewReservation } from 'src/providers/reservationProvider'
+import { useTranslation } from 'next-i18next'
 
 interface RoomCardProps {
   img: string | undefined | null
@@ -138,6 +139,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
 }) => {
   const { locale } = useRouter()
   const { addRoom } = useNewReservation()
+  const { t } = useTranslation('common')
 
   const handleBookRoom = () => {
     if (id) {
@@ -173,7 +175,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
             </p>
           </span>
           <Button className="w-max py-2 px-8 text-base font-normal leading-tight ">
-            <Link href={'/rooms'}>Show Availability</Link>
+            <Link href={'/rooms'}>{t('Show Availability')}</Link>
           </Button>
         </div>
       </RoomCardHolder>
@@ -195,7 +197,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
             <Authenticated>
               <Link href={`/room/${id}`}>
                 <span className="flex flex-row items-center cursor-pointer">
-                  <a className="text-blue-500 mr-4">More info</a>
+                  <a className="text-blue-500 mr-4">{t('More info')}</a>
                   <Arrow />
                 </span>
               </Link>
