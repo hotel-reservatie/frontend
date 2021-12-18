@@ -225,6 +225,7 @@ const Form: FunctionComponent<FormProps> = ({
         ) {
           return (
             <Dropdown
+              className={className}
               key={`dropdown-${index}`}
               options={
                 item.options ?? [{ id: '', name: 'option array required' }]
