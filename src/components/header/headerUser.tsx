@@ -38,7 +38,7 @@ export const DropDownItem: FunctionComponent<DropDownItemProps> = ({
       >
         <div className=" flex items-center gap-2">
           {<Icon size={24} />}
-          <a href="">{title}</a>
+          <a className=' whitespace-nowrap'>{title}</a>
         </div>
       </li>
     </Link>
