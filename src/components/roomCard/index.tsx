@@ -3,7 +3,7 @@ import Image from 'next/image'
 import router, { useRouter } from 'next/router'
 import localizedPrice from 'src/utils/localePrice'
 import Button from 'src/components/button'
-import Link from 'next/link'
+import Link from 'src/components/translatedLink'
 import FavButton from '../button/FavButton'
 import {
   Authenticated,
@@ -13,6 +13,7 @@ import {
 import { useNewReservation } from 'src/providers/reservationProvider'
 import { useTranslation } from 'next-i18next'
 import Translater from '../translater'
+import LinkWrapper from '../linkWrapper'
 
 interface RoomCardProps {
   img: string | undefined | null
@@ -176,9 +177,11 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
             </p>
           </span>
           <Link href={'/rooms'}>
-            <Button className="w-max py-2 px-8 text-base font-normal leading-tight ">
-              <Translater>Show Availability</Translater>
-            </Button>
+            <LinkWrapper>
+              <Button className="w-max py-2 px-8 text-base font-normal leading-tight ">
+                <Translater>Show Availability</Translater>
+              </Button>
+            </LinkWrapper>
           </Link>
         </div>
       </RoomCardHolder>
@@ -233,19 +236,23 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
             </div>
             <Authenticated>
               <Link href={'/newreservation'}>
-                <Button
-                  onClick={handleBookRoom}
-                  className="w-max py-2 px-8 text-base font-normal leading-tight"
-                >
-                  <Translater>Book this room</Translater>
-                </Button>
+                <LinkWrapper>
+                  <Button
+                    onClick={handleBookRoom}
+                    className="w-max py-2 px-8 text-base font-normal leading-tight"
+                  >
+                    <Translater>Book this room</Translater>
+                  </Button>
+                </LinkWrapper>
               </Link>
             </Authenticated>
             <NotAuthenticated>
               <Link href={`/room/${id}`}>
-                <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
-                  <Translater>More info</Translater>
-                </Button>
+                <LinkWrapper>
+                  <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
+                    <Translater>More info</Translater>
+                  </Button>
+                </LinkWrapper>
               </Link>
             </NotAuthenticated>
           </div>

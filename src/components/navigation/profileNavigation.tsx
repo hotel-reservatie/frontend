@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from 'src/components/translatedLink'
 import { useRouter } from 'next/router'
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { IconType } from 'react-icons'

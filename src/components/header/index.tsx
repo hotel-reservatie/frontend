@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Link from 'next/link'
+import Link from 'src/components/translatedLink'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import {

@@ -53,7 +53,7 @@ const moduleExports = {
       },
       {
         source: '/nl/reservatie/:reservationId',
-        destination: '/reservations/:reservationId',
+        destination: '/reservation/:reservationId',
         locale: false,
       },
       {
