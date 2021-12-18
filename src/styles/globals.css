@@ -23,8 +23,6 @@ body {
   border-radius: 6px;
 }
 
-
-
 /* MODAL DIALOG FROM BOOTSTRAP */
 .modal {
   position: fixed;
@@ -115,4 +113,11 @@ body {
     max-width: 500px;
     margin: 1.75rem auto;
   }
+}
+
+input[type='range']::-webkit-slider-thumb {
+  pointer-events: all;
+  width: 24px;
+  height: 24px;
+  -webkit-appearance: none;
 }

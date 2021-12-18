@@ -21,6 +21,7 @@ import Form from 'src/components/form'
 import FormItem, { FormItemOption } from 'src/classes/FormItem'
 import { useFilterValues } from 'src/providers/filterProvider'
 import Skeleton from 'src/components/roomCard/Skeleton'
+import Range from 'src/components/input/Range'
 
 const Rooms = () => {
   const { user } = useAuth()
@@ -234,6 +235,14 @@ const Rooms = () => {
           boundries={boundries}
           onValueChange={debouncedSliderChange}
         />
+        {boundries.min && boundries.max && (
+          <Range
+            min={boundries.min}
+            max={boundries.max}
+            onChange={() => {}}
+            step={10}
+          />
+        )}
       </div>
       {data && data.getRooms && data.getRooms?.length < 1 && (
         <div className="flex justify-center">
