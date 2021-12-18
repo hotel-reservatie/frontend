@@ -87,20 +87,20 @@ const RoomCardHolder: FunctionComponent<RoomCardHolderProps> = ({
   title,
 }) => {
   return (
-    <div className="max-w-7xl mx-auto grid grid-cols-4 mb-8 items-center rounded-xl shadow bg-white relative">
-      <div className="h-80 relative">
+    <div className="max-w-xs sm:max-w-2xl md:max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 mb-8 items-center rounded-xl shadow bg-white relative">
+      <div className="h-52 sm:h-64 md:h-80 relative col-span-2 md:col-span-1">
         {img && title && (
           <Image
             src={img}
             alt={title}
             layout="fill" // required
             objectFit="cover" // change to suit your needs
-            className="rounded-l-xl"
+            className="rounded-t-xl md:rounded-l-xl md:rounded-tr-none"
             priority
           />
         )}
       </div>
-      <div className="col-span-3 flex  flex-col px-8 h-full content-between justify-between">
+      <div className="col-span-3 flex flex-col px-4 md:px-8 h-full content-between justify-between">
         {children}
       </div>
     </div>
@@ -113,8 +113,12 @@ const RoomCardTitleSection: FunctionComponent<RoomCardTitleSectionProps> = ({
 }) => {
   return (
     <div className="">
-      <h2 className="font-bold text-2xl mt-8 mb-4">{title ? title : ''}</h2>
-      <p className="max-w-md text-blue-700">{desc ? desc : ''}</p>
+      <h2 className="font-bold text-xl md:text-2xl mt-8 mb-4">
+        {title ? title : ''}
+      </h2>
+      <p className="max-w-md text-blue-700 text-sm md:text-base mr-4">
+        {desc ? desc : ''}
+      </p>
     </div>
   )
 }
@@ -153,20 +157,22 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
         <div className="flex flex-row justify-between items-start">
           <RoomCardTitleSection title={title} desc={desc} />
           <div>
-            <p className="mt-8 text-gray-400">Starting from</p>
-            <p className="font-bold text-2xl">
+            <p className="mt-8 text-gray-400 text-xs md:text-base">
+              Starting from
+            </p>
+            <p className="font-bold md:text-2xl text-sm">
               {price ? localizedPrice(price, locale) : ''}
             </p>
           </div>
         </div>
-        <div className="flex flex-row justify-between my-8">
-          <span className="flex flex-row align-baseline">
+        <div className="flex flex-row justify-center  md:justify-between my-8">
+          <span className="flex-row align-baseline hidden md:flex">
             <People />
             <p className="font-bold text-2xl text-blue-700 ml-3">
               {size ? size : ''}
             </p>
           </span>
-          <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
+          <Button className="w-max py-2 px-8 text-base font-normal leading-tight ">
             <Link href={'/rooms'}>Show Availability</Link>
           </Button>
         </div>
