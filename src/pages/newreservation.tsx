@@ -32,6 +32,7 @@ import FormItem from 'src/classes/FormItem'
 import { useTranslation } from 'react-i18next'
 import Form from 'src/components/form'
 import CustomerInfoSection from 'src/components/customerInfo'
+import Translater from 'src/components/translater'
 
 const NewReservation = () => {
   const {
@@ -135,13 +136,13 @@ const NewReservation = () => {
   // TODO: Add dateform that uses filterValue for the dates OR if there's already a reservation use those dates
   const dateForm: Array<FormItem> = [
     new FormItem({
-      placeholder: t('datepicker.arrivaldate'),
+      placeholder: 'Arrival Date',
       type: 'date',
       name: 'arrivalDate',
       id: 'startDate',
     }),
     new FormItem({
-      placeholder: t('datepicker.departuredate'),
+      placeholder: 'Departure Date',
       type: 'date',
       name: 'departureDate',
       id: 'endDate',
@@ -292,15 +293,21 @@ const NewReservation = () => {
         <SubTitle>Booking Info</SubTitle>
         <div className="mb-8">
           <div className="flex justify-between mb">
-            <p>Total amount of days</p>
+            <p>
+              <Translater>Total amount of days</Translater>
+            </p>
             <p>{validated.data?.validateReservation.totalDays}</p>
           </div>
           <div className="flex justify-between mb">
-            <p>Amount of weekend days</p>
+            <p>
+              <Translater>Amount of weekend days</Translater>
+            </p>
             <p>{validated.data?.validateReservation.weekendDays}</p>
           </div>
           <div className="flex justify-between mb">
-            <p>Rooms</p>
+            <p>
+              <Translater>Rooms</Translater>
+            </p>
             <p>{newReservation?.roomIds?.length}</p>
           </div>
           <ul className=" pl-8 list-disc">
@@ -342,12 +349,14 @@ const NewReservation = () => {
             disabled={!validated.data?.validateReservation.isValid}
             onClick={handleConfirmButton}
           >
-            Confirm Booking
+            <Translater>Confirm Booking</Translater>
           </Button>
         </div>
       </Authenticated>
       <NotAuthenticated>
-        <p>Please sign in to create a booking...</p>
+        <p>
+          <Translater>Please sign in to create a booking...</Translater>
+        </p>
       </NotAuthenticated>
     </PageLayout>
   )

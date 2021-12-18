@@ -4,6 +4,7 @@ import FormItem from 'src/classes/FormItem'
 import { UserInput } from 'src/schema/__generated-schema-types'
 import Form from '../form'
 import SubTitle from '../text/SubTitle'
+import Translater from '../translater'
 
 interface CustomerInfoSectionProps {
   userInfo: UserInput
@@ -26,11 +27,14 @@ export const CustomerInfoItem: FunctionComponent<CustomerInfoItemProps> = ({
   value,
   className,
 }) => {
-
   return (
     <div className={`${className} mb-4`}>
-      <p className="text-blue-600 font-semibold">{title}</p>
-      <p className=" text-blue-400">{value ? value : 'Unknown'}</p>
+      <p className="text-blue-600 font-semibold">
+        <Translater>{title}</Translater>
+      </p>
+      <p className=" text-blue-400">
+        <Translater>{value ? value : 'Unknown'}</Translater>
+      </p>
     </div>
   )
 }
@@ -41,7 +45,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
   submitting,
   onSubmit,
   setSubmitting,
-  requiredFormFields = false
+  requiredFormFields = false,
 }) => {
   const userInfoForm: Array<FormItem> = [
     new FormItem({
@@ -118,42 +122,42 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
         <CustomerInfoItem
           title="User Name"
           value={userInfo.userName as string}
-          className='col-span-4'
+          className="col-span-4"
         />
         <CustomerInfoItem
           title="First Name"
           value={userInfo.firstName as string}
-          className='col-span-2'
+          className="col-span-2"
         />
         <CustomerInfoItem
           title="Last Name"
           value={userInfo.lastName as string}
-          className='col-span-2'
+          className="col-span-2"
         />
         <CustomerInfoItem
           title="Billing Email"
           value={userInfo.reservationEmail as string}
-          className='col-span-2'
+          className="col-span-2"
         />
         <CustomerInfoItem
           title="Phone"
           value={userInfo.phone as string}
-          className='col-span-2'
+          className="col-span-2"
         />
         <CustomerInfoItem
           title="Address"
           value={userInfo.address as string}
-          className='col-span-2'
+          className="col-span-2"
         />
         <CustomerInfoItem
           title="City"
           value={userInfo.city as string}
-          className='col-span-1'
+          className="col-span-1"
         />
         <CustomerInfoItem
           title="Postal"
           value={userInfo.postal as number}
-          className='col-span-1'
+          className="col-span-1"
         />
       </div>
     )
@@ -167,7 +171,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
         onSubmit={onSubmit}
         submitting={submitting}
         setSubmitting={setSubmitting}
-        className=' mb-4'
+        className=" mb-4"
       />
     )
   }

@@ -6,6 +6,7 @@ import Button from 'src/components/button'
 import Card from 'src/components/card'
 import Form from 'src/components/form'
 import PageLayout from 'src/components/layout/PageLayout'
+import Translater from 'src/components/translater'
 
 const Contact = () => {
   const [submitting, setSubmitting] = useState(false)
@@ -60,7 +61,9 @@ const Contact = () => {
             onSubmit={handleSubmit}
           />
 
-          <Button onClick={setSubmit}>{'Send'}</Button>
+          <Button onClick={setSubmit}>
+            <Translater>{'Send'}</Translater>
+          </Button>
         </Card>
       </div>
     </PageLayout>

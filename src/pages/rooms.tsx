@@ -159,7 +159,7 @@ const Rooms = () => {
 
   const formItems = [
     new FormItem({
-      placeholder: 'datepicker.arrivaldate',
+      placeholder: 'Arrival Date',
       type: 'date',
       name: 'arrivalDate',
       id: 'startDate',
@@ -167,7 +167,7 @@ const Rooms = () => {
       value: filterValues.startDate,
     }),
     new FormItem({
-      placeholder: 'datepicker.departuredate',
+      placeholder: 'Departure Date',
       type: 'date',
       name: 'departureDate',
       id: 'endDate',
@@ -217,9 +217,7 @@ const Rooms = () => {
   return (
     <PageLayout>
       <div>
-        <PageTitle>
-          <Translater>Rooms</Translater>
-        </PageTitle>
+        <PageTitle>Rooms</PageTitle>
 
         {filterOptions && (
           <Form

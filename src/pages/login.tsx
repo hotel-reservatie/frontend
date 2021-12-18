@@ -10,6 +10,7 @@ import { useTranslation } from 'next-i18next'
 import { useAuth } from 'src/providers/authProvider'
 import FormItem from 'src/classes/FormItem'
 import Form from 'src/components/form'
+import Translater from 'src/components/translater'
 
 const Login = () => {
   const router = useRouter()
@@ -44,19 +45,21 @@ const Login = () => {
 
   const formItems = [
     new FormItem({
-      label: t('email.address'),
+      label: 'email.address',
       id: 'email',
       name: 'email',
-      placeholder: t('email.placeholder'),
+      placeholder: 'email.placeholder',
       type: 'email',
     }),
     new FormItem({
-      label: t('password'),
+      label: 'Password',
       id: 'password',
       type: 'password',
       name: 'password',
     }),
   ]
+
+  console.log(t('loginpage.register'))
 
   return (
     <div className="min-h-full pt-12">
@@ -90,7 +93,7 @@ const Login = () => {
         <Button onClick={handleLoginClick}>{t('login')}</Button>
         {/* </form> */}
 
-        <Subtext>
+        <p className="text-sm text-center text-blue-400 mt-12">
           {t('subtext.register')}{' '}
           <Link href="/register">
             <a className="underline focus:outline-none focus-visible:ring">
@@ -98,7 +101,7 @@ const Login = () => {
             </a>
           </Link>
           .
-        </Subtext>
+        </p>
       </Card>
     </div>
   )

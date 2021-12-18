@@ -7,8 +7,13 @@ import PageLayout from 'src/components/layout/PageLayout'
 import SmallRoomCard from 'src/components/roomCard/SmallRoomCard'
 import PageTitle from 'src/components/text/PageTitle'
 import SubTitle from 'src/components/text/SubTitle'
+import Translater from 'src/components/translater'
 import { Authenticated, useAuth } from 'src/providers/authProvider'
-import { useDeleteReservationMutation, useGetReservationLazyQuery, useGetReservationQuery } from 'src/schema'
+import {
+  useDeleteReservationMutation,
+  useGetReservationLazyQuery,
+  useGetReservationQuery,
+} from 'src/schema'
 import formatDate from 'src/utils/formatDate'
 
 const Reservation = () => {
@@ -29,10 +34,12 @@ const Reservation = () => {
   }, [reservationResult])
 
   const handleCancelBtn = () => {
-    deleteReservation({ variables: { reservationId: reservationId as string } }).then(() => {
-        setDialogIsVisible(false);
-        router.push('/profile/reservations')
-      })
+    deleteReservation({
+      variables: { reservationId: reservationId as string },
+    }).then(() => {
+      setDialogIsVisible(false)
+      router.push('/profile/reservations')
+    })
   }
 
   //   useEffect(() => {
@@ -54,15 +61,15 @@ const Reservation = () => {
           <div className="mb-8">
             <SubTitle>Arrival and departure</SubTitle>
             <p>
-              Checkin:{' '}
+              <Translater>Checkin</Translater>:{' '}
               {formatDate(reservationResult.data?.getReservation.startDate)}{' '}
             </p>
             <p>
-              Checkout:{' '}
+              <Translater>Checkout</Translater>:{' '}
               {formatDate(reservationResult.data?.getReservation.endDate)}{' '}
             </p>
             <p>
-              Total amount of days:{' '}
+              <Translater>Total amount of days</Translater>:{' '}
               {reservationResult.data?.getReservation.totalAmountOfDays}
             </p>
           </div>
@@ -89,15 +96,21 @@ const Reservation = () => {
           <SubTitle>Booking Info</SubTitle>
           <div className="mb-8">
             <div className="flex justify-between mb">
-              <p>Total amount of days</p>
+              <p>
+                <Translater>Total amount of days</Translater>
+              </p>
               <p>{reservationResult.data?.getReservation.totalAmountOfDays}</p>
             </div>
             <div className="flex justify-between mb">
-              <p>Amount of weekend days</p>
+              <p>
+                <Translater>Amount of weekend days</Translater>
+              </p>
               <p>{reservationResult.data?.getReservation.weekendDays}</p>
             </div>
             <div className="flex justify-between mb">
-              <p>Rooms</p>
+              <p>
+                <Translater>Rooms</Translater>
+              </p>
               <p>
                 {reservationResult.data?.getReservation.roomsReserved?.length}
               </p>
@@ -128,10 +141,13 @@ const Reservation = () => {
             }`}</SubTitle>
           </div>
           <div className="flex justify-center">
-            <Button className="w w-72 bg-red-500 hover:bg-red-400" onClick={() => {
-                setDialogIsVisible(true);
-            }}>
-              CANCEL RESERVATION
+            <Button
+              className="w w-72 bg-red-500 hover:bg-red-400"
+              onClick={() => {
+                setDialogIsVisible(true)
+              }}
+            >
+              <Translater>CANCEL RESERVATION</Translater>
             </Button>
           </div>
         </Authenticated>
@@ -140,10 +156,10 @@ const Reservation = () => {
           show={dialogIsVisible}
           onRequestConfirm={() => {
             handleCancelBtn()
-            setDialogIsVisible(false);
+            setDialogIsVisible(false)
           }}
           onRequestClose={() => {
-              setDialogIsVisible(false);
+            setDialogIsVisible(false)
           }}
           description="You are about to cancel your reservation. Are you sure you want to continue?"
         />

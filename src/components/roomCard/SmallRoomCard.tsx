@@ -4,6 +4,7 @@ import { HiMinusCircle } from 'react-icons/hi'
 import Card from '../card'
 import SubTitle from '../text/SubTitle'
 import Link from 'next/link'
+import Translater from '../translater'
 
 interface SmallRoomCardProps {
   isEditable?: boolean
@@ -76,7 +77,7 @@ const SmallRoomCard: FunctionComponent<SmallRoomCardProps> = ({
             </div>
             <div className=" font-bold text-blue-300">
               <span className="text-3xl text-blue-800">{`€${price} `}</span>
-              per night
+              <Translater>per night</Translater>
             </div>
           </div>
           {isEditable ? (

@@ -45,7 +45,7 @@ const Input: FunctionComponent<InputProps> = ({
     <div className={className}>
       <span className="flex justify-between items-center">
         <label className={labelStyling} htmlFor={id}>
-          {t(`${label}`) ?? ''}
+          {t(`${label ?? ''}`)}
         </label>
         {faulty && errormessage && (
           <p className={classNames(labelStyling, 'text-xs')}>{errormessage}</p>

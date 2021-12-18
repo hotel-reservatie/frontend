@@ -11,7 +11,7 @@ const About = () => {
       <div className="grid grid-cols-2 place-items-center gap-x-4">
         <div>
           <p>
-            <Translater>{'about.text'}</Translater>
+            <Translater>{'text.about'}</Translater>
           </p>
         </div>
         <div className="relative h-full w-full">

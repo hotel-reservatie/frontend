@@ -16,6 +16,7 @@ import {
   MdPerson,
 } from 'react-icons/md'
 import { useAuth } from 'src/providers/authProvider'
+import Translater from '../translater'
 
 interface DropDownItemProps {
   Icon: IconType
@@ -38,7 +39,9 @@ export const DropDownItem: FunctionComponent<DropDownItemProps> = ({
       >
         <div className=" flex items-center gap-2">
           {<Icon size={24} />}
-          <a href="">{title}</a>
+          <a href="">
+            <Translater>{title}</Translater>
+          </a>
         </div>
       </li>
     </Link>
@@ -51,7 +54,11 @@ export const UserDropDown = () => {
     <div className=" z-50 absolute top-16 right-0 bg-white border-1 rounded-lg border-blue-400 shadow">
       <ul>
         <DropDownItem Icon={MdPerson} title={'Profile'} href="/profile/info" />
-        <DropDownItem Icon={MdFavorite} title={'Favorites'} href="/profile/favorites" />
+        <DropDownItem
+          Icon={MdFavorite}
+          title={'Favorites'}
+          href="/profile/favorites"
+        />
         <DropDownItem
           Icon={MdListAlt}
           title={'My Reservations'}
