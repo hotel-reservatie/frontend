@@ -22,6 +22,7 @@ import FormItem, { FormItemOption } from 'src/classes/FormItem'
 import { useFilterValues } from 'src/providers/filterProvider'
 import Skeleton from 'src/components/roomCard/Skeleton'
 import PageLayout from 'src/components/layout/PageLayout'
+import Translater from 'src/components/translater'
 
 const Rooms = () => {
   const { user } = useAuth()
@@ -174,7 +175,7 @@ const Rooms = () => {
       value: filterValues.endDate,
     }),
     new FormItem({
-      placeholder: 'Search room name',
+      placeholder: t('Search room name'),
       type: 'text',
       id: 'roomName',
       className: 'col-span-3',
@@ -182,14 +183,14 @@ const Rooms = () => {
     }),
     new FormItem({
       type: 'dropdown',
-      placeholder: 'Room Type',
+      placeholder: t('Room Type'),
       options: filterOptions?.roomTypes,
       name: 'roomType',
       id: 'roomTypeIds',
     }),
     new FormItem({
       type: 'dropdown',
-      placeholder: 'Room Capacity',
+      placeholder: t('Room Capacity'),
       options: filterOptions?.roomCapacity,
       name: 'roomCapacity',
       id: 'maxCapacity',
@@ -216,7 +217,9 @@ const Rooms = () => {
   return (
     <PageLayout>
       <div>
-        <PageTitle>Rooms</PageTitle>
+        <PageTitle>
+          <Translater>Rooms</Translater>
+        </PageTitle>
 
         {filterOptions && (
           <Form

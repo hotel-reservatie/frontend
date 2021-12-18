@@ -12,6 +12,7 @@ import {
 } from 'src/providers/authProvider'
 import { useNewReservation } from 'src/providers/reservationProvider'
 import { useTranslation } from 'next-i18next'
+import Translater from '../translater'
 
 interface RoomCardProps {
   img: string | undefined | null
@@ -160,7 +161,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
           <RoomCardTitleSection title={title} desc={desc} />
           <div>
             <p className="mt-8 text-gray-400 text-xs md:text-base">
-              Starting from
+              <Translater>Starting from</Translater>
             </p>
             <p className="font-bold md:text-2xl text-sm">
               {price ? localizedPrice(price, locale) : ''}
@@ -197,7 +198,9 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
             <Authenticated>
               <Link href={`/room/${id}`}>
                 <span className="flex flex-row items-center cursor-pointer">
-                  <a className="text-blue-500 mr-4">{t('More info')}</a>
+                  <a className="text-blue-500 mr-4">
+                    <Translater>More info</Translater>
+                  </a>
                   <Arrow />
                 </span>
               </Link>
@@ -231,12 +234,16 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
                 onClick={handleBookRoom}
                 className="w-max py-2 px-8 text-base font-normal leading-tight"
               >
-                <Link href={'/newreservation'}>Book this room</Link>
+                <Link href={'/newreservation'}>
+                  <Translater>Book this room</Translater>
+                </Link>
               </Button>
             </Authenticated>
             <NotAuthenticated>
               <Button className="w-max py-2 px-8 text-base font-normal leading-tight">
-                <Link href={`/room/${id}`}>More info</Link>
+                <Link href={`/room/${id}`}>
+                  <Translater>More info</Translater>
+                </Link>
               </Button>
             </NotAuthenticated>
           </div>

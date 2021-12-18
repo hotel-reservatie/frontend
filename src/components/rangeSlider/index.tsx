@@ -1,5 +1,6 @@
 import Slider from '@mui/material/Slider'
 import { FunctionComponent, useState } from 'react'
+import Translater from '../translater'
 
 interface RangeSliderProps {
   boundries: { min: number | null; max: number | null }
@@ -23,7 +24,9 @@ const RangeSlider: FunctionComponent<RangeSliderProps> = ({
   if (boundries.min && boundries.max) {
     return (
       <div className="flex flex-col items-center mb-28 px-6">
-        <h2 className=" text-blue-500 font text-2xl">Price Range</h2>
+        <h2 className=" text-blue-500 font text-2xl">
+          <Translater>Price Range</Translater>
+        </h2>
         <Slider
           min={boundries.min}
           max={boundries.max}
