@@ -46,7 +46,7 @@ const Home: NextPage = () => {
 
   return (
     <PageLayout>
-      <div className="md:grid  md:grid-cols-2 md:mt-16">
+      <div className="md:grid  md:grid-cols-2 md:mt-16 mb-8">
         <div className="mb-8 mx-auto md:my-auto md:pr-4 md:text-center">
           <h1 className="font-bold text-blue-700 mb-2 md:text-4xl text-center md:text-left">
             {t('home.welcome')}
