@@ -20,6 +20,7 @@ const About = () => {
             layout="fill" // required
             objectFit="contain" // change to suit your needs
             priority
+            alt='hotel'
           />
         </div>
       </div>
