@@ -63,8 +63,6 @@ const Login = () => {
     }),
   ]
 
-  console.log(t('loginpage.register'))
-
   return (
     <div className="min-h-full pt-12">
       <Card>

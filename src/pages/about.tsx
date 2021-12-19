@@ -8,13 +8,13 @@ const About = () => {
   return (
     <PageLayout className="flex flex-col h-full">
       <PageTitle>Hotel MCT</PageTitle>
-      <div className="grid grid-cols-2 place-items-center gap-x-4">
+      <div className="md:grid grid-cols-2 place-items-center gap-x-4">
         <div>
           <p>
             <Translater>{'text.about'}</Translater>
           </p>
         </div>
-        <div className="relative h-full w-full">
+        <div className="relative w-full h-52 mt-16 md:mt-0">
           <Image
             src="/image/hotel.png"
             layout="fill" // required

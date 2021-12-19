@@ -20,6 +20,7 @@ import { useRouter } from 'next/router'
 import Link from 'src/components/translatedLink'
 import ProfileNavigation from 'src/components/navigation/profileNavigation'
 import Translater from 'src/components/translater'
+import EmptyPlaceholder from 'src/components/emptyPlaceholder'
 
 const Reservations = () => {
   const [show, setShow] = useState(false)
@@ -105,9 +106,9 @@ const Reservations = () => {
               )
             })
           ) : (
-            <p>
-              <Translater>It looks empty here...</Translater>
-            </p>
+            <EmptyPlaceholder href="/newreservation">
+              Start booking now
+            </EmptyPlaceholder>
           )}
         </div>
       </Authenticated>

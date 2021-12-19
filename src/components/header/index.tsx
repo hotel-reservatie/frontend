@@ -14,6 +14,7 @@ import {
   MdListAlt,
   MdLogin,
   MdLogout,
+  MdOutlineShoppingBasket,
   MdPerson,
 } from 'react-icons/md'
 import { IoMdBed } from 'react-icons/io'
@@ -141,6 +142,12 @@ const Header = () => {
                 Icon={MdListAlt}
                 title="My Reservations"
                 href="/profile/reservations"
+                className=" border-white"
+              />
+              <NavElement
+                Icon={MdOutlineShoppingBasket}
+                title="Cart"
+                href="/newreservation"
                 className=" border-white"
               />
             </Authenticated>

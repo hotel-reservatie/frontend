@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
+import EmptyPlaceholder from 'src/components/emptyPlaceholder'
 import PageLayout from 'src/components/layout/PageLayout'
 import ProfileNavigation from 'src/components/navigation/profileNavigation'
 import RoomCard from 'src/components/roomCard'
@@ -39,16 +40,19 @@ const Favorites = () => {
       <Authenticated>
         {userFavs.data?.getUserFavorites &&
           userFavs.data.getUserFavorites.length < 1 && (
-            <div className="flex justify-center flex-row">
-              <h1 className="font-semibold text-2xl">
-                <Translater>It looks empty in here...</Translater>
-              </h1>{' '}
-              <Link href={'/rooms'}>
-                <h1 className="font-semibold text-2xl ml-1 underline cursor-pointer hover:text-blue-700">
-                  <Translater>{'Add some of your favorites here!'}</Translater>
-                </h1>
-              </Link>
-            </div>
+            // <div className="flex justify-center flex-row">
+            //   <h1 className="font-semibold text-2xl">
+            //     <Translater>It looks empty in here...</Translater>
+            //   </h1>{' '}
+            //   <Link href={'/rooms'}>
+            //     <h1 className="font-semibold text-2xl ml-1 underline cursor-pointer hover:text-blue-700">
+            //       <Translater>{'Add some of your favorites here!'}</Translater>
+            //     </h1>
+            //   </Link>
+            // </div>
+            <EmptyPlaceholder href="/rooms">
+              Start adding some favorites
+            </EmptyPlaceholder>
           )}
         {userFavs.data?.getUserFavorites.map((room, index) => {
           return (
