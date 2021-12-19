@@ -3,6 +3,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import EmptyPlaceholder from 'src/components/emptyPlaceholder'
+import NotSignedIn from 'src/components/emptyPlaceholder/NotSignedIn'
 import PageLayout from 'src/components/layout/PageLayout'
 import ProfileNavigation from 'src/components/navigation/profileNavigation'
 import RoomCard from 'src/components/roomCard'
@@ -74,9 +75,7 @@ const Favorites = () => {
         })}
       </Authenticated>
       <NotAuthenticated>
-        <p>
-          <Translater>Please sign in to view your favorites...</Translater>
-        </p>
+        <NotSignedIn>Please sign in to view your favorites...</NotSignedIn>
       </NotAuthenticated>
     </ProfileNavigation>
   )

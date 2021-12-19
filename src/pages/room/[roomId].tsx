@@ -31,6 +31,7 @@ import { useNewReservation } from 'src/providers/reservationProvider'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import ReviewCard from 'src/components/card/ReviewCard'
 import Link from 'next/link'
+import NotSignedIn from 'src/components/emptyPlaceholder/NotSignedIn'
 
 const RoomPage: NextPage = () => {
   const router = useRouter()
@@ -124,7 +125,9 @@ const RoomPage: NextPage = () => {
   return (
     <PageLayout>
       <div className="flex justify-between items-start mb-8 gap-2">
-        <PageTitle className=' mb-0 whitespace-normal'>{data?.getRoomById?.roomName}</PageTitle>
+        <PageTitle className=" mb-0 whitespace-normal">
+          {data?.getRoomById?.roomName}
+        </PageTitle>
         <Authenticated>
           <FavButton
             size={32}
@@ -168,6 +171,9 @@ const RoomPage: NextPage = () => {
               <Link href={`/newreservation`}>Book this room</Link>
             </Button>
           </Authenticated>
+          <NotAuthenticated>
+            <Button disabled={true}>Sign in to book</Button>
+          </NotAuthenticated>
         </div>
       </div>
       <div className="md:grid md:grid-cols-2 md:mt-16 gap-x-16">
@@ -197,22 +203,24 @@ const RoomPage: NextPage = () => {
       </div>
       <SubTitle className="md:mt-8">Reviews</SubTitle>
       <div className="grid md:grid-cols-2 md:mb-8 auto-rows-fr gap-6 mt-8">
-        {data?.getRoomById?.reviews && data.getRoomById.reviews.length > 0
-          ? data?.getRoomById?.reviews?.map(r => {
-              return (
-                <ReviewCard
-                  key={r.reviewId}
-                  reviewId={r.reviewId!}
-                  title={r.title}
-                  score={r.reviewScore}
-                  description={r.description!}
-                  fromuser={r.user!}
-                  createdAt={formatDate(r.createdAt)}
-                  onRequestDelete={handleDeleteReview}
-                />
-              )
-            })
-          : null}
+        {data?.getRoomById?.reviews && data.getRoomById.reviews.length > 0 ? (
+          data?.getRoomById?.reviews?.map(r => {
+            return (
+              <ReviewCard
+                key={r.reviewId}
+                reviewId={r.reviewId!}
+                title={r.title}
+                score={r.reviewScore}
+                description={r.description!}
+                fromuser={r.user!}
+                createdAt={formatDate(r.createdAt)}
+                onRequestDelete={handleDeleteReview}
+              />
+            )
+          })
+        ) : (
+          <p>It looks empty here... Be the first to write a review!</p>
+        )}
       </div>
       <SubTitle>Describe your experience</SubTitle>
       <Authenticated>
@@ -243,7 +251,7 @@ const RoomPage: NextPage = () => {
         </div>
       </Authenticated>
       <NotAuthenticated>
-        <p>Please sign in to write a review</p>
+        <NotSignedIn>Please sign in to write a review...</NotSignedIn>
       </NotAuthenticated>
     </PageLayout>
   )

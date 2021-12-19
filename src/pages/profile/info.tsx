@@ -4,6 +4,7 @@ import { MdEdit } from 'react-icons/md'
 import FormItem from 'src/classes/FormItem'
 import Button from 'src/components/button'
 import CustomerInfoSection from 'src/components/customerInfo'
+import NotSignedIn from 'src/components/emptyPlaceholder/NotSignedIn'
 import ProfileNavigation from 'src/components/navigation/profileNavigation'
 import PageTitle from 'src/components/text/PageTitle'
 import SubTitle from 'src/components/text/SubTitle'
@@ -85,7 +86,7 @@ const Info = () => {
         ) : null}
       </Authenticated>
       <NotAuthenticated>
-        <p>Please sign in to view your profile...</p>
+        <NotSignedIn>Please sign in to view your profile...</NotSignedIn>
       </NotAuthenticated>
     </ProfileNavigation>
   )
