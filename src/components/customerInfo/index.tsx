@@ -74,7 +74,7 @@ const CustomerInfoSection: FunctionComponent<CustomerInfoSectionProps> = ({
       value: userInfo.reservationEmail,
       type: 'email',
       autoComplete: 'email',
-      placeholder: 'Doe',
+      placeholder: 'email.placeholder',
       name: 'email',
       className: 'col-span-4 sm:col-span-2',
       required: requiredFormFields,

@@ -20,6 +20,8 @@ import { useRouter } from 'next/router'
 import Link from 'src/components/translatedLink'
 import ProfileNavigation from 'src/components/navigation/profileNavigation'
 import Translater from 'src/components/translater'
+import EmptyPlaceholder from 'src/components/emptyPlaceholder'
+import NotSignedIn from 'src/components/emptyPlaceholder/NotSignedIn'
 
 const Reservations = () => {
   const [show, setShow] = useState(false)
@@ -105,16 +107,14 @@ const Reservations = () => {
               )
             })
           ) : (
-            <p>
-              <Translater>It looks empty here...</Translater>
-            </p>
+            <EmptyPlaceholder href="/newreservation">
+              Start booking now
+            </EmptyPlaceholder>
           )}
         </div>
       </Authenticated>
       <NotAuthenticated>
-        <p>
-          <Translater>Please sign in to view your reservations...</Translater>
-        </p>
+        <NotSignedIn>Please sign in to view your reservations...</NotSignedIn>
       </NotAuthenticated>
       <Dialog
         title="Warning!"

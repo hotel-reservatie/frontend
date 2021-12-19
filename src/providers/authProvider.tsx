@@ -32,10 +32,19 @@ import { json } from 'stream/consumers'
 interface IAuthContext {
   user: User | null
   restoreAuth: () => Promise<{ state: User; token: string }>
-  createUser: (email: string, password: string, username: string) => Promise<Boolean>
-  login: (email: string, password: string) => Promise<boolean>
+  createUser: (
+    email: string,
+    password: string,
+    username: string,
+  ) => Promise<Boolean>
+  login: (email: string, password: string) => Promise<LoginResponse>
   logout: () => Promise<Boolean>
   signedIn: boolean
+}
+
+export interface LoginResponse {
+  success: boolean
+  errCode?: string
 }
 
 const AuthContext = createContext<IAuthContext>({} as IAuthContext)
@@ -180,7 +189,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     })
   }
 
-  const login = (email: string, password: string): Promise<boolean> => {
+  const login = (email: string, password: string): Promise<LoginResponse> => {
     return new Promise((resolve, reject) => {
       signInWithEmailAndPassword(auth, email, password)
         .then(async userCredential => {
@@ -189,14 +198,14 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
           )
           setUser(userCredential.user)
           setSignedIn(true)
-          resolve(true)
+          resolve({ success: true })
         })
         .catch(error => {
           const errorCode = error.code
           const errorMessage = error.message
           console.log(error)
 
-          reject(false)
+          resolve({ success: false, errCode: errorCode })
         })
     })
   }

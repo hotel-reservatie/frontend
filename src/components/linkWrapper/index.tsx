@@ -6,4 +6,6 @@ const LinkWrapper = forwardRef((props: any, ref) => (
   </a>
 ))
 
+LinkWrapper.displayName = 'LinkWrapper'
+
 export default LinkWrapper

@@ -29,9 +29,6 @@ const Reservation = () => {
   })
   const [deleteReservation] = useDeleteReservationMutation()
 
-  useEffect(() => {
-    console.log(reservationResult)
-  }, [reservationResult])
 
   const handleCancelBtn = () => {
     deleteReservation({

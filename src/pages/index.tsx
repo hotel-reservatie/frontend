@@ -14,6 +14,7 @@ import { useFilterValues } from 'src/providers/filterProvider'
 import Skeleton from 'src/components/roomCard/Skeleton'
 import PageLayout from 'src/components/layout/PageLayout'
 import LinkWrapper from 'src/components/linkWrapper'
+import PageTitle from 'src/components/text/PageTitle'
 
 const Home: NextPage = () => {
   const { t } = useTranslation('common')
@@ -68,6 +69,7 @@ const Home: NextPage = () => {
           </Link>
         </Card>
       </div>
+      <PageTitle>Our room types</PageTitle>
       {loading && <Skeleton amount={3} />}
       {data?.getRoomTypes.map((type, index) => (
         <RoomCard
