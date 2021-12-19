@@ -12,18 +12,20 @@ import FormItem from 'src/classes/FormItem'
 import Form from 'src/components/form'
 import Translater from 'src/components/translater'
 
+enum FirebaseError {
+  wrongPassword = 'auth/wrong-password',
+  userNotFound = 'auth/user-not-found',
+  tooManyRequests = 'auth/too-many-requests'
+}
+
 const Login = () => {
   const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [loginError, setLoginError] = useState<string | undefined>()
   const { t } = useTranslation()
   const [credentials, setCredentials] = useState({ email: '', password: '' })
   const { login, user } = useAuth()
-
-  function loginUser() {
-    login(credentials.email, credentials.password)
-    // router.push('/')
-  }
 
   useEffect(() => {
     console.log(user)
@@ -39,11 +41,40 @@ const Login = () => {
     setSubmitting(true)
   }
 
+  const showError = (errCode: string) => {
+    setIsLoading(false)
+
+    console.log(errCode);
+    
+    if(errCode == FirebaseError.wrongPassword){
+      setLoginError('Wrong password!')
+    }
+
+    if(errCode == FirebaseError.userNotFound){
+      setLoginError('This email address is not in use!')
+    }
+
+    if(errCode == FirebaseError.tooManyRequests){
+      setLoginError('Too many requests')
+    }
+    
+  }
+
   function handleSubmit(items: Array<FormItem>) {
     setIsLoading(true)
-    login(items[0].value, items[1].value).then(r => {
-      router.push('/')
-    })
+    login(items[0].value, items[1].value)
+      .then(r => {
+        console.log(r);
+        
+        if (r.success) {
+          router.push('/')
+        }else{
+          showError(r.errCode as string)
+        }
+      })
+      .catch(e => {
+        setLoginError('Something went wrong')
+      })
   }
 
   const formItems = [
@@ -74,6 +105,7 @@ const Login = () => {
           setSubmitting={setSubmitting}
           formItems={formItems}
           onSubmit={handleSubmit}
+          externalError={loginError}
         />
         {/* <form onSubmit={loginUser}>
           <Input
