@@ -147,7 +147,7 @@ const RoomPage: NextPage = () => {
             {data?.getRoomById?.tags
               ? data.getRoomById.tags.map(t => {
                   return (
-                    <Card className=" px-2 py-2 mx-0 flex gap-2" key={t.name}>
+                    <Card className=" px-2 py-2 mx-0 flex items-center gap-2" key={t.name}>
                       <div>
                         <BsTag />
                       </div>
