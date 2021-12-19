@@ -99,9 +99,8 @@ const Rooms = () => {
 
   useEffect(() => {
     if (query['roomtype']) {
-      setFilters({
-        roomTypeIds: query['roomtype'] as Maybe<string[]> | undefined,
-      })
+      updateFilterValue('roomTypeIds', query['roomtype'] as string[])
+      
     } else if (query['daterange']) {
       const dateRange: { arrival: string; departure: string } = JSON.parse(
         query['daterange'] as string,
@@ -187,7 +186,7 @@ const Rooms = () => {
       options: filterOptions?.roomTypes,
       name: 'roomType',
       id: 'roomTypeIds',
-      className: 'col-span-2 md:col-span-1'
+      className: 'col-span-2 md:col-span-1',
     }),
     new FormItem({
       type: 'dropdown',
@@ -195,7 +194,7 @@ const Rooms = () => {
       options: filterOptions?.roomCapacity,
       name: 'roomCapacity',
       id: 'maxCapacity',
-      className: 'col-span-2 md:col-span-1'
+      className: 'col-span-2 md:col-span-1',
     }),
     new FormItem({
       type: 'dropdown-multi-select',
@@ -203,7 +202,7 @@ const Rooms = () => {
       options: filterOptions?.tags,
       name: 'tags',
       id: 'tagIds',
-      className: 'col-span-2 md:col-span-1'
+      className: 'col-span-2 md:col-span-1',
     }),
   ]
 

@@ -175,7 +175,7 @@ const RoomCard: FunctionComponent<RoomCardProps> = ({
               {size ? size : ''}
             </p>
           </span>
-          <Link href={'/rooms'}>
+          <Link href={`/rooms?roomtype=${id}`}>
             <Button className="w-max py-2 px-8 text-base font-normal leading-tight ">
               <Translater>Show Availability</Translater>
             </Button>
