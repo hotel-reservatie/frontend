@@ -55,17 +55,25 @@ const Reservations = () => {
                   className="w-full px-8 py-8 max-w-full mb-8 mx-0"
                   key={r.reservationId}
                 >
-                  <div className="flex justify-between">
+                  <div className="sm:flex justify-between">
                     <div>
                       <div className="mb-8">
-                        <span className="flex">
-                          <SubTitle className=" mb-0">Reservation</SubTitle>
-                          <h2
-                            className={` mb-8 text-2xl font-semibold text-blue-600`}
-                          >
-                            &nbsp;{`#${index}`}
-                          </h2>
-                        </span>
+                        <Link href={`/reservation/${r.reservationId}`}>
+                          <a>
+                            <span className="flex items-center gap-2">
+                              <SubTitle className=" mb-0">Reservation</SubTitle>
+                              <h2
+                                className={` text-2xl font-semibold text-blue-600`}
+                              >
+                                &nbsp;{`#${index}`}
+                              </h2>
+                              <div>
+                                <MdArrowForward size={24} />
+                              </div>
+                            </span>
+                          </a>
+                        </Link>
+
                         <p>{`${formatDate(r.startDate)} - ${formatDate(
                           r.endDate,
                         )}`}</p>
@@ -89,16 +97,9 @@ const Reservations = () => {
                         />
                       </div>
                     </div>
-                    <div className="flex flex-col justify-between text-right">
-                      <Link href={`/reservation/${r.reservationId}`}>
-                        <a>
-                          <MdArrowForward size={24} className=" ml-auto" />
-                        </a>
-                      </Link>
-                      <span className="font-bold text-3xl text-blue-600">
-                        €{r.totalPrice}
-                      </span>
-                    </div>
+                    <p className="mt-4 sm:mt-0 font-bold text-3xl text-blue-600">
+                      €{r.totalPrice}
+                    </p>
                   </div>
                 </Card>
               )
