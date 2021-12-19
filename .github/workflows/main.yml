@@ -29,6 +29,9 @@ jobs:
         echo NEXT_PUBLIC_FB_MESSAGINGSENDERID=$MESSAGINGSENDERID >> ./.env
         echo NEXT_PUBLIC_FB_PROJECTID=$PROJECTID >> ./.env
         echo NEXT_PUBLIC_FB_STORAGEBUCKET=$STORAGEBUCKET >> ./.env
+        echo NEXT_PUBLIC_SENTRY_DSN=$STORAGEBUCKET >> ./.env
+        echo [auth] >> ./.sentryclirc
+        echo $SENTRYCLIRC >> ./.sentryclirc
       env:
         BACKEND: ${{secrets.NEXT_PUBLIC_BACKEND}}
         APIKEY: ${{secrets.NEXT_PUBLIC_FB_APIKEY}}
@@ -37,6 +40,8 @@ jobs:
         MESSAGINGSENDERID: ${{secrets.NEXT_PUBLIC_FB_MESSAGINGSENDERID}}
         PROJECTID: ${{secrets.NEXT_PUBLIC_FB_PROJECTID}}
         STORAGEBUCKET: ${{secrets.NEXT_PUBLIC_FB_STORAGEBUCKET}}
+        SENTRYDSN: ${{secrets.NEXT_PUBLIC_SENTRY_DSN}}
+        SENTRYCLIRC: ${{secrets.SENTRYCLIRC}}
     - name: Check env
       run: cat ./.env
     # - name: Install codegen
