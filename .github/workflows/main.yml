@@ -32,7 +32,7 @@ jobs:
         echo NEXT_PUBLIC_FB_MESSAGINGSENDERID=$MESSAGINGSENDERID >> ./.env
         echo NEXT_PUBLIC_FB_PROJECTID=$PROJECTID >> ./.env
         echo NEXT_PUBLIC_FB_STORAGEBUCKET=$STORAGEBUCKET >> ./.env
-        echo NEXT_PUBLIC_SENTRY_DSN=$STORAGEBUCKET >> ./.env
+        echo NEXT_PUBLIC_SENTRY_DSN=$SENTRYDSN >> ./.env
         echo [auth] >> ./.sentryclirc
         echo $SENTRYCLIRC >> ./.sentryclirc
       env:
