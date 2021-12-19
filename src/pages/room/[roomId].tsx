@@ -123,8 +123,8 @@ const RoomPage: NextPage = () => {
 
   return (
     <PageLayout>
-      <div className="flex justify-between align-middle">
-        <PageTitle>{data?.getRoomById?.roomName}</PageTitle>
+      <div className="flex justify-between items-start mb-8 gap-2">
+        <PageTitle className=' mb-0 whitespace-normal'>{data?.getRoomById?.roomName}</PageTitle>
         <Authenticated>
           <FavButton
             size={32}
@@ -133,7 +133,7 @@ const RoomPage: NextPage = () => {
           />
         </Authenticated>
       </div>
-      <div className="md:grid md:grid-cols-2 md:gap-x-16 items-start">
+      <div className="mb-8 md:mb-0 md:grid md:grid-cols-2 md:gap-x-16 items-start">
         <ImageScroller
           images={
             data?.getRoomById?.images ? data.getRoomById.images : undefined
