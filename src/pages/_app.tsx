@@ -1,9 +1,11 @@
 import type { AppProps } from 'next/app'
 import { appWithTranslation } from 'next-i18next'
-import Header from 'src/components/header'
+
+import dynamic from 'next/dynamic'
 import '../styles/globals.css'
 
-import AppProvider from 'src/providers/appProvider'
+const Header = dynamic(() => import('src/components/header'))
+const AppProvider = dynamic(() => import('src/providers/appProvider'))
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

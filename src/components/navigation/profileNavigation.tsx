@@ -1,11 +1,13 @@
-import Link from 'src/components/translatedLink'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import React, { FunctionComponent, useEffect, useState } from 'react'
 import { IconType } from 'react-icons'
 import { MdFavorite, MdListAlt, MdPerson } from 'react-icons/md'
-import PageLayout from 'src/components/layout/PageLayout'
-import PageTitle from '../text/PageTitle'
-import Translater from '../translater'
+import dynamic from 'next/dynamic'
+
+const Link = dynamic(() => import('src/components/translatedLink'))
+const PageLayout = dynamic(() => import('src/components/layout/PageLayout'))
+const PageTitle = dynamic(() => import('../text/PageTitle'))
+const Translater = dynamic(() => import('../translater'))
 
 interface ProfileNavigationProps {
   title: string
@@ -24,7 +26,7 @@ export const NavElement: FunctionComponent<NavElementProps> = ({
   href,
   title,
   onClick,
-  className = 'border-blue-50'
+  className = 'border-blue-50',
 }) => {
   const router = useRouter()
   const [selected, setSelected] = useState(true)

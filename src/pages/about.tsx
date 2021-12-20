@@ -1,8 +1,10 @@
-import PageLayout from 'src/components/layout/PageLayout'
-import PageTitle from 'src/components/text/PageTitle'
-import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import Translater from 'src/components/translater'
+
+const PageTitle = dynamic(() => import('src/components/text/PageTitle'))
+const PageLayout = dynamic(() => import('src/components/layout/PageLayout'))
+const Image = dynamic(() => import('next/image'))
+const Translater = dynamic(() => import('src/components/translater'))
 
 const About = () => {
   return (
@@ -20,7 +22,7 @@ const About = () => {
             layout="fill" // required
             objectFit="contain" // change to suit your needs
             priority
-            alt='hotel'
+            alt="hotel"
           />
         </div>
       </div>

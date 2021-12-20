@@ -1,12 +1,14 @@
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import dynamic from 'next/dynamic'
 import router from 'next/router'
 import { useState } from 'react'
 import FormItem from 'src/classes/FormItem'
-import Button from 'src/components/button'
-import Card from 'src/components/card'
-import Form from 'src/components/form'
-import PageLayout from 'src/components/layout/PageLayout'
-import Translater from 'src/components/translater'
+
+const Button = dynamic(() => import('src/components/button'))
+const Card = dynamic(() => import('src/components/card'))
+const Form = dynamic(() => import('src/components/form'))
+const PageLayout = dynamic(() => import('src/components/layout/PageLayout'))
+const Translater = dynamic(() => import('src/components/translater'))
 
 const Contact = () => {
   const [submitting, setSubmitting] = useState(false)

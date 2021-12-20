@@ -217,4 +217,4 @@ const Dropdown: FunctionComponent<DropdownProps> = ({
   }
 }
 
-export default Dropdown
+export default React.memo(Dropdown)

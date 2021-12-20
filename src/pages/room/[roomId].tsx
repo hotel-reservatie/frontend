@@ -1,37 +1,44 @@
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
-import PageLayout from 'src/components/layout/PageLayout'
-import PageTitle from 'src/components/text/PageTitle'
+import { useEffect, useState } from 'react'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import {
   NewReviewInput,
   useDeleteReviewMutation,
   useGetRoomByIdLazyQuery,
   useGetUserFavoritesLazyQuery,
 } from 'src/schema'
-import Button from 'src/components/button'
-import SubTitle from 'src/components/text/SubTitle'
+import AddReview from 'src/schema/reviews/addReview.schema'
+import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
 import { MdDone } from 'react-icons/md'
-import Card from 'src/components/card'
-import ImageScroller from 'src/components/image/ImageScroller'
 import { BsTag } from 'react-icons/bs'
+import { useNewReservation } from 'src/providers/reservationProvider'
 import {
   Authenticated,
   NotAuthenticated,
   useAuth,
 } from 'src/providers/authProvider'
-import Input from 'src/components/input'
 import { useMutation } from '@apollo/client'
-import AddReview from 'src/schema/reviews/addReview.schema'
 import formatDate from 'src/utils/formatDate'
-import FavButton from 'src/components/button/FavButton'
-import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
+
 import { NewReviewStars } from 'src/components/reviewStar'
-import { useNewReservation } from 'src/providers/reservationProvider'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import ReviewCard from 'src/components/card/ReviewCard'
-import Link from 'next/link'
-import NotSignedIn from 'src/components/emptyPlaceholder/NotSignedIn'
+import dynamic from 'next/dynamic'
+
+const Link = dynamic(() => import('next/link'))
+const SubTitle = dynamic(() => import('src/components/text/SubTitle'))
+const NotSignedIn = dynamic(
+  () => import('src/components/emptyPlaceholder/NotSignedIn'),
+)
+const PageLayout = dynamic(() => import('src/components/layout/PageLayout'))
+const PageTitle = dynamic(() => import('src/components/text/PageTitle'))
+const ReviewCard = dynamic(() => import('src/components/card/ReviewCard'))
+const FavButton = dynamic(() => import('src/components/button/FavButton'))
+const Input = dynamic(() => import('src/components/input'))
+const Card = dynamic(() => import('src/components/card'))
+const Button = dynamic(() => import('src/components/button'))
+const ImageScroller = dynamic(
+  () => import('src/components/image/ImageScroller'),
+)
 
 const RoomPage: NextPage = () => {
   const router = useRouter()
@@ -147,7 +154,10 @@ const RoomPage: NextPage = () => {
             {data?.getRoomById?.tags
               ? data.getRoomById.tags.map(t => {
                   return (
-                    <Card className=" px-2 py-2 mx-0 flex items-center gap-2" key={t.name}>
+                    <Card
+                      className=" px-2 py-2 mx-0 flex items-center gap-2"
+                      key={t.name}
+                    >
                       <div>
                         <BsTag />
                       </div>
