@@ -1,14 +1,7 @@
 import { useMutation } from '@apollo/client'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import Link from 'next/link'
-import React, { useEffect } from 'react'
-import EmptyPlaceholder from 'src/components/emptyPlaceholder'
-import NotSignedIn from 'src/components/emptyPlaceholder/NotSignedIn'
-import PageLayout from 'src/components/layout/PageLayout'
-import ProfileNavigation from 'src/components/navigation/profileNavigation'
-import RoomCard from 'src/components/roomCard'
-import PageTitle from 'src/components/text/PageTitle'
-import Translater from 'src/components/translater'
+import dynamic from 'next/dynamic'
+import { useEffect } from 'react'
 import {
   Authenticated,
   NotAuthenticated,
@@ -16,6 +9,17 @@ import {
 } from 'src/providers/authProvider'
 import { useGetUserFavoritesLazyQuery } from 'src/schema'
 import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
+
+const EmptyPlaceholder = dynamic(
+  () => import('src/components/emptyPlaceholder'),
+)
+const NotSignedIn = dynamic(
+  () => import('src/components/emptyPlaceholder/NotSignedIn'),
+)
+const ProfileNavigation = dynamic(
+  () => import('src/components/navigation/profileNavigation'),
+)
+const RoomCard = dynamic(() => import('src/components/roomCard'))
 
 const Favorites = () => {
   const { user } = useAuth()
