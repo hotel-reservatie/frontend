@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
-
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-
-import Card from 'src/components/card'
-import Button from 'src/components/button'
-import Subtext from 'src/components/text'
+import { useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useAuth } from 'src/providers/authProvider'
+import { useRouter } from 'next/router'
+
 import FormItem from 'src/classes/FormItem'
-import Form from 'src/components/form'
+import dynamic from 'next/dynamic'
+
+const Link = dynamic(() => import('next/link'))
+const Form = dynamic(() => import('src/components/form'))
+const Card = dynamic(() => import('src/components/card'))
+const Button = dynamic(() => import('src/components/button'))
 
 const Register = () => {
   const router = useRouter()
@@ -72,7 +72,7 @@ const Register = () => {
           onSubmit={handleSubmit}
         />
         {isLoading ? (
-          <p className=' text-center'>Please wait...</p>
+          <p className=" text-center">Please wait...</p>
         ) : (
           <Button onClick={onStartSubmit}>Register</Button>
         )}
