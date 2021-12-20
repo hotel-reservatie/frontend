@@ -1,20 +1,23 @@
+import { useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
-import Button from 'src/components/button'
-import Dialog from 'src/components/dialog'
-import PageLayout from 'src/components/layout/PageLayout'
-import SmallRoomCard from 'src/components/roomCard/SmallRoomCard'
-import PageTitle from 'src/components/text/PageTitle'
-import SubTitle from 'src/components/text/SubTitle'
-import Translater from 'src/components/translater'
 import { Authenticated, useAuth } from 'src/providers/authProvider'
 import {
   useDeleteReservationMutation,
-  useGetReservationLazyQuery,
   useGetReservationQuery,
 } from 'src/schema'
 import formatDate from 'src/utils/formatDate'
+import dynamic from 'next/dynamic'
+
+const Button = dynamic(() => import('src/components/button'))
+const Dialog = dynamic(() => import('src/components/dialog'))
+const PageLayout = dynamic(() => import('src/components/layout/PageLayout'))
+const SmallRoomCard = dynamic(
+  () => import('src/components/roomCard/SmallRoomCard'),
+)
+const PageTitle = dynamic(() => import('src/components/text/PageTitle'))
+const SubTitle = dynamic(() => import('src/components/text/SubTitle'))
+const Translater = dynamic(() => import('src/components/translater'))
 
 const Reservation = () => {
   const router = useRouter()
@@ -23,12 +26,10 @@ const Reservation = () => {
   const { reservationId } = router.query
 
   const [dialogIsVisible, setDialogIsVisible] = useState(false)
-  //   const [getReservation, reservationResult] = useGetReservationLazyQuery()
   const reservationResult = useGetReservationQuery({
     variables: { reservationId: reservationId as string },
   })
   const [deleteReservation] = useDeleteReservationMutation()
-
 
   const handleCancelBtn = () => {
     deleteReservation({
@@ -39,11 +40,6 @@ const Reservation = () => {
     })
   }
 
-  //   useEffect(() => {
-  //     if (reservationId && user) {
-  //       getReservation({ variables: { reservationId: reservationId as string } })
-  //     }
-  //   }, [router.query, user])
   if (!reservationResult.called || reservationResult.loading) {
     return (
       <PageLayout>
