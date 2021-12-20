@@ -64,4 +64,4 @@ const Input: FunctionComponent<InputProps> = ({
   )
 }
 
-export default Input
+export default React.memo(Input)

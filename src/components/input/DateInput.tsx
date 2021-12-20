@@ -76,4 +76,4 @@ const DateInput: FunctionComponent<DateInputProps> = ({
   )
 }
 
-export default DateInput
+export default React.memo(DateInput)
