@@ -22,6 +22,7 @@ const moduleExports = {
     register: true,
     skipWaiting: true,
     disable: isDev,
+    buildExcludes: [/middleware-manifest.json$/]
   },
   swcMinify: true,
   async rewrites() {
