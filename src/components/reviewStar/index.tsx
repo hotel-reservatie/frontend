@@ -35,40 +35,38 @@ export const NewReviewStars = ({
   onSetReviewScore,
   newReviewScore,
 }: {
-  onSetReviewScore: Function,
+  onSetReviewScore: Function
   newReviewScore: number
 }) => {
   const [hoveredStar, setHoveredStar] = useState(-1)
 
-  const generateStars = () => {
-    const stars = []
+  const stars = [0, 0, 0, 0, 0]
 
-    for (let i = 0; i < 5; i++) {
-      stars.push(
-        <ReviewStar
-          key={i}
-          size={48}
-          id={i.toString()}
-          className={`${
-            i <= hoveredStar ? 'text-yellow-400' : 'text-blue-300'
-          } hover:cursor-pointer`}
-          onMouseEnter={e => {
-            setHoveredStar(i)
-          }}
-          onMouseLeave={() => {
-            setHoveredStar(newReviewScore - 1)
-          }}
-          onClick={() => {
-            onSetReviewScore(i + 1)
-          }}
-        />,
-      )
-    }
-
-    return stars
-  }
-
-  return <div className="flex mb-4">{generateStars()}</div>
+  return (
+    <div className="flex mb-4">
+      {stars.map((isOn, index) => {
+        return (
+          <ReviewStar
+            key={`star_${index}`}
+            size={48}
+            id={index.toString()}
+            className={`${
+              index <= hoveredStar ? 'text-yellow-400' : 'text-blue-300'
+            } hover:cursor-pointer`}
+            onMouseEnter={e => {
+              setHoveredStar(index)
+            }}
+            onMouseLeave={() => {
+              setHoveredStar(newReviewScore - 1)
+            }}
+            onClick={() => {
+              onSetReviewScore(index + 1)
+            }}
+          />
+        )
+      })}
+    </div>
+  )
 }
 
 export default ReviewStar
