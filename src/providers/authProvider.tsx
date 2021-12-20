@@ -9,7 +9,6 @@ import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app'
 import {
   Auth,
   browserLocalPersistence,
-  createUserWithEmailAndPassword,
   getAuth,
   setPersistence,
   signInWithEmailAndPassword,
@@ -26,8 +25,6 @@ import {
 import { setContext } from '@apollo/client/link/context'
 import client from 'src/utils/apollo'
 import { createLogicalWrapper } from 'src/utils/logicalWrapper'
-import { resolve } from 'path'
-import { json } from 'stream/consumers'
 
 interface IAuthContext {
   user: User | null
