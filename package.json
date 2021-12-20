@@ -7,7 +7,8 @@
     "start": "next start -p 3001",
     "lint": "next lint",
     "gen-types": "graphql-codegen --config codegen.yml -r dotenv/config",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "cypress:headless": "cypress run"
   },
   "dependencies": {
     "@apollo/client": "^3.4.17",
