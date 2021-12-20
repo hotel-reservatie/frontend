@@ -23,6 +23,7 @@ const moduleExports = {
     skipWaiting: true,
     disable: isDev,
   },
+  swcMinify: true,
   async rewrites() {
     return [
       { source: '/nl', destination: '/', locale: false },
