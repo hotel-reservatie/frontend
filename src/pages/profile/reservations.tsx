@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Authenticated,
   NotAuthenticated,
@@ -10,18 +10,25 @@ import {
   useDeleteReservationMutation,
   useGetUserReservationsLazyQuery,
 } from 'src/schema'
-import Card from 'src/components/card'
-import SubTitle from 'src/components/text/SubTitle'
 import formatDate from 'src/utils/formatDate'
 import { MdArrowForward, MdPeople } from 'react-icons/md'
 import { HiMinusCircle } from 'react-icons/hi'
-import Dialog from 'src/components/dialog'
-import { useRouter } from 'next/router'
-import Link from 'src/components/translatedLink'
-import ProfileNavigation from 'src/components/navigation/profileNavigation'
-import Translater from 'src/components/translater'
-import EmptyPlaceholder from 'src/components/emptyPlaceholder'
-import NotSignedIn from 'src/components/emptyPlaceholder/NotSignedIn'
+import dynamic from 'next/dynamic'
+
+const Dialog = dynamic(() => import('src/components/dialog'))
+const Link = dynamic(() => import('src/components/translatedLink'))
+const ProfileNavigation = dynamic(
+  () => import('src/components/navigation/profileNavigation'),
+)
+const Translater = dynamic(() => import('src/components/translater'))
+const EmptyPlaceholder = dynamic(
+  () => import('src/components/emptyPlaceholder'),
+)
+const NotSignedIn = dynamic(
+  () => import('src/components/emptyPlaceholder/NotSignedIn'),
+)
+const Card = dynamic(() => import('src/components/card'))
+const SubTitle = dynamic(() => import('src/components/text/SubTitle'))
 
 const Reservations = () => {
   const [show, setShow] = useState(false)
