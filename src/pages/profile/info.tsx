@@ -1,13 +1,6 @@
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MdEdit } from 'react-icons/md'
-import FormItem from 'src/classes/FormItem'
-import Button from 'src/components/button'
-import CustomerInfoSection from 'src/components/customerInfo'
-import NotSignedIn from 'src/components/emptyPlaceholder/NotSignedIn'
-import ProfileNavigation from 'src/components/navigation/profileNavigation'
-import PageTitle from 'src/components/text/PageTitle'
-import SubTitle from 'src/components/text/SubTitle'
 import {
   Authenticated,
   NotAuthenticated,
@@ -15,10 +8,22 @@ import {
 } from 'src/providers/authProvider'
 import {
   useGetUserInfoLazyQuery,
-  useGetUserInfoQuery,
   UserInput,
   useUpdateUserMutation,
 } from 'src/schema'
+
+import FormItem from 'src/classes/FormItem'
+import dynamic from 'next/dynamic'
+
+const Button = dynamic(() => import('src/components/button'))
+const CustomerInfoSection = dynamic(() => import('src/components/customerInfo'))
+const NotSignedIn = dynamic(
+  () => import('src/components/emptyPlaceholder/NotSignedIn'),
+)
+const ProfileNavigation = dynamic(
+  () => import('src/components/navigation/profileNavigation'),
+)
+const SubTitle = dynamic(() => import('src/components/text/SubTitle'))
 
 const Info = () => {
   const { user } = useAuth()
