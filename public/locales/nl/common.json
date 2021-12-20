@@ -1,37 +1,96 @@
 {
-  "home": {
-    "welcome": "Welkom bij Hotel MCT!",
-    "p1": "We hebben kamers voor iedere vakantieganger.",
-    "p2": "Neem eens een kijkje!"
-  },
-  "header": {
-    "about": "Over Ons",
-    "rooms": "Kamers",
-    "contact": "Contact",
-    "signin": "Inloggen",
-    "register": "Registreren"
-  },
-  "datepicker": {
-    "title": "In welke periode wilt u bij ons verblijven?",
-    "arrivaldate": "Aankomst datum",
-    "departuredate": "Vertrek datum",
-    "availability": "Toon beschikbaarheid"
-  },
-  "email": {
-    "address": "E-mail adres",
-    "placeholder": "bv. mark@gmail.com"
-  },
-  "login": "Log in",
-  "subtext": {
-    "register": "Ik heb nog geen login, laat me",
-    "login": "Heb je al een account?"
-  },
-  "loginpage": {
-    "register": "registreren"
-  },
-  "username": "Gebruikersnaam",
-  "password": {
-    "repeat": "Herhaal wachtwoord"
-  },
-  "register": "Registreer"
+    "home": {
+        "welcome": "Welkom bij Hotel MCT!",
+        "p1": "We hebben kamers voor iedere vakantieganger.",
+        "p2": "Neem eens een kijkje!"
+    },
+    "header": {
+        "about": "Over Ons",
+        "rooms": "Kamers",
+        "contact": "Contact",
+        "signin": "Inloggen",
+        "register": "Registreren"
+    },
+    "datepicker": {
+        "title": "In welke periode wilt u bij ons verblijven?",
+        "arrivaldate": "Aankomst datum",
+        "departuredate": "Vertrek datum",
+        "availability": "Toon beschikbaarheid"
+    },
+    "email": {
+        "address": "E-mail adres",
+        "placeholder": "bv. mark@gmail.com"
+    },
+    "login": "Log in",
+    "subtext": {
+        "register": "Ik heb nog geen login, laat me",
+        "login": "Heb je al een account?"
+    },
+    "loginpage": {
+        "register": "registreren"
+    },
+    "username": "Gebruikersnaam",
+    "password": {
+        "repeat": "Herhaal wachtwoord"
+    },
+    "register": "Registreer",
+    "Show availability": "Toon beschikbaarheid",
+    "More info": "Meer info",
+    "text": {
+        "about": "Vier sterren, 59 luxekamers: het Hotel MCT in Kortrijk is dé van comfort en klasse. De neoklassieke barokstijl van imposante hoofdmijngebouw is een pronkstuk uit ons industriële verleden. In het heden kreeg het pand een trendy, toekomstgerichte invulling … Welkom in Hotel MCT! Te midden van eelderige auna en flora en indrukwekkende waterpartijen nestelt Hotel MCT zich in het Kortrijkse groen. Unieke vergezichten vanop de mijnterrils en schachtbok brengen de herinnering aan het steenkoolmijnverleden dichterbij dan ooit. Als troefkaart is er de betoverende Franse tuin van het hotel, als schakel met de hoofdtoegangspoort naar het enige Nationale Park van België: een onvervalst wandelwalhalla. Verder zet je langs deze weg ook de stap naar een ander soort paradijs … Het shopparadijs Kortrijk Village! Daar word je 7 dagen op 7 verwelkomd in een pittoreske winkelsetting. Meer dan 100 luxueuze fashion- en\n lifestylemerken staan voor je klaar. Waar wacht je nog op?"
+    },
+    "Search room name": "Zoek kamernaam",
+    "Room type": "Kamertype",
+    "Room capacity": "Kamer capaciteit",
+    "Starting from": "Beginnend vanaf",
+    "Book this room": "Boek deze kamer",
+    "Rooms": "Kamers",
+    "Price Range": "Prijsbereik",
+    "First name": "Voornaam",
+    "John": "Jan",
+    "Last name": "Achternaam",
+    "Doe": "Jansen",
+    "Email": "E-mail",
+    "johndoe@mail.com": "janjansen@mail.com",
+    "Question": "Vraag",
+    "Profile": "Profiel",
+    "Favorites": "Favorieten",
+    "My Reservations": "Mijn Reserveringen",
+    "Cart": "Winkelwagen",
+    "Sign Out": "Afmelden",
+    "Customer Info": "Klantinfo",
+    "User Name": "Gebruikersnaam",
+    "Billing Email": "Rekening e-mail",
+    "Address": "Adres",
+    "City": "Stad",
+    "Postal": "Postcode",
+    "Phone": "Telefoon",
+    "Departure Date": "Vertrekdatum",
+    "Arrival Date": "Aankomstdatum",
+    "Booking Info": "Boekingsinfo",
+    "Total amount of days": "Totaal aantal dagen",
+    "Amount of weekend days": "Aantal weekenddagen",
+    "Total Price": "Totale prijs",
+    "Confirm Booking": "Bevestig boeking",
+    "Please sign in to create a booking...": "Gelieve in te loggen om een boeking te maken...",
+    "Show Availability": "Toon beschikbaarheid",
+    "Send": "Verstuur",
+    "Password": "Wachtwoord",
+    "log in": "registreren",
+    "Reservation": "Reservatie",
+    "First Name": "Voornaam",
+    "Last Name": "Naam",
+    "My Reservation": "Mijn Reservatie",
+    "Select Time": "Selecteer Periode",
+    "per night": "per nacht",
+    "Facilities": "Faciliteiten",
+    "Reviews": "Recenties",
+    "Describe your experience": "Beschrijf je ervaring",
+    "In amount of stars": "In sterren",
+    "In own words": "In woorden",
+    "WRITE": "Plaats Recentie",
+    "Arrival and departure": "Aankomst en vertrek",
+    "CANCEL RESERVATION": "Annuleer Reservering",
+    "Checkin": "Checkin",
+    "Checkout": "Checkout"
 }

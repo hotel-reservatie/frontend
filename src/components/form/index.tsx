@@ -1,9 +1,19 @@
-import React, { FormEvent, FunctionComponent, useEffect, useState } from 'react'
+import {
+  FormEvent,
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
 import classNames from 'classnames/bind'
 import FormItem, { FormItemOption } from 'src/classes/FormItem'
-import Dropdown from '../dropdown'
-import Input from '../input'
-import DateInput from '../input/DateInput'
+import dynamic from 'next/dynamic'
+
+const Dropdown = dynamic(() => import('../dropdown'))
+const Input = dynamic(() => import('../input'))
+const DateInput = dynamic(() => import('../input/DateInput'))
+const TextArea = dynamic(() => import('../input/TextArea'))
+const FormError = dynamic(() => import('./Error'))
 
 interface FormProps {
   formItems: Array<FormItem>
@@ -16,6 +26,7 @@ interface FormProps {
   onItemChange?: any
   onSubmit?: any
   className?: string
+  externalError?: string
 }
 
 const findIndexByName = (arr: FormItem[], searchName: string) => {
@@ -33,53 +44,94 @@ const Form: FunctionComponent<FormProps> = ({
   setSubmitting,
   onItemChange,
   className = '',
+  externalError,
 }) => {
   const [items, setItems] = useState<Array<FormItem>>(formItems)
 
-  function onFormItemChange(e: FormEvent<HTMLInputElement>) {
-    const index = findIndexByName(items, e.currentTarget.name)
+  const onFormItemChange = useCallback(
+    (e: FormEvent<HTMLInputElement>) => {
+      const index = findIndexByName(items, e.currentTarget.name)
 
-    if (index > -1) {
+      if (index > -1) {
+        const newItems = [
+          ...items.slice(0, index),
+          new FormItem({ ...items[index], value: e.currentTarget.value }),
+          ...items.slice(index + 1),
+        ]
+        if (onItemChange) onItemChange(newItems[index])
+
+        setItems(newItems)
+      }
+    },
+    [items],
+  )
+
+  const handleDropdownChange = useCallback(
+    (e: FormItemOption | Array<FormItemOption>, name: string) => {
+      const index = findIndexByName(items, name)
+      if (index > -1) {
+        if (Array.isArray(e)) {
+          const ids = e.map(i => i.id)
+          const newItems = [
+            ...items.slice(0, index),
+            new FormItem({ ...items[index], value: ids }),
+            ...items.slice(index + 1),
+          ]
+          console.log(newItems[index])
+
+          if (onItemChange) onItemChange(newItems[index])
+          setItems(newItems)
+        } else {
+          const newItems = [
+            ...items.slice(0, index),
+            new FormItem({ ...items[index], value: e.id }),
+            ...items.slice(index + 1),
+          ]
+          if (onItemChange) onItemChange(newItems[index])
+          setItems(newItems)
+        }
+      }
+    },
+    [items],
+  )
+
+  const handleDateChange = useCallback(
+    (d: Date, index: number) => {
       const newItems = [
         ...items.slice(0, index),
-        new FormItem({ ...items[index], value: e.currentTarget.value }),
+        new FormItem({ ...items[index], value: d }),
         ...items.slice(index + 1),
       ]
-      if (onItemChange) onItemChange(newItems[index])
-
+      if (onItemChange) {
+        onItemChange(newItems[index])
+      }
       setItems(newItems)
-    }
-  }
+    },
+    [items],
+  )
 
-  function handleDropdownChange(e: FormItemOption, name: string) {
-    const index = findIndexByName(items, name)
-    if (index > -1) {
-      const newItems = [
-        ...items.slice(0, index),
-        new FormItem({ ...items[index], value: e.id }),
-        ...items.slice(index + 1),
-      ]
-      if (onItemChange) onItemChange(newItems[index])
-      setItems(newItems)
-    }
-  }
+  const handleTextAreaChange = useCallback(
+    (e: FormEvent<HTMLTextAreaElement>) => {
+      const index = findIndexByName(items, e.currentTarget.name)
 
-  function handleDateChange(d: Date, index: number) {
-    const newItems = [
-      ...items.slice(0, index),
-      new FormItem({ ...items[index], value: d }),
-      ...items.slice(index + 1),
-    ]
-    if (onItemChange) {
-      onItemChange(newItems[index])
-    }
-    setItems(newItems)
-  }
+      if (index > -1) {
+        const newItems = [
+          ...items.slice(0, index),
+          new FormItem({ ...items[index], value: e.currentTarget.value }),
+          ...items.slice(index + 1),
+        ]
+        if (onItemChange) onItemChange(newItems[index])
+
+        setItems(newItems)
+      }
+    },
+    [items],
+  )
 
   function isEmpty(formItem: FormItem, index: number) {
     if (formItem.required) {
       if (formItem.value) {
-        return !(formItem.value.trim().length > 0)
+        return !(formItem.value.toString().trim().length > 0)
       } else {
         return true
       }
@@ -101,7 +153,11 @@ const Form: FunctionComponent<FormProps> = ({
         item.errormessage = 'Verplicht!'
         counter++
         return item
-      } else if (item.type === 'email' && !isValidEmail(item)) {
+      } else if (
+        item.type === 'email' &&
+        !isValidEmail(item) &&
+        item.required
+      ) {
         counter++
         item.faulty = 'true'
         item.errormessage = 'Geen geldig e-mail'
@@ -136,11 +192,15 @@ const Form: FunctionComponent<FormProps> = ({
     return `gap-${type}-${amount}`
   }
 
-  function handleEnterKeyPress(e: React.KeyboardEvent<HTMLFormElement>) {
-    if (e.key === 'Enter') {
-      if (setSubmitting) setSubmitting(true)
-    }
-  }
+  const handleEnterKeyPress = useCallback(
+    (e: React.KeyboardEvent<HTMLFormElement>) => {
+      const target = e.target as HTMLElement
+      if (e.key === 'Enter' && target.tagName !== 'TEXTAREA') {
+        if (setSubmitting) setSubmitting(true)
+      }
+    },
+    [],
+  )
 
   useEffect(() => {
     function handleSubmit() {
@@ -185,6 +245,7 @@ const Form: FunctionComponent<FormProps> = ({
         ) {
           return (
             <Dropdown
+              className={className}
               key={`dropdown-${index}`}
               options={
                 item.options ?? [{ id: '', name: 'option array required' }]
@@ -193,6 +254,18 @@ const Form: FunctionComponent<FormProps> = ({
               placeholder={item.placeholder ?? 'Placeholder is required'}
               name={item.name ?? 'name is required'}
               multiSelect={item.type === 'dropdown-multi-select'}
+            />
+          )
+        } else if (item.type === 'text-area') {
+          return (
+            <TextArea
+              key={`textarea-${index}`}
+              onChange={handleTextAreaChange}
+              value={items[index].value}
+              errormessage={item.errormessage}
+              faulty={items[index].faulty}
+              className={className}
+              {...item}
             />
           )
         } else {
@@ -209,6 +282,7 @@ const Form: FunctionComponent<FormProps> = ({
           )
         }
       })}
+      {externalError && <FormError message={externalError} />}
     </form>
   )
 }

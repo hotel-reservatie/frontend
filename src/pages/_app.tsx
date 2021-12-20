@@ -1,21 +1,18 @@
 import type { AppProps } from 'next/app'
 import { appWithTranslation } from 'next-i18next'
-import Header from 'src/components/header'
+
+import dynamic from 'next/dynamic'
 import '../styles/globals.css'
-import { AuthProvider } from 'src/providers/authProvider'
-import ReservationProvider from 'src/providers/reservationProvider'
-import FilterProvider from 'src/providers/filterProvider'
+
+const Header = dynamic(() => import('src/components/header'))
+const AppProvider = dynamic(() => import('src/providers/appProvider'))
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <AuthProvider>
-      <FilterProvider>
-        <ReservationProvider>
-          <Header />
-          <Component {...pageProps} />
-        </ReservationProvider>
-      </FilterProvider>
-    </AuthProvider>
+    <AppProvider>
+      <Header />
+      <Component {...pageProps} />
+    </AppProvider>
   )
 }
 

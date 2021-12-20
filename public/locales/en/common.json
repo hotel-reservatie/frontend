@@ -1,37 +1,96 @@
 {
-  "home": {
-    "welcome": "Welcome to Hotel MCT!",
-    "p1": "We provide rooms for every type of vacation goer.",
-    "p2": "Have a look around!"
-  },
-  "header": {
-    "about": "About",
-    "rooms": "Rooms",
-    "contact": "Contact",
-    "signin": "Sign In",
-    "register": "Register"
-  },
-  "datepicker": {
-    "title": "When would you like to stay with us?",
-    "arrivaldate": "Arrival date",
-    "departuredate": "Departure date",
-    "availability": "Show availability"
-  },
-  "email": {
-    "address": "Email address",
-    "placeholder": "eg. johndoe@gmail.com"
-  },
-  "login": "Log in",
-  "subtext": {
-    "register": "I don't have a login, let me",
-    "login": "Already have an account?"
-  },
-  "loginpage": {
-    "register": "register"
-  },
-  "username": "Username",
-  "password": {
-    "repeat": "Repeat password"
-  },
-  "register": "Register"
+    "home": {
+        "welcome": "Welcome to Hotel MCT!",
+        "p1": "We provide rooms for every type of vacation goer.",
+        "p2": "Have a look around!"
+    },
+    "header": {
+        "about": "About",
+        "rooms": "Rooms",
+        "contact": "Contact",
+        "signin": "Sign In",
+        "register": "Register"
+    },
+    "datepicker": {
+        "title": "When would you like to stay with us?",
+        "arrivaldate": "Arrival date",
+        "departuredate": "Departure date",
+        "availability": "Show availability"
+    },
+    "email": {
+        "address": "Email address",
+        "placeholder": "eg. johndoe@gmail.com"
+    },
+    "login": "Log in",
+    "subtext": {
+        "register": "I don't have a login, let me",
+        "login": "Already have an account?"
+    },
+    "loginpage": {
+        "register": "register"
+    },
+    "username": "Username",
+    "password": {
+        "repeat": "Repeat password"
+    },
+    "register": "Register",
+    "Show availability": "Show availability",
+    "More info": "More info",
+    "text": {
+        "about": "Four stars, 59 luxury rooms: the Hotel MCT in Kortrijk is the ultimate in comfort and class. The neoclassical baroque style of the imposing main mine building is a showpiece from our industrial past. In the present, the building has been given a trendy, future-oriented interpretation… Welcome to Hotel MCT! Hotel MCT nestles in the greenery of Kortrijk amid lush auna and flora and impressive water features. Unique views from the mine slag heaps and headframe bring the memory of the coal mining past closer than ever. The hotel's trump card is the enchanting French garden, as a link with the main entrance gate to Belgium's only National Park: a genuine hiking mecca. Furthermore, along this road you also take the step to a different kind of paradise… The shopping paradise of Kortrijk Village! There you will be welcomed 7 days a week in a picturesque shopping setting. More than 100 luxurious fashion and\n  lifestyle brands are ready for you. What are you waiting for?"
+    },
+    "Search room name": "Search room name",
+    "Room type": "Room type",
+    "Room capacity": "Room capacity",
+    "Starting from": "Starting from",
+    "Book this room": "Book this room",
+    "Rooms": "Rooms",
+    "Price Range": "Price Range",
+    "First name": "First name",
+    "John": "John",
+    "Last name": "Last name",
+    "Doe": "Doe",
+    "Email": "Email",
+    "johndoe@mail.com": "johndoe@mail.com",
+    "Question": "Question",
+    "Profile": "Profile",
+    "Favorites": "Favorites",
+    "My Reservations": "My Reservations",
+    "Cart": "Cart",
+    "Sign Out": "Sign Out",
+    "Customer Info": "Customer Info",
+    "User Name": "User Name",
+    "Billing Email": "Billing Email",
+    "Address": "Address",
+    "City": "City",
+    "Postal": "Postal",
+    "Phone": "Phone",
+    "Departure Date": "Departure Date",
+    "Arrival Date": "Arrival Date",
+    "Booking Info": "Booking Info",
+    "Total amount of days": "Total amount of days",
+    "Amount of weekend days": "Amount of weekend days",
+    "Total Price": "Total Price",
+    "Confirm Booking": "Confirm Booking",
+    "Please sign in to create a booking...": "Please sign in to create a booking...",
+    "Show Availability": "Show Availability",
+    "Send": "Send",
+    "Password": "Password",
+    "log in": "log in",
+    "Reservation": "Reservation",
+    "First Name": "First Name",
+    "Last Name": "Last Name",
+    "My Reservation": "My Reservation",
+    "Select Time": "Select Time",
+    "per night": "per night",
+    "Facilities": "Facilities",
+    "Reviews": "Reviews",
+    "Describe your experience": "Describe your experience",
+    "In amount of stars": "In amount of stars",
+    "In own words": "In words",
+    "WRITE": "Place Review",
+    "Arrival and departure": "Arrival and departure",
+    "CANCEL RESERVATION": "Cancel Reservation",
+    "Checkin": "Checkin",
+    "Checkout": "Checkout"
 }

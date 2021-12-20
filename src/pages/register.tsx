@@ -1,21 +1,22 @@
-import React, { useState } from 'react'
-
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-
-import Card from 'src/components/card'
-import Button from 'src/components/button'
-import Subtext from 'src/components/text'
+import { useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useAuth } from 'src/providers/authProvider'
+import { useRouter } from 'next/router'
+
 import FormItem from 'src/classes/FormItem'
-import Form from 'src/components/form'
+import dynamic from 'next/dynamic'
+
+const Link = dynamic(() => import('next/link'))
+const Form = dynamic(() => import('src/components/form'))
+const Card = dynamic(() => import('src/components/card'))
+const Button = dynamic(() => import('src/components/button'))
 
 const Register = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const [submitting, setSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const { createUser } = useAuth()
 
   function onStartSubmit() {
@@ -23,31 +24,35 @@ const Register = () => {
   }
 
   function handleSubmit(items: Array<FormItem>) {
-    createUser(items[1].value, items[2].value, items[0].value)
-    router.push('/')
+    setIsLoading(true)
+    createUser(items[1].value, items[2].value, items[0].value).then(r => {
+      if (r) {
+        router.push('/')
+      }
+    })
   }
 
   const formItems = [
     new FormItem({
-      label: t('username'),
+      label: 'username',
       id: 'username',
       name: 'username',
     }),
     new FormItem({
-      label: t('email.address'),
+      label: 'email.address',
       name: 'email',
       id: 'email',
-      placeholder: t('email.placeholder'),
+      placeholder: 'email.placeholder',
       type: 'email',
     }),
     new FormItem({
-      label: t('password'),
+      label: 'Password',
       name: 'password',
       id: 'password',
       type: 'password',
     }),
     new FormItem({
-      label: t('password.repeat'),
+      label: 'password.repeat',
       name: 'repeatpassword',
       id: 'repeatpassword',
       type: 'password',
@@ -66,10 +71,12 @@ const Register = () => {
           setSubmitting={setSubmitting}
           onSubmit={handleSubmit}
         />
-
-        <Button onClick={onStartSubmit}>Register</Button>
-
-        <Subtext>
+        {isLoading ? (
+          <p className=" text-center">Please wait...</p>
+        ) : (
+          <Button onClick={onStartSubmit}>Register</Button>
+        )}
+        <p className="text-sm text-center text-blue-400 mt-12">
           {t('subtext.login')}{' '}
           <Link href="/login">
             <a className="underline focus:outline-none focus-visible:ring">
@@ -77,7 +84,7 @@ const Register = () => {
             </a>
           </Link>
           .
-        </Subtext>
+        </p>
       </Card>
     </div>
   )

@@ -1,30 +1,31 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
-import debounce from 'lodash.debounce'
+import { useFilterValues } from 'src/providers/filterProvider'
+import { useMutation } from '@apollo/client'
+import { useAuth } from 'src/providers/authProvider'
+import FormItem, { FormItemOption } from 'src/classes/FormItem'
 
-import RangeSlider from 'src/components/rangeSlider'
-import RoomCard from 'src/components/roomCard'
+import debounce from 'lodash.debounce'
 import {
-  Maybe,
   RoomFilters,
   useGetAllFilterValuesQuery,
   useGetFilteredRoomsLazyQuery,
   useGetUserFavoritesLazyQuery,
 } from 'src/schema'
-import { useMutation } from '@apollo/client'
-import { useAuth } from 'src/providers/authProvider'
 import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
-import PageTitle from 'src/components/text/PageTitle'
-import { useTranslation } from 'react-i18next'
-import Form from 'src/components/form'
-import FormItem, { FormItemOption } from 'src/classes/FormItem'
-import { useFilterValues } from 'src/providers/filterProvider'
+import dynamic from 'next/dynamic'
+
+const RangeSlider = dynamic(() => import('src/components/rangeSlider'))
+const RoomCard = dynamic(() => import('src/components/roomCard'))
+const PageTitle = dynamic(() => import('src/components/text/PageTitle'))
+const Form = dynamic(() => import('src/components/form'))
+const Skeleton = dynamic(() => import('src/components/roomCard/Skeleton'))
+const PageLayout = dynamic(() => import('src/components/layout/PageLayout'))
 
 const Rooms = () => {
   const { user } = useAuth()
   const { query } = useRouter()
-  const { t } = useTranslation('common')
   const { filters: filterValues, updateFilterValue } = useFilterValues()
 
   const [filters, setFilters] = useState<RoomFilters>(filterValues)
@@ -39,10 +40,9 @@ const Rooms = () => {
     max: number | null
   }>({ min: null, max: null })
 
-  const [getFilteredRooms, { loading, error, data }] =
-    useGetFilteredRoomsLazyQuery({
-      variables: { roomFilter: { ...filters } },
-    })
+  const [getFilteredRooms, { loading, data }] = useGetFilteredRoomsLazyQuery({
+    variables: { roomFilter: { ...filters } },
+  })
   const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
   const [toggleFavorite, toggleFavoriteResult] = useMutation(ToggleFavorite)
   const [submitting, setSubmitting] = useState(false)
@@ -96,9 +96,7 @@ const Rooms = () => {
 
   useEffect(() => {
     if (query['roomtype']) {
-      setFilters({
-        roomTypeIds: query['roomtype'] as Maybe<string[]> | undefined,
-      })
+      updateFilterValue('roomTypeIds', query['roomtype'] as string[])
     } else if (query['daterange']) {
       const dateRange: { arrival: string; departure: string } = JSON.parse(
         query['daterange'] as string,
@@ -147,7 +145,7 @@ const Rooms = () => {
       }
       if (filterData?.getFilters.tags) {
         filterData.getFilters.tags.forEach((t, i) => {
-          tags.push({ id: String(i), name: t.name })
+          tags.push({ id: t.tagId ?? String(i), name: t.name })
         })
       }
       setFilterOptions({ roomTypes, roomCapacity, tags })
@@ -156,26 +154,26 @@ const Rooms = () => {
 
   const formItems = [
     new FormItem({
-      placeholder: t('datepicker.arrivaldate'),
+      placeholder: 'Arrival Date',
       type: 'date',
       name: 'arrivalDate',
       id: 'startDate',
-      className: 'col-span-3',
+      className: 'col-span-6 md:col-span-3',
       value: filterValues.startDate,
     }),
     new FormItem({
-      placeholder: t('datepicker.departuredate'),
+      placeholder: 'Departure Date',
       type: 'date',
       name: 'departureDate',
       id: 'endDate',
-      className: 'col-span-3',
+      className: 'col-span-6 md:col-span-3',
       value: filterValues.endDate,
     }),
     new FormItem({
       placeholder: 'Search room name',
       type: 'text',
       id: 'roomName',
-      className: 'col-span-3',
+      className: 'col-span-6 md:col-span-3',
       name: 'roomName',
     }),
     new FormItem({
@@ -184,6 +182,7 @@ const Rooms = () => {
       options: filterOptions?.roomTypes,
       name: 'roomType',
       id: 'roomTypeIds',
+      className: 'col-span-2 md:col-span-1',
     }),
     new FormItem({
       type: 'dropdown',
@@ -191,6 +190,7 @@ const Rooms = () => {
       options: filterOptions?.roomCapacity,
       name: 'roomCapacity',
       id: 'maxCapacity',
+      className: 'col-span-2 md:col-span-1',
     }),
     new FormItem({
       type: 'dropdown-multi-select',
@@ -198,6 +198,7 @@ const Rooms = () => {
       options: filterOptions?.tags,
       name: 'tags',
       id: 'tagIds',
+      className: 'col-span-2 md:col-span-1',
     }),
   ]
 
@@ -206,15 +207,13 @@ const Rooms = () => {
   }
 
   useEffect(() => {
-    console.log(filterValues)
-
     setFilters(filterValues)
   }, [filterValues])
 
   const debouncedItemChange = useMemo(() => debounce(onItemChange, 300), [])
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <PageLayout>
       <div>
         <PageTitle>Rooms</PageTitle>
 
@@ -236,6 +235,14 @@ const Rooms = () => {
           onValueChange={debouncedSliderChange}
         />
       </div>
+      {data && data.getRooms && data.getRooms?.length < 1 && (
+        <div className="flex justify-center">
+          <h1 className="font-semibold text-2xl">
+            No rooms currently available
+          </h1>
+        </div>
+      )}
+      {loading && <Skeleton amount={3} />}
       {data?.getRooms?.map((room, index) => {
         defineBoundries(room.currentPrice)
         return (
@@ -255,7 +262,7 @@ const Rooms = () => {
           />
         )
       })}
-    </div>
+    </PageLayout>
   )
 }
 

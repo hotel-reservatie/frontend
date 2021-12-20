@@ -16,6 +16,7 @@ import {
   MdPerson,
 } from 'react-icons/md'
 import { useAuth } from 'src/providers/authProvider'
+import Translater from '../translater'
 
 interface DropDownItemProps {
   Icon: IconType
@@ -38,7 +39,9 @@ export const DropDownItem: FunctionComponent<DropDownItemProps> = ({
       >
         <div className=" flex items-center gap-2">
           {<Icon size={24} />}
-          <a href="">{title}</a>
+          <a className='whitespace-nowrap'>
+            <Translater>{title}</Translater>
+          </a>
         </div>
       </li>
     </Link>
@@ -50,12 +53,16 @@ export const UserDropDown = () => {
   return (
     <div className=" z-50 absolute top-16 right-0 bg-white border-1 rounded-lg border-blue-400 shadow">
       <ul>
-        <DropDownItem Icon={MdPerson} title={'Profile'} href="#" />
-        <DropDownItem Icon={MdFavorite} title={'Favorites'} href="/favorites" />
+        <DropDownItem Icon={MdPerson} title={'Profile'} href="/profile/info" />
+        <DropDownItem
+          Icon={MdFavorite}
+          title={'Favorites'}
+          href="/profile/favorites"
+        />
         <DropDownItem
           Icon={MdListAlt}
           title={'My Reservations'}
-          href="/reservations"
+          href="/profile/reservations"
         />
         <DropDownItem
           Icon={MdOutlineShoppingBasket}
@@ -103,7 +110,7 @@ const HeaderUser = () => {
   }, [router])
 
   return (
-    <div ref={divRef} className="flex items-center gap-4 relative">
+    <div ref={divRef} className="hidden md:flex items-center gap-4 relative">
       <p className="">{user?.displayName}</p>
       <div
         onClick={handleOpenProfile}

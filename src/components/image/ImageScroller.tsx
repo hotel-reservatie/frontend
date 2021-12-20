@@ -15,7 +15,7 @@ const ImageScroller = ({ images }: { images?: string[] | undefined }) => {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 mb-8 md:mb-0">
       <img
         className="rounded-3xl w-full h-auto max-h-80 object-cover object-center"
         src={images ? images[selectedImage] : ''}

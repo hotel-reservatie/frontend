@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react'
 import DatePicker, { ReactDatePickerProps } from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -16,7 +17,7 @@ const DateInput: FunctionComponent<DateInputProps> = ({
 }) => {
   const [showIcon, setShowIcon] = useState(true)
   const datePickerRef = useRef<any>(null)
-
+  const { t } = useTranslation('common')
   function onFocus() {
     setShowIcon(false)
   }
@@ -34,7 +35,7 @@ const DateInput: FunctionComponent<DateInputProps> = ({
       <DatePicker
         ref={datePickerRef}
         minDate={minDate}
-        placeholderText={placeholder}
+        placeholderText={t(`${placeholder}`)}
         onFocus={onFocus}
         onBlur={onBlur}
         className={`
@@ -75,4 +76,4 @@ const DateInput: FunctionComponent<DateInputProps> = ({
   )
 }
 
-export default DateInput
+export default React.memo(DateInput)

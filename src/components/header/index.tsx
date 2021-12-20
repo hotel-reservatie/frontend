@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Link from 'next/link'
+import Link from 'src/components/translatedLink'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import {
@@ -7,8 +7,21 @@ import {
   NotAuthenticated,
   useAuth,
 } from 'src/providers/authProvider'
-import { MdPerson } from 'react-icons/md'
+import {
+  MdFavorite,
+  MdHelp,
+  MdInfo,
+  MdListAlt,
+  MdLogin,
+  MdLogout,
+  MdOutlineShoppingBasket,
+  MdPerson,
+} from 'react-icons/md'
+import { IoMdBed } from 'react-icons/io'
 import HeaderUser from './headerUser'
+import PageLayout from '../layout/PageLayout'
+import { NavElement } from '../navigation/profileNavigation'
+import { BsPencilSquare } from 'react-icons/bs'
 
 const Header = () => {
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true)
@@ -17,11 +30,11 @@ const Header = () => {
     setMobileMenuHidden(!mobileMenuHidden)
   }
 
-  const { user } = useAuth()
+  const { logout } = useAuth()
 
   return (
     <nav className="bg-white shadow">
-      <div className="max-w-7xl mx-auto ">
+      <PageLayout className=" pt-0 pb-0">
         <div className="flex justify-between">
           <div className="flex space-x-7">
             <div>
@@ -59,7 +72,7 @@ const Header = () => {
             </div>
           </div>
           <Authenticated>
-            <HeaderUser/>
+            <HeaderUser />
           </Authenticated>
           <NotAuthenticated>
             <div className="hidden md:flex items-center space-x-3 ">
@@ -96,32 +109,99 @@ const Header = () => {
             </button>
           </div>
         </div>
-      </div>
-      <div className={`${mobileMenuHidden ? 'hidden' : ''} mobile-menu `}>
-        <ul className="">
-          <li className="active px-6">
-            <Link href="/about">
-              <a className="block text-sm px-2 py-6 text-blue-800 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                {t('header.about')}
-              </a>
-            </Link>
-          </li>
-          <li className="px-6">
-            <Link href="/rooms">
-              <a className="block text-sm px-2 py-6 text-blue-800 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                {t('header.rooms')}
-              </a>
-            </Link>
-          </li>
-          <li className="px-6">
-            <Link href="/contact">
-              <a className="block text-sm px-2 py-6 text-blue-800 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
-                {t('header.contact')}
-              </a>
-            </Link>
-          </li>
-        </ul>
-      </div>
+        <div className={`${mobileMenuHidden ? 'hidden' : ''} mobile-menu `}>
+          <ul className=" py-2">
+            <NotAuthenticated>
+              <NavElement
+                Icon={MdLogin}
+                title="Login"
+                href="/login"
+                className=" border-white"
+              />
+              <NavElement
+                Icon={BsPencilSquare}
+                title="Register"
+                href="/register"
+                className=" border-white"
+              />
+            </NotAuthenticated>
+            <Authenticated>
+              <NavElement
+                Icon={MdPerson}
+                title="Customer Info"
+                href="/profile/info"
+                className=" border-white"
+              />
+              <NavElement
+                Icon={MdFavorite}
+                title="Favorites"
+                href="/profile/favorites"
+                className=" border-white"
+              />
+              <NavElement
+                Icon={MdListAlt}
+                title="My Reservations"
+                href="/profile/reservations"
+                className=" border-white"
+              />
+              <NavElement
+                Icon={MdOutlineShoppingBasket}
+                title="Cart"
+                href="/newreservation"
+                className=" border-white"
+              />
+            </Authenticated>
+            <NavElement
+              Icon={MdInfo}
+              title={t('header.about')}
+              href="/about"
+              className=" border-white"
+            />
+            <NavElement
+              Icon={IoMdBed}
+              title={t('header.rooms')}
+              href="/rooms"
+              className=" border-white"
+            />
+            <NavElement
+              Icon={MdHelp}
+              title={t('header.contact')}
+              href="/contact"
+              className=" border-white"
+            />
+            <Authenticated>
+              <NavElement
+                Icon={MdLogout}
+                title='Sign Out'
+                href="/login"
+                className=" border-white"
+                onClick={logout}
+              />
+            </Authenticated>
+            {/* <li className="active px-6">
+              <Link href="/about">
+                <a className="block text-sm px-2 py-6 text-blue-800 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
+                  {t('header.about')}
+                </a>
+              </Link>
+            </li>
+            <li className="px-6">
+              <Link href="/rooms">
+                <a className="block text-sm px-2 py-6 text-blue-800 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
+                  {t('header.rooms')}
+                </a>
+              </Link>
+            </li>
+            <li className="px-6">
+              <Link href="/contact">
+                <a className="block text-sm px-2 py-6 text-blue-800 transition duration-75 focus:outline-none  focus-visible:ring focus-visible:ring-blue-200">
+                  {t('header.contact')}
+                </a>
+              </Link>
+            </li> */}
+          </ul>
+        </div>
+      </PageLayout>
     </nav>
   )
 }

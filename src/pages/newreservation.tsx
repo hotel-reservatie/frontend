@@ -1,52 +1,51 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MdAddCircle } from 'react-icons/md'
-import Card from 'src/components/card'
-import Input from 'src/components/input'
-import DateInput from 'src/components/input/DateInput'
-import PageLayout from 'src/components/layout/PageLayout'
-import SmallRoomCard from 'src/components/roomCard/SmallRoomCard'
-import PageTitle from 'src/components/text/PageTitle'
-import SubTitle from 'src/components/text/SubTitle'
+import { useMutation } from '@apollo/client'
+import { CreateReservation } from 'src/schema/reservation/createReservation.schema'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useRouter } from 'next/router'
 import { useNewReservation } from 'src/providers/reservationProvider'
+import FormItem from 'src/classes/FormItem'
 import {
   Room,
   useGetFilteredRoomsQuery,
+  useGetUserInfoLazyQuery,
+  UserInput,
   useValidateReservationLazyQuery,
 } from 'src/schema'
-import Link from 'next/link'
-import Button from 'src/components/button'
 import {
   Authenticated,
   NotAuthenticated,
   useAuth,
 } from 'src/providers/authProvider'
-import { useMutation } from '@apollo/client'
-import { CreateReservation } from 'src/schema/reservation/createReservation.schema'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useRouter } from 'next/router'
-import Dialog from 'src/components/dialog'
-import FormItem from 'src/classes/FormItem'
-import { useTranslation } from 'react-i18next'
-import Form from 'src/components/form'
+import dynamic from 'next/dynamic'
+
+const Link = dynamic(() => import('next/link'))
+const Dialog = dynamic(() => import('src/components/dialog'))
+const Button = dynamic(() => import('src/components/button'))
+const CustomerInfoSection = dynamic(() => import('src/components/customerInfo'))
+const Translater = dynamic(() => import('src/components/translater'))
+const Card = dynamic(() => import('src/components/card'))
+const DateInput = dynamic(() => import('src/components/input/DateInput'))
+const PageLayout = dynamic(() => import('src/components/layout/PageLayout'))
+const SmallRoomCard = dynamic(
+  () => import('src/components/roomCard/SmallRoomCard'),
+)
+const PageTitle = dynamic(() => import('src/components/text/PageTitle'))
+const SubTitle = dynamic(() => import('src/components/text/SubTitle'))
 
 const NewReservation = () => {
-  const {
-    setUserInfo,
-    setDates,
-    removeRoom,
-    newReservation,
-    resetReservation,
-  } = useNewReservation()
+  const { setDates, removeRoom, newReservation, resetReservation } =
+    useNewReservation()
   const [submitting, setSubmitting] = useState(false)
   const { user } = useAuth()
-  const { t } = useTranslation('common')
   const router = useRouter()
 
   const [showDialog, setShowDialog] = useState(false)
   const [roomToRemove, setroomToRemove] = useState('')
 
-  const [createReservation, createReservationResult] =
-    useMutation(CreateReservation)
+  const [createReservation] = useMutation(CreateReservation)
+  const [getUserInfo, { data }] = useGetUserInfoLazyQuery()
 
   const [validateReservation, validated] = useValidateReservationLazyQuery()
   const res = useGetFilteredRoomsQuery({
@@ -86,25 +85,12 @@ const NewReservation = () => {
 
   const handleConfirmButton = () => {
     setSubmitting(true)
-    if (newReservation) {
-      createReservation({
-        variables: {
-          newReservation: newReservation.details,
-          roomIds: newReservation.roomIds,
-        },
-      }).then(async () => {
-        resetReservation()
-        await router.push('/reservations')
-      })
-    }
   }
 
   useEffect(() => {
-    console.log(createReservationResult)
-  }, [createReservationResult])
-
-  useEffect(() => {
-    console.log(user)
+    if (user) {
+      getUserInfo()
+    }
   }, [user])
 
   useEffect(() => {
@@ -127,86 +113,18 @@ const NewReservation = () => {
   ])
 
   function handleSubmit(e: FormItem[]) {
-    console.log(e)
+    if (newReservation) {
+      createReservation({
+        variables: {
+          newReservation: newReservation.details,
+          roomIds: newReservation.roomIds,
+        },
+      }).then(async () => {
+        resetReservation()
+        await router.push('profile/reservations')
+      })
+    }
   }
-
-  // TODO: Add dateform that uses filterValue for the dates OR if there's already a reservation use those dates
-  const dateForm: Array<FormItem> = [
-    new FormItem({
-      placeholder: t('datepicker.arrivaldate'),
-      type: 'date',
-      name: 'arrivalDate',
-      id: 'startDate',
-    }),
-    new FormItem({
-      placeholder: t('datepicker.departuredate'),
-      type: 'date',
-      name: 'departureDate',
-      id: 'endDate',
-    }),
-  ]
-
-  const userInfoForm: Array<FormItem> = [
-    new FormItem({
-      label: 'First Name',
-      placeholder: 'John',
-      id: 'firstname',
-      autoComplete: 'given-name',
-      value: newReservation?.details?.user?.firstName,
-      name: 'firstname',
-      className: 'col-span-2',
-    }),
-    new FormItem({
-      label: 'Last Name',
-      id: 'lastname',
-      autoComplete: 'family-name',
-      value: newReservation?.details?.user?.lastName,
-      placeholder: 'Doe',
-      name: 'lastname',
-      className: 'col-span-2',
-    }),
-    new FormItem({
-      label: 'Email',
-      id: 'email',
-      value: newReservation?.details?.user?.reservationEmail,
-      type: 'email',
-      autoComplete: 'email',
-      placeholder: 'Doe',
-      name: 'email',
-      className: 'col-span-2',
-    }),
-    new FormItem({
-      label: 'Phone',
-      id: 'phone',
-      value: newReservation?.details?.user?.phone,
-      autoComplete: 'tel',
-      name: 'phone',
-      className: 'col-span-2',
-    }),
-    new FormItem({
-      label: 'Address',
-      id: 'address',
-      value: newReservation?.details?.user?.address,
-      autoComplete: 'street-address',
-      name: 'address',
-      className: 'col-span-2',
-    }),
-    new FormItem({
-      label: 'City',
-      id: 'city',
-      value: '',
-      autoComplete: 'address-level2',
-      name: 'city',
-    }),
-    new FormItem({
-      type: 'number',
-      label: 'Postal Code',
-      id: 'postal',
-      value: newReservation?.details?.user?.city,
-      autoComplete: 'postal-code',
-      name: 'postal',
-    }),
-  ]
 
   return (
     <PageLayout>
@@ -276,28 +194,35 @@ const NewReservation = () => {
           </Link>
         </div>
         <SubTitle>Customer Info</SubTitle>
-        <Form
-          cols={4}
-          rows={3}
-          colGap={6}
-          formItems={userInfoForm}
-          onSubmit={handleSubmit}
-          submitting={submitting}
-          setSubmitting={setSubmitting}
-        />
+        {data ? (
+          <CustomerInfoSection
+            userInfo={data?.getUserInfo as UserInput}
+            isEditing={true}
+            submitting={submitting}
+            setSubmitting={setSubmitting}
+            onSubmit={handleSubmit}
+            requiredFormFields={true}
+          />
+        ) : null}
 
         <SubTitle>Booking Info</SubTitle>
         <div className="mb-8">
           <div className="flex justify-between mb">
-            <p>Total amount of days</p>
+            <p>
+              <Translater>Total amount of days</Translater>
+            </p>
             <p>{validated.data?.validateReservation.totalDays}</p>
           </div>
           <div className="flex justify-between mb">
-            <p>Amount of weekend days</p>
+            <p>
+              <Translater>Amount of weekend days</Translater>
+            </p>
             <p>{validated.data?.validateReservation.weekendDays}</p>
           </div>
           <div className="flex justify-between mb">
-            <p>Rooms</p>
+            <p>
+              <Translater>Rooms</Translater>
+            </p>
             <p>{newReservation?.roomIds?.length}</p>
           </div>
           <ul className=" pl-8 list-disc">
@@ -339,12 +264,14 @@ const NewReservation = () => {
             disabled={!validated.data?.validateReservation.isValid}
             onClick={handleConfirmButton}
           >
-            Confirm Booking
+            <Translater>Confirm Booking</Translater>
           </Button>
         </div>
       </Authenticated>
       <NotAuthenticated>
-        <p>Please sign in to create a booking...</p>
+        <p>
+          <Translater>Please sign in to create a booking...</Translater>
+        </p>
       </NotAuthenticated>
     </PageLayout>
   )

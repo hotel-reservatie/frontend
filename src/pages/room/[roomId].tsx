@@ -1,37 +1,44 @@
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import React, { FormEvent, useEffect, useState } from 'react'
-import PageLayout from 'src/components/layout/PageLayout'
-import PageTitle from 'src/components/text/PageTitle'
+import { useEffect, useState } from 'react'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import {
   NewReviewInput,
-  Room,
+  useDeleteReviewMutation,
   useGetRoomByIdLazyQuery,
-  useGetRoomByIdQuery,
   useGetUserFavoritesLazyQuery,
-  useGetUserFavoritesQuery,
 } from 'src/schema'
-import Image from 'next/image'
-import Button from 'src/components/button'
-import SubTitle from 'src/components/text/SubTitle'
-import { MdDone, MdOutlinePerson, MdStar, MdFavorite } from 'react-icons/md'
-import Card from 'src/components/card'
-import ImageScroller from 'src/components/image/ImageScroller'
+import AddReview from 'src/schema/reviews/addReview.schema'
+import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
+import { MdDone } from 'react-icons/md'
 import { BsTag } from 'react-icons/bs'
+import { useNewReservation } from 'src/providers/reservationProvider'
 import {
   Authenticated,
   NotAuthenticated,
   useAuth,
 } from 'src/providers/authProvider'
-import Input from 'src/components/input'
 import { useMutation } from '@apollo/client'
-import AddReview from 'src/schema/reviews/addReview.schema'
 import formatDate from 'src/utils/formatDate'
-import FavButton from 'src/components/button/FavButton'
-import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
-import { NewReviewStars, ReviewStars } from 'src/components/reviewStar'
-import { useNewReservation } from 'src/providers/reservationProvider'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
+import { NewReviewStars } from 'src/components/reviewStar'
+import dynamic from 'next/dynamic'
+
+const Link = dynamic(() => import('next/link'))
+const SubTitle = dynamic(() => import('src/components/text/SubTitle'))
+const NotSignedIn = dynamic(
+  () => import('src/components/emptyPlaceholder/NotSignedIn'),
+)
+const PageLayout = dynamic(() => import('src/components/layout/PageLayout'))
+const PageTitle = dynamic(() => import('src/components/text/PageTitle'))
+const ReviewCard = dynamic(() => import('src/components/card/ReviewCard'))
+const FavButton = dynamic(() => import('src/components/button/FavButton'))
+const Input = dynamic(() => import('src/components/input'))
+const Card = dynamic(() => import('src/components/card'))
+const Button = dynamic(() => import('src/components/button'))
+const ImageScroller = dynamic(
+  () => import('src/components/image/ImageScroller'),
+)
 
 const RoomPage: NextPage = () => {
   const router = useRouter()
@@ -42,6 +49,7 @@ const RoomPage: NextPage = () => {
   const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
   const [toggleFavorite, toggleFavoriteResult] = useMutation(ToggleFavorite)
   const [createReview, createReviewResult] = useMutation(AddReview)
+  const [deleteReview] = useDeleteReviewMutation()
   const [newReview, setNewReview] = useState<NewReviewInput>({
     reviewScore: 0,
     title: '',
@@ -90,8 +98,13 @@ const RoomPage: NextPage = () => {
   const handleBookRoom = () => {
     if (roomId) {
       addRoom(roomId as string)
-      router.push('/newreservation')
     }
+  }
+
+  const handleDeleteReview = (reviewId: string) => {
+    deleteReview({ variables: { reviewId: reviewId } }).then(r => {
+      if (refetch) refetch()
+    })
   }
   const isFav = (roomId: string | null | undefined) => {
     if (userFavs.data && roomId) {
@@ -118,8 +131,10 @@ const RoomPage: NextPage = () => {
 
   return (
     <PageLayout>
-      <div className="flex justify-between align-middle">
-        <PageTitle>{data?.getRoomById?.roomName}</PageTitle>
+      <div className="flex justify-between items-start mb-8 gap-2">
+        <PageTitle className=" mb-0 whitespace-normal">
+          {data?.getRoomById?.roomName}
+        </PageTitle>
         <Authenticated>
           <FavButton
             size={32}
@@ -128,7 +143,7 @@ const RoomPage: NextPage = () => {
           />
         </Authenticated>
       </div>
-      <div className="md:grid md:grid-cols-2 md:gap-x-16 items-start">
+      <div className="mb-8 md:mb-0 md:grid md:grid-cols-2 md:gap-x-16 items-start">
         <ImageScroller
           images={
             data?.getRoomById?.images ? data.getRoomById.images : undefined
@@ -139,7 +154,10 @@ const RoomPage: NextPage = () => {
             {data?.getRoomById?.tags
               ? data.getRoomById.tags.map(t => {
                   return (
-                    <Card className=" px-2 py-2 mx-0 flex gap-2" key={t.name}>
+                    <Card
+                      className=" px-2 py-2 mx-0 flex items-center gap-2"
+                      key={t.name}
+                    >
                       <div>
                         <BsTag />
                       </div>
@@ -159,8 +177,13 @@ const RoomPage: NextPage = () => {
           </h2>
           <p>{data?.getRoomById?.description}</p>
           <Authenticated>
-            <Button onClick={handleBookRoom}>Book this room</Button>
+            <Button onClick={handleBookRoom}>
+              <Link href={`/newreservation`}>Book this room</Link>
+            </Button>
           </Authenticated>
+          <NotAuthenticated>
+            <Button disabled={true}>Sign in to book</Button>
+          </NotAuthenticated>
         </div>
       </div>
       <div className="md:grid md:grid-cols-2 md:mt-16 gap-x-16">
@@ -190,37 +213,24 @@ const RoomPage: NextPage = () => {
       </div>
       <SubTitle className="md:mt-8">Reviews</SubTitle>
       <div className="grid md:grid-cols-2 md:mb-8 auto-rows-fr gap-6 mt-8">
-        {data?.getRoomById?.reviews && data.getRoomById.reviews.length > 0
-          ? data?.getRoomById?.reviews?.map(r => {
-              return (
-                <Card
-                  className=" w-full sm:p-8 p-8 flex flex-col justify-between"
-                  key={r.createdAt}
-                >
-                  <div>
-                    <div className="flex justify-between">
-                      <SubTitle className=" text-xl">{r.title}</SubTitle>
-                      <ReviewStars score={r.reviewScore} />
-                    </div>
-                    <p>{r.description}</p>
-                  </div>
-                  <div className="flex justify-between mt-4">
-                    <div className="flex gap-x-2">
-                      <div>
-                        <MdOutlinePerson size={24} className=" text-blue-300" />
-                      </div>
-                      <p className=" text-base text-blue-300">
-                        {r.user?.userName}
-                      </p>
-                    </div>
-                    <p className=" text-base text-blue-300">
-                      {formatDate(r.createdAt)}
-                    </p>
-                  </div>
-                </Card>
-              )
-            })
-          : null}
+        {data?.getRoomById?.reviews && data.getRoomById.reviews.length > 0 ? (
+          data?.getRoomById?.reviews?.map(r => {
+            return (
+              <ReviewCard
+                key={r.reviewId}
+                reviewId={r.reviewId!}
+                title={r.title}
+                score={r.reviewScore}
+                description={r.description!}
+                fromuser={r.user!}
+                createdAt={formatDate(r.createdAt)}
+                onRequestDelete={handleDeleteReview}
+              />
+            )
+          })
+        ) : (
+          <p>It looks empty here... Be the first to write a review!</p>
+        )}
       </div>
       <SubTitle>Describe your experience</SubTitle>
       <Authenticated>
@@ -246,12 +256,12 @@ const RoomPage: NextPage = () => {
               onChange={onInputChange}
               value={newReview.description!}
             />
-            <Button>{'schrijf'}</Button>
+            <Button>WRITE</Button>
           </form>
         </div>
       </Authenticated>
       <NotAuthenticated>
-        <p>Please sign in to write a review</p>
+        <NotSignedIn>Please sign in to write a review...</NotSignedIn>
       </NotAuthenticated>
     </PageLayout>
   )
