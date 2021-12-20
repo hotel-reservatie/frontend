@@ -1,11 +1,13 @@
-import React, { FormEvent, FunctionComponent, useEffect, useState } from 'react'
+import { FormEvent, FunctionComponent, useEffect, useState } from 'react'
 import classNames from 'classnames/bind'
 import FormItem, { FormItemOption } from 'src/classes/FormItem'
-import Dropdown from '../dropdown'
-import Input from '../input'
-import DateInput from '../input/DateInput'
-import TextArea from '../input/TextArea'
-import FormError from './Error'
+import dynamic from 'next/dynamic'
+
+const Dropdown = dynamic(() => import('../dropdown'))
+const Input = dynamic(() => import('../input'))
+const DateInput = dynamic(() => import('../input/DateInput'))
+const TextArea = dynamic(() => import('../input/TextArea'))
+const FormError = dynamic(() => import('./Error'))
 
 interface FormProps {
   formItems: Array<FormItem>

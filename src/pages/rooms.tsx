@@ -1,33 +1,31 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
-import debounce from 'lodash.debounce'
+import { useFilterValues } from 'src/providers/filterProvider'
+import { useMutation } from '@apollo/client'
+import { useAuth } from 'src/providers/authProvider'
+import FormItem, { FormItemOption } from 'src/classes/FormItem'
 
-import RangeSlider from 'src/components/rangeSlider'
-import RoomCard from 'src/components/roomCard'
+import debounce from 'lodash.debounce'
 import {
-  Maybe,
   RoomFilters,
   useGetAllFilterValuesQuery,
   useGetFilteredRoomsLazyQuery,
   useGetUserFavoritesLazyQuery,
 } from 'src/schema'
-import { useMutation } from '@apollo/client'
-import { useAuth } from 'src/providers/authProvider'
 import ToggleFavorite from 'src/schema/favorites/toggleFavorite.schema'
-import PageTitle from 'src/components/text/PageTitle'
-import { useTranslation } from 'react-i18next'
-import Form from 'src/components/form'
-import FormItem, { FormItemOption } from 'src/classes/FormItem'
-import { useFilterValues } from 'src/providers/filterProvider'
-import Skeleton from 'src/components/roomCard/Skeleton'
-import PageLayout from 'src/components/layout/PageLayout'
-import Translater from 'src/components/translater'
+import dynamic from 'next/dynamic'
+
+const RangeSlider = dynamic(() => import('src/components/rangeSlider'))
+const RoomCard = dynamic(() => import('src/components/roomCard'))
+const PageTitle = dynamic(() => import('src/components/text/PageTitle'))
+const Form = dynamic(() => import('src/components/form'))
+const Skeleton = dynamic(() => import('src/components/roomCard/Skeleton'))
+const PageLayout = dynamic(() => import('src/components/layout/PageLayout'))
 
 const Rooms = () => {
   const { user } = useAuth()
   const { query } = useRouter()
-  const { t } = useTranslation('common')
   const { filters: filterValues, updateFilterValue } = useFilterValues()
 
   const [filters, setFilters] = useState<RoomFilters>(filterValues)
@@ -42,10 +40,9 @@ const Rooms = () => {
     max: number | null
   }>({ min: null, max: null })
 
-  const [getFilteredRooms, { loading, error, data }] =
-    useGetFilteredRoomsLazyQuery({
-      variables: { roomFilter: { ...filters } },
-    })
+  const [getFilteredRooms, { loading, data }] = useGetFilteredRoomsLazyQuery({
+    variables: { roomFilter: { ...filters } },
+  })
   const [getUserFavs, userFavs] = useGetUserFavoritesLazyQuery()
   const [toggleFavorite, toggleFavoriteResult] = useMutation(ToggleFavorite)
   const [submitting, setSubmitting] = useState(false)
@@ -100,7 +97,6 @@ const Rooms = () => {
   useEffect(() => {
     if (query['roomtype']) {
       updateFilterValue('roomTypeIds', query['roomtype'] as string[])
-      
     } else if (query['daterange']) {
       const dateRange: { arrival: string; departure: string } = JSON.parse(
         query['daterange'] as string,

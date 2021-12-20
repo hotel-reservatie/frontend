@@ -1,58 +1,51 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
-import { MdAddCircle, MdEdit } from 'react-icons/md'
-import Card from 'src/components/card'
-import Input from 'src/components/input'
-import DateInput from 'src/components/input/DateInput'
-import PageLayout from 'src/components/layout/PageLayout'
-import SmallRoomCard from 'src/components/roomCard/SmallRoomCard'
-import PageTitle from 'src/components/text/PageTitle'
-import SubTitle from 'src/components/text/SubTitle'
+import { useEffect, useState } from 'react'
+import { MdAddCircle } from 'react-icons/md'
+import { useMutation } from '@apollo/client'
+import { CreateReservation } from 'src/schema/reservation/createReservation.schema'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useRouter } from 'next/router'
 import { useNewReservation } from 'src/providers/reservationProvider'
+import FormItem from 'src/classes/FormItem'
 import {
   Room,
   useGetFilteredRoomsQuery,
   useGetUserInfoLazyQuery,
-  useGetUserInfoQuery,
   UserInput,
   useValidateReservationLazyQuery,
 } from 'src/schema'
-import Link from 'next/link'
-import Button from 'src/components/button'
 import {
   Authenticated,
   NotAuthenticated,
   useAuth,
 } from 'src/providers/authProvider'
-import { useMutation } from '@apollo/client'
-import { CreateReservation } from 'src/schema/reservation/createReservation.schema'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useRouter } from 'next/router'
-import Dialog from 'src/components/dialog'
-import FormItem from 'src/classes/FormItem'
-import { useTranslation } from 'react-i18next'
-import Form from 'src/components/form'
-import CustomerInfoSection from 'src/components/customerInfo'
-import Translater from 'src/components/translater'
+import dynamic from 'next/dynamic'
+
+const Link = dynamic(() => import('next/link'))
+const Dialog = dynamic(() => import('src/components/dialog'))
+const Button = dynamic(() => import('src/components/button'))
+const CustomerInfoSection = dynamic(() => import('src/components/customerInfo'))
+const Translater = dynamic(() => import('src/components/translater'))
+const Card = dynamic(() => import('src/components/card'))
+const DateInput = dynamic(() => import('src/components/input/DateInput'))
+const PageLayout = dynamic(() => import('src/components/layout/PageLayout'))
+const SmallRoomCard = dynamic(
+  () => import('src/components/roomCard/SmallRoomCard'),
+)
+const PageTitle = dynamic(() => import('src/components/text/PageTitle'))
+const SubTitle = dynamic(() => import('src/components/text/SubTitle'))
 
 const NewReservation = () => {
-  const {
-    setUserInfo,
-    setDates,
-    removeRoom,
-    newReservation,
-    resetReservation,
-  } = useNewReservation()
+  const { setDates, removeRoom, newReservation, resetReservation } =
+    useNewReservation()
   const [submitting, setSubmitting] = useState(false)
   const { user } = useAuth()
-  const { t } = useTranslation('common')
   const router = useRouter()
 
   const [showDialog, setShowDialog] = useState(false)
   const [roomToRemove, setroomToRemove] = useState('')
 
-  const [createReservation, createReservationResult] =
-    useMutation(CreateReservation)
-  const [getUserInfo, { data, refetch }] = useGetUserInfoLazyQuery()
+  const [createReservation] = useMutation(CreateReservation)
+  const [getUserInfo, { data }] = useGetUserInfoLazyQuery()
 
   const [validateReservation, validated] = useValidateReservationLazyQuery()
   const res = useGetFilteredRoomsQuery({
@@ -132,84 +125,6 @@ const NewReservation = () => {
       })
     }
   }
-
-  // TODO: Add dateform that uses filterValue for the dates OR if there's already a reservation use those dates
-  const dateForm: Array<FormItem> = [
-    new FormItem({
-      placeholder: 'Arrival Date',
-      type: 'date',
-      name: 'arrivalDate',
-      id: 'startDate',
-    }),
-    new FormItem({
-      placeholder: 'Departure Date',
-      type: 'date',
-      name: 'departureDate',
-      id: 'endDate',
-    }),
-  ]
-
-  const userInfoForm: Array<FormItem> = [
-    new FormItem({
-      label: 'First Name',
-      placeholder: 'John',
-      id: 'firstname',
-      autoComplete: 'given-name',
-      value: newReservation?.details?.user?.firstName,
-      name: 'firstname',
-      className: 'col-span-2',
-    }),
-    new FormItem({
-      label: 'Last Name',
-      id: 'lastname',
-      autoComplete: 'family-name',
-      value: newReservation?.details?.user?.lastName,
-      placeholder: 'Doe',
-      name: 'lastname',
-      className: 'col-span-2',
-    }),
-    new FormItem({
-      label: 'Email',
-      id: 'email',
-      value: newReservation?.details?.user?.reservationEmail,
-      type: 'email',
-      autoComplete: 'email',
-      placeholder: 'Doe',
-      name: 'email',
-      className: 'col-span-2',
-    }),
-    new FormItem({
-      label: 'Phone',
-      id: 'phone',
-      value: newReservation?.details?.user?.phone,
-      autoComplete: 'tel',
-      name: 'phone',
-      className: 'col-span-2',
-    }),
-    new FormItem({
-      label: 'Address',
-      id: 'address',
-      value: newReservation?.details?.user?.address,
-      autoComplete: 'street-address',
-      name: 'address',
-      className: 'col-span-2',
-    }),
-    new FormItem({
-      label: 'City',
-      id: 'city',
-      value: '',
-      autoComplete: 'address-level2',
-      name: 'city',
-    }),
-    new FormItem({
-      type: 'number',
-      label: 'Postal Code',
-      id: 'postal',
-      value: newReservation?.details?.user?.city,
-      autoComplete: 'postal-code',
-      name: 'postal',
-    }),
-  ]
 
   return (
     <PageLayout>
